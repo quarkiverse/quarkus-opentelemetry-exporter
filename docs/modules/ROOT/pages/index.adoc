@@ -1,0 +1,13 @@
+= Quarkus OpenTelemetry Exporter
+
+include::./includes/attributes.adoc[]
+
+TIP: Exporters are OpenTelemetry (OTel) SDK Plugins which implement the Exporter interface, and emit telemetry to consumers, usually observability vendors.
+
+Quarkus already includes the default OTLP exporter. This project will host additional ones.
+
+== Additional resources
+* https://quarkus.io/guides/opentelemetry[Quarkus OpenTelemetry guide]
+* https://opentelemetry.io/docs/concepts/data-collection/[OTel Data collection]
+
+Please ask questions on stackoverflow (using `quarkus` and `opentelemetry` tags, or join us in the https://quarkusio.zulipchat.com/[Quarkus Zulip] chatroom,

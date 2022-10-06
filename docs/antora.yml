@@ -1,0 +1,5 @@
+name: quarkus-opentelemetry-exporter
+title: Quarkus Opentelemetry Exporter
+version: dev
+nav:
+  - modules/ROOT/nav.adoc

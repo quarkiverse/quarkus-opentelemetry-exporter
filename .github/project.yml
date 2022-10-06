@@ -1,0 +1,5 @@
+name: Quarkus OpenTelemetry Exporters
+release:
+  current-version: "0"
+  next-version: "999-SNAPSHOT"
+
