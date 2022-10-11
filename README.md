@@ -1,5 +1,14 @@
-# quarkus-opentelemetry-exporter
-Quarkus extensions related with additional OpenTelemetry exporters 
+# Quarkus OpenTelemetry Exporters
 
+## About Exporters
 
-Work in progress
+Exporters are OpenTelemetry SDK Plugins which implement the Exporter interface, and emit telemetry to consumers, usually observability vendors.
+Currently, we support this implementation:
+* Jaeger
+
+## Documentation
+
+The documentation for this extension is stored in the `docs/` directory.
+
+Please ask questions on stackoverflow (using quarkus and opentelemetry tags, or join us in the Quarkus Zulip chatroom,
+

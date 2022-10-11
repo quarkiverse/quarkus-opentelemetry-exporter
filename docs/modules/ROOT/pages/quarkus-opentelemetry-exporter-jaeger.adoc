@@ -1,0 +1,31 @@
+= Quarkus Opentelemetry Exporter Jaeger
+
+include::./includes/attributes.adoc[]
+
+Exporters are OpenTelemetry SDK Plugins which implement the Exporter interface, and emit telemetry to consumers, usually observability vendors.
+
+This exporter send data to Jaeger using native protocol, previous to OTLP.
+
+== Installation
+
+If you want to use this extension, you need to add the `io.quarkiverse.opentelemetry.exporter:quarkus-opentelemetry-exporter` extension first to your build file.
+
+For instance, with Maven, add the following dependency to your POM file:
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+    <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+    <artifactId>quarkus-opentelemetry-exporter-jaeger</artifactId>
+    <version>{project-version}</version>
+</dependency>
+----
+
+Please mind the quarkus-opentelemetry extension already includes the default OTLP exporter. To deactivate that default exporter and only have this Jaeger extension exporting data, please set the following property:
+
+`quarkus.opentelemetry.tracer.exporter.otlp.enabled=false`
+
+[[extension-configuration-reference]]
+== Extension Configuration Reference
+
+include::includes/quarkus-opentelemetry-tracer-exporter-jaeger.adoc[leveloffset=+1, opts=optional]

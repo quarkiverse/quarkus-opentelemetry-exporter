@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+        <artifactId>quarkus-opentelemetry-exporter-parent</artifactId>
+        <version>999-SNAPSHOT</version>
+    </parent>
+
+    <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+    <artifactId>quarkus-opentelemetry-exporter-jaeger-parent</artifactId>
+    <packaging>pom</packaging>
+    <name>Quarkus Opentelemetry Exporter - Jaeger</name>
+
+    <modules>
+        <module>runtime</module>
+        <module>deployment</module>
+        <module>integration-tests</module>
+    </modules>
+
+</project>

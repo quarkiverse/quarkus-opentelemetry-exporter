@@ -1,0 +1,2 @@
+* xref:index.adoc[Introduction]
+* xref:quarkus-opentelemetry-exporter-jaeger.adoc[Quarkus Opentelemetry Exporter Jaeger]
