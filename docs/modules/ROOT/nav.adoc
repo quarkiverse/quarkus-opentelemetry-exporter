@@ -1,2 +1,3 @@
 * xref:index.adoc[Introduction]
 * xref:quarkus-opentelemetry-exporter-jaeger.adoc[Quarkus Opentelemetry Exporter Jaeger]
+* xref:quarkus-opentelemetry-exporter-gcp.adoc[Quarkus Opentelemetry Exporter for Google Cloud Platform]

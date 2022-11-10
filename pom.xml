@@ -16,6 +16,7 @@
 
     <modules>
         <module>quarkus-opentelemetry-exporter-jaeger</module>
+        <module>quarkus-opentelemetry-exporter-gcp</module>
         <module>docs</module>
     </modules>
 

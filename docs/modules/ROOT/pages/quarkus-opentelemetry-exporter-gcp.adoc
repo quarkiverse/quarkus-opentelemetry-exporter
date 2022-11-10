@@ -1,0 +1,78 @@
+= Quarkus Opentelemetry Exporter for Google Cloud Platform
+
+include::./includes/attributes.adoc[]
+
+Exporters are OpenTelemetry SDK Plugins which implement the Exporter interface, and emit telemetry to consumers, usually observability vendors.
+
+This exporter sends data to Google Cloud Platform using https://github.com/GoogleCloudPlatform/opentelemetry-operations-java[opentelemetry-operations-java library].
+
+== Installation
+
+=== Add exporter dependency
+
+To use this extension, first, add the `io.quarkiverse.opentelemetry.exporter:quarkus-opentelemetry`  extension to your build file.
+
+For Maven:
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+    <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+    <artifactId>quarkus-opentelemetry-exporter-gcp</artifactId>
+    <version>{project-version}</version>
+</dependency>
+----
+
+=== Disable default exporter
+
+`quarkus-opentelemetry` extension already includes the default OTLP exporter. To deactivate that default exporter and only have this GCP extension exporting data, please set the following property in the `application.properties`:
+
+[source]
+----
+quarkus.opentelemetry.tracer.exporter.otlp.enabled=false
+----
+
+
+== Google Cloud Project preparation
+
+ 1. https://support.google.com/cloud/answer/6251787?hl=en[Create a Cloud project].
+ 2. https://support.google.com/cloud/answer/6288653#new-billing[Enable billing].
+ 3. https://console.cloud.google.com/apis/api/cloudtrace.googleapis.com/overview[Enable the Trace API].
+
+=== Local development/testing
+
+If you are running in a GCP environment, the exporter will automatically authenticate using the environment's service account.
+
+For local development/testing please follow the https://github.com/googleapis/google-cloud-java#local-developmenttesting[instructions] from https://github.com/googleapis/google-cloud-java[google-cloud-java] library.
+
+== Configuration
+
+Enable GCP exporting by adding following properties in the `application.properties`:
+
+[source]
+----
+quarkus.opentelemetry.tracer.exporter.gcp.enabled=true
+----
+
+https://cloud.google.com/trace/docs/setup#force-trace[Cloud Trace doesn't sample every request].  If you are using App Engine, requests are sampled at a rate of 0.1 requests per second for each App Engine instance. If you use the Cloud Trace API, then you can configure custom rates. Some packages, such as the Java OpenCensus package, support configuring the sampling rate.
+
+https://cloud.google.com/trace/docs/setup#force-trace[You can force a request to be traced].
+
+=== Cloud Run
+
+Goolge's recommendation is to use `BatchSpanProcessor` for all deployments except Cloud Run. Cloud Run https://cloud.google.com/trace/docs/setup/java-ot#export[doesn't support background processes] and `SimpleSpanProcessor` must be used. You can enable usage of `SimpleSpanProcessor` by adding to `application.properties`:
+
+[source]
+----
+quarkus.opentelemetry.tracer.exporter.gcp.cloudrun=true
+----
+
+Cloud Run doesn't sample the traces for every request. When used with Cloud Run, requests are sampled at a maximum rate of 0.1 requests per second for each container instance. https://cloud.google.com/trace/docs/setup#force-trace[You can force a request to be traced]
+
+Cloud Run does not support configuration of the Cloud Run sample rate.
+
+
+[[extension-configuration-reference]]
+== Extension Configuration Reference
+
+include::includes/quarkus-opentelemetry-tracer-exporter-gcp.adoc[leveloffset=+1, opts=optional]
