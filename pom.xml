@@ -10,7 +10,7 @@
 
     <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
     <artifactId>quarkus-opentelemetry-exporter-parent</artifactId>
-    <version>1.0.0.Final</version>
+    <version>999-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Quarkus Opentelemetry Exporter - Parent</name>
 
@@ -87,8 +87,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-  <scm>
-    <tag>1.0.0.Final</tag>
-  </scm>
 </project>
