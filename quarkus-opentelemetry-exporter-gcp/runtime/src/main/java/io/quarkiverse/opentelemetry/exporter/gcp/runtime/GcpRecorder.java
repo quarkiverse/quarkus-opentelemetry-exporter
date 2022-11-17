@@ -15,11 +15,13 @@ public class GcpRecorder {
     public void installBatchSpanProcessorForGcp() {
 
         try {
+            // Initialize GCP TraceExporter default configuration
+            TraceExporter traceExporter = TraceExporter.createWithDefaultConfiguration();
+
             // Create TraceExporter and install into LateBoundBatchSpanProcessor
             LateBoundBatchSpanProcessor delayedProcessor = CDI.current()
                     .select(LateBoundBatchSpanProcessor.class, Any.Literal.INSTANCE).get();
-            TraceExporter traceExporters = TraceExporter.createWithDefaultConfiguration();
-            delayedProcessor.setBatchSpanProcessorDelegate(BatchSpanProcessor.builder(traceExporters).build());
+            delayedProcessor.setBatchSpanProcessorDelegate(BatchSpanProcessor.builder(traceExporter).build());
         } catch (IllegalArgumentException iae) {
             throw new IllegalStateException("Unable to install GCP Exporter", iae);
         } catch (IOException e) {

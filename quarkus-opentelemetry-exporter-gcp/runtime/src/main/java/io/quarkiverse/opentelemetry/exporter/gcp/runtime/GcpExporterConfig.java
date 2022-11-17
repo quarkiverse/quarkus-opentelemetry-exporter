@@ -14,12 +14,11 @@ public class GcpExporterConfig {
          */
         @ConfigItem(defaultValue = "true")
         public Boolean enabled;
-    }
 
-    @ConfigRoot(name = "opentelemetry.tracer.exporter.gcp", phase = ConfigPhase.RUN_TIME)
-    public static class GcpExporterRuntimeConfig {
         /**
-         * For Cloud Run environments we cannot use BatchSpanProcessor. Cloud Run doesn't support background processes.
+         * Support for Cloud Run environments. Cloud Run doesn't support background processes so we need to use different
+         * SpanProcessor.
+         *
          * Reference: https://cloud.google.com/trace/docs/setup/java-ot#export
          */
         @ConfigItem(defaultValue = "false")

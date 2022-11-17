@@ -12,12 +12,13 @@ import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.quarkiverse.opentelemetry.exporter.gcp.runtime.LateBoundBatchSpanProcessor;
 import io.quarkus.test.QuarkusUnitTest;
 
-public class GcpExporterDisabledTest {
+public class GcpSimpleExporterEnabledTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .withEmptyApplication()
-            .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.gcp.enabled", "false");
+            .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.gcp.enabled", "true")
+            .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.gcp.cloudrun", "true");
 
     @Inject
     OpenTelemetry openTelemetry;
@@ -32,6 +33,6 @@ public class GcpExporterDisabledTest {
     void testOpenTelemetryButNoBatchSpanProcessor() {
         Assertions.assertNotNull(openTelemetry);
         Assertions.assertFalse(lateBoundBatchSpanProcessorInstance.isResolvable());
-        Assertions.assertFalse(simpleSpanProcessor.isResolvable());
+        Assertions.assertTrue(simpleSpanProcessor.isResolvable());
     }
 }
