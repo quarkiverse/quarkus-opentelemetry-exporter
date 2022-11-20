@@ -2,8 +2,11 @@ package io.quarkiverse.opentelemetry.exporter.gcp.runtime;
 
 import com.google.cloud.opentelemetry.trace.TraceConfiguration;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
+import com.google.cloud.trace.v2.stub.TraceServiceStub;
+import com.google.cloud.trace.v2.stub.TraceServiceStubSettings;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import io.quarkus.runtime.LaunchMode;
 import io.quarkus.runtime.annotations.Recorder;
 
 import javax.enterprise.inject.Any;
@@ -12,8 +15,18 @@ import java.io.IOException;
 
 @Recorder
 public class GcpRecorder {
-    public void installSpanProcessorForGcp(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig, GcpExporterConfig.GcpExporterBuildConfig buildConfig) {
+    public void installSpanProcessorForGcp(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig, GcpExporterConfig.GcpExporterBuildConfig buildConfig, LaunchMode launchMode) {
         TraceConfiguration.Builder builder = TraceConfiguration.builder();
+
+        if (launchMode == LaunchMode.TEST) {
+            try {
+                TraceServiceStubSettings build = TraceServiceStubSettings.newBuilder().build();
+                TraceServiceStub stub = build.createStub();
+                builder.setTraceServiceStub(stub);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         if (runtimeConfig.projectid.isPresent() && runtimeConfig.projectid.get().trim().length() > 0) {
             builder.setProjectId(runtimeConfig.projectid.get());

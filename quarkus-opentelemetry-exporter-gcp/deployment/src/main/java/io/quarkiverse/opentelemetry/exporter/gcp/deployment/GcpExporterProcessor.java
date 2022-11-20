@@ -9,6 +9,7 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.BuildSteps;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
+import io.quarkus.deployment.builditem.LaunchModeBuildItem;
 
 import java.util.function.BooleanSupplier;
 
@@ -41,7 +42,8 @@ public class GcpExporterProcessor {
     @Record(ExecutionTime.RUNTIME_INIT)
     void installBatchSpanProcessorForGcp(GcpRecorder recorder,
                                          GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig,
-                                         GcpExporterConfig.GcpExporterBuildConfig buildConfig) {
-        recorder.installSpanProcessorForGcp(runtimeConfig, buildConfig);
+                                         GcpExporterConfig.GcpExporterBuildConfig buildConfig,
+                                         LaunchModeBuildItem launchModeBuildItem) {
+        recorder.installSpanProcessorForGcp(runtimeConfig, buildConfig, launchModeBuildItem.getLaunchMode());
     }
 }
