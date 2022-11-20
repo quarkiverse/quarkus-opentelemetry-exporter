@@ -1,32 +1,50 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.runtime;
 
-import java.io.IOException;
+import com.google.cloud.opentelemetry.trace.TraceConfiguration;
+import com.google.cloud.opentelemetry.trace.TraceExporter;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import io.quarkus.runtime.annotations.Recorder;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.spi.CDI;
-
-import com.google.cloud.opentelemetry.trace.TraceExporter;
-
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
-import io.quarkus.runtime.annotations.Recorder;
+import java.io.IOException;
 
 @Recorder
 public class GcpRecorder {
-    public void installBatchSpanProcessorForGcp() {
+    public void installSpanProcessorForGcp(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig, GcpExporterConfig.GcpExporterBuildConfig buildConfig) {
+        TraceConfiguration.Builder builder = TraceConfiguration.builder();
 
-        try {
-            // Initialize GCP TraceExporter default configuration
-            TraceExporter traceExporter = TraceExporter.createWithDefaultConfiguration();
-
-            // Create TraceExporter and install into LateBoundBatchSpanProcessor
-            LateBoundBatchSpanProcessor delayedProcessor = CDI.current()
-                    .select(LateBoundBatchSpanProcessor.class, Any.Literal.INSTANCE).get();
-            delayedProcessor.setBatchSpanProcessorDelegate(BatchSpanProcessor.builder(traceExporter).build());
-        } catch (IllegalArgumentException iae) {
-            throw new IllegalStateException("Unable to install GCP Exporter", iae);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to install GCP Exporter", e);
+        if (runtimeConfig.projectid.isPresent() && runtimeConfig.projectid.get().trim().length() > 0) {
+            builder.setProjectId(runtimeConfig.projectid.get());
         }
-        //}
+
+        // Initialize GCP TraceExporter default configuration
+        try (TraceExporter traceExporter = TraceExporter.createWithConfiguration(builder.build())) {
+            if (buildConfig.cloudrun) {
+                configureSimpleSpanExporter(traceExporter);
+            } else {
+                configureBatchSpanExporter(traceExporter);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to initialize GCP TraceExporter.", e);
+        }
+    }
+
+    private void configureBatchSpanExporter(TraceExporter traceExporter) {
+        BatchSpanProcessor batchSpanProcessor = BatchSpanProcessor.builder(traceExporter).build();
+
+        LateBoundBatchSpanProcessor delayedProcessor = CDI.current()
+                .select(LateBoundBatchSpanProcessor.class, Any.Literal.INSTANCE).get();
+
+        delayedProcessor.setBatchSpanProcessorDelegate(batchSpanProcessor);
+    }
+
+    private void configureSimpleSpanExporter(TraceExporter traceExporter) {
+        SimpleSpanProcessor spanProcessor = (SimpleSpanProcessor) SimpleSpanProcessor.create(traceExporter);
+
+        LateBoundSimpleSpanProcessor delayedProcessor = CDI.current()
+                .select(LateBoundSimpleSpanProcessor.class, Any.Literal.INSTANCE).get();
+        delayedProcessor.setSimpleSpanProcessorDelegate(spanProcessor);
     }
 }

@@ -1,24 +1,22 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.deployment;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-
+import io.opentelemetry.api.OpenTelemetry;
+import io.quarkiverse.opentelemetry.exporter.gcp.runtime.LateBoundBatchSpanProcessor;
+import io.quarkiverse.opentelemetry.exporter.gcp.runtime.LateBoundSimpleSpanProcessor;
+import io.quarkus.test.QuarkusUnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.quarkiverse.opentelemetry.exporter.gcp.runtime.LateBoundBatchSpanProcessor;
-import io.quarkus.test.QuarkusUnitTest;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 
 public class GcpExporterEnabledTest {
 
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .withEmptyApplication()
-            .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.gcp.enabled", "true")
-            .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.gcp.cloudrun", "false");
+            .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.gcp.enabled", "true");
 
     @Inject
     OpenTelemetry openTelemetry;
@@ -27,12 +25,12 @@ public class GcpExporterEnabledTest {
     Instance<LateBoundBatchSpanProcessor> lateBoundBatchSpanProcessorInstance;
 
     @Inject
-    Instance<SimpleSpanProcessor> simpleSpanProcessor;
+    Instance<LateBoundSimpleSpanProcessor> lateBoundSimpleSpanProcessors;
 
     @Test
     void testOpenTelemetryButNoBatchSpanProcessor() {
         Assertions.assertNotNull(openTelemetry);
         Assertions.assertTrue(lateBoundBatchSpanProcessorInstance.isResolvable());
-        Assertions.assertFalse(simpleSpanProcessor.isResolvable());
+        Assertions.assertTrue(lateBoundSimpleSpanProcessors.isResolvable());
     }
 }

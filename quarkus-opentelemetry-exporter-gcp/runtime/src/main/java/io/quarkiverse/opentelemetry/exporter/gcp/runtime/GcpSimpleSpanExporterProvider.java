@@ -1,14 +1,10 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.runtime;
 
-import java.io.IOException;
+import io.quarkus.arc.DefaultBean;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
-
-import com.google.cloud.opentelemetry.trace.TraceExporter;
-
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.quarkus.arc.DefaultBean;
+import java.io.IOException;
 
 @Singleton
 public class GcpSimpleSpanExporterProvider {
@@ -16,8 +12,7 @@ public class GcpSimpleSpanExporterProvider {
     @Produces
     @Singleton
     @DefaultBean
-    public SimpleSpanProcessor spanProcessorForGCP() throws IOException {
-        TraceExporter traceExporter = TraceExporter.createWithDefaultConfiguration();
-        return (SimpleSpanProcessor) SimpleSpanProcessor.create(traceExporter);
+    public LateBoundSimpleSpanProcessor spanProcessorForGCP() {
+        return new LateBoundSimpleSpanProcessor();
     }
 }
