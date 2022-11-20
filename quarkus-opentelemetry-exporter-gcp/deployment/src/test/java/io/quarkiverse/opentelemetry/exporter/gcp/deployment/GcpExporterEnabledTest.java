@@ -16,7 +16,8 @@ public class GcpExporterEnabledTest {
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .withEmptyApplication()
-            .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.gcp.enabled", "true");
+            .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.gcp.enabled", "true")
+            .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.gcp.projectid", "test");
 
     @Inject
     OpenTelemetry openTelemetry;
