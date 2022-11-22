@@ -42,8 +42,8 @@ public class GcpExporterProcessor {
     @BuildStep
     @Record(RUNTIME_INIT)
     void installBatchSpanProcessorForGcp(GcpRecorder recorder,
-                                         LaunchModeBuildItem launchModeBuildItem,
-                                         GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig) {
+            LaunchModeBuildItem launchModeBuildItem,
+            GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig) {
         recorder.installSpanProcessorForGcp(runtimeConfig, launchModeBuildItem.getLaunchMode());
     }
 }

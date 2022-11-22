@@ -24,7 +24,7 @@ public class GcpRecorder {
                 builder.setTraceServiceEndpoint(runtimeConfig.endpoint.get());
             }
 
-            try(TraceExporter testTraceExporter = TraceExporter.createWithConfiguration(builder.build())) {
+            try (TraceExporter testTraceExporter = TraceExporter.createWithConfiguration(builder.build())) {
                 if (runtimeConfig.cloudrun) {
                     configureSimpleSpanExporter(testTraceExporter);
                 } else {
