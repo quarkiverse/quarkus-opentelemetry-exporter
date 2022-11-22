@@ -23,11 +23,18 @@ public class GcpExporterConfig {
     @ConfigRoot(name = "opentelemetry.tracer.exporter.gcp", phase = ConfigPhase.RUN_TIME)
     public static class GcpExporterRuntimeConfig {
         /**
-         * Override for GCP Project ID.
+         * Set GCP Project ID.
          */
         @ConfigItem
         @ConvertWith(TrimmedStringConverter.class)
         public Optional<String> projectid;
+
+        /**
+         * Override for GCP TraceEndpoint. Optional, usually is set by GCP's TraceConfiguration library.
+         */
+        @ConfigItem
+        @ConvertWith(TrimmedStringConverter.class)
+        public Optional<String> endpoint;
 
         /**
          * Support for Cloud Run environments. Cloud Run doesn't support background processes so we need to use different

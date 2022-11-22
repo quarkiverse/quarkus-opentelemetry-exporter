@@ -1,9 +1,11 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.runtime;
 
+import com.google.cloud.opentelemetry.trace.TestTraceConfigurationBuilder;
 import com.google.cloud.opentelemetry.trace.TraceConfiguration;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import io.quarkus.runtime.LaunchMode;
 import io.quarkus.runtime.annotations.Recorder;
 
 import javax.enterprise.inject.Any;
@@ -12,7 +14,30 @@ import java.io.IOException;
 
 @Recorder
 public class GcpRecorder {
-    public void installSpanProcessorForGcp(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig) {
+    public void installSpanProcessorForGcp(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig, LaunchMode launchMode) {
+        if (launchMode != LaunchMode.TEST) {
+            configureNormalTraceExporter(runtimeConfig);
+        } else {
+            TraceConfiguration.Builder builder = TestTraceConfigurationBuilder.buildTestTraceConfiguration();
+
+            if (runtimeConfig.endpoint.isPresent() && runtimeConfig.endpoint.get().trim().length() > 0) {
+                builder.setTraceServiceEndpoint(runtimeConfig.endpoint.get());
+            }
+
+            try(TraceExporter testTraceExporter = TraceExporter.createWithConfiguration(builder.build())) {
+                if (runtimeConfig.cloudrun) {
+                    configureSimpleSpanExporter(testTraceExporter);
+                } else {
+                    configureBatchSpanExporter(testTraceExporter);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to initialize GCP TraceExporter.", e);
+            }
+        }
+
+    }
+
+    private void configureNormalTraceExporter(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig) {
         TraceConfiguration.Builder builder = TraceConfiguration.builder();
 
         if (runtimeConfig.projectid.isPresent() && runtimeConfig.projectid.get().trim().length() > 0) {
