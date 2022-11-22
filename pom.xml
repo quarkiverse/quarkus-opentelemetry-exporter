@@ -31,7 +31,7 @@
         <opentelemetry-alpha.version>1.18.0-alpha</opentelemetry-alpha.version>
 
         <assertj-core.version>3.23.1</assertj-core.version>
-        <junit-jupiter.version>1.17.5</junit-jupiter.version>
+        <junit-jupiter.version>1.17.6</junit-jupiter.version>
     </properties>
 
     <dependencyManagement>
