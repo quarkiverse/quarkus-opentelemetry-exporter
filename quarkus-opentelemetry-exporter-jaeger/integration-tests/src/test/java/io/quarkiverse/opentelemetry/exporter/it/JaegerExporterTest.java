@@ -27,9 +27,6 @@ public class JaegerExporterTest {
     @ConfigProperty(name = "quarkus.jaeger.port")
     String jaegerPort;
 
-    @ConfigProperty(name = "quarkus.opentelemetry.tracer.exporter.jaeger.endpoint")
-    String jaegerEndpoint;
-
     /**
      * Response format example:
      * result = {LinkedHashMap@11959} size = 5
@@ -40,7 +37,7 @@ public class JaegerExporterTest {
      * "errors" -> null
      */
     private Map<String, Object> getJaegerTrace() {
-        Map<String, Object> as = get(jaegerEndpoint + "/api/traces?service=" + SERVICE_NAME)
+        Map<String, Object> as = get(  "/api/traces?service=" + SERVICE_NAME)
                 .body().as(new TypeRef<>() {
                 });
         return as;
