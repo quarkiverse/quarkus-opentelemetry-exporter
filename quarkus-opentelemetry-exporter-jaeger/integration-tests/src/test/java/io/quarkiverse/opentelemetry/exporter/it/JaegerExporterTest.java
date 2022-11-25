@@ -1,22 +1,21 @@
 package io.quarkiverse.opentelemetry.exporter.it;
 
-import static io.restassured.RestAssured.get;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
+import io.restassured.common.mapper.TypeRef;
+import org.awaitility.Awaitility;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
-import org.awaitility.Awaitility;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.junit.jupiter.api.Test;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.common.mapper.TypeRef;
+import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 @QuarkusTestResource(JaegerTestResource.class)
@@ -26,6 +25,9 @@ public class JaegerExporterTest {
 
     @ConfigProperty(name = "quarkus.jaeger.port")
     String jaegerPort;
+
+    @ConfigProperty(name = "quarkus.jaeger.host")
+    String jaegerHost;
 
     /**
      * Response format example:
@@ -37,7 +39,7 @@ public class JaegerExporterTest {
      * "errors" -> null
      */
     private Map<String, Object> getJaegerTrace() {
-        Map<String, Object> as = get(  "/api/traces?service=" + SERVICE_NAME)
+        Map<String, Object> as = get("/api/traces?service=" + SERVICE_NAME)
                 .body().as(new TypeRef<>() {
                 });
         return as;
@@ -53,6 +55,7 @@ public class JaegerExporterTest {
                 .body("message", equalTo("Direct trace"));
 
         RestAssured.port = Integer.parseInt(jaegerPort);
+        RestAssured.baseURI = String.format("http://%s", jaegerHost);
 
         Awaitility.await()
                 .atMost(Duration.ofSeconds(30))
