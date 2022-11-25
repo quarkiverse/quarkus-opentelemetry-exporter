@@ -1,12 +1,11 @@
 package io.quarkiverse.opentelemetry.exporter.it;
 
-import java.util.Map;
-
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.images.PullPolicy;
 
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import java.util.Map;
 
 public class JaegerTestResource implements QuarkusTestResourceLifecycleManager {
 
@@ -30,7 +29,7 @@ public class JaegerTestResource implements QuarkusTestResourceLifecycleManager {
         jaegerContainer.start();
         final Map<String, String> properties = Map.of(
                 "quarkus.jaeger.port", "" + jaegerContainer.getMappedPort(QUERY_PORT),
-                "quarkus.opentelemetry.tracer.exporter.jaeger.endpoint", "http://localhost:" +
+                "quarkus.opentelemetry.tracer.exporter.jaeger.endpoint", "http://" + jaegerContainer.getHost() + ":" +
                         jaegerContainer.getMappedPort(COLLECTOR_PORT));
         return properties;
     }
