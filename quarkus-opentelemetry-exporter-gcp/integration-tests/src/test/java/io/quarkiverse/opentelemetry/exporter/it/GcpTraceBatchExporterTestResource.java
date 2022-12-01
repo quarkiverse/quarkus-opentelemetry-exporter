@@ -14,6 +14,7 @@ public class GcpTraceBatchExporterTestResource implements QuarkusTestResourceLif
     public void init(Map<String, String> initArgs) {
         QuarkusTestResourceLifecycleManager.super.init(initArgs);
         cloudOperationsMockContainer = new CloudOperationsMockContainer()
+                .withExposedPorts(18181)
                 .waitingFor(Wait.forLogMessage(".*Listening on.*\\n", 1));
     }
 

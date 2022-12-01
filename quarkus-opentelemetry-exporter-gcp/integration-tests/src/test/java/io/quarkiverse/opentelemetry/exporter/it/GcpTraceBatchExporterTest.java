@@ -1,23 +1,25 @@
 package io.quarkiverse.opentelemetry.exporter.it;
 
-import api.MockTraceServiceGrpc;
-import com.google.devtools.cloudtrace.v2.AttributeValue;
-import com.google.devtools.cloudtrace.v2.Span;
-import com.google.protobuf.Empty;
-import io.quarkus.grpc.GrpcClient;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.awaitility.Awaitility;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.org.awaitility.Awaitility;
+
+import com.google.devtools.cloudtrace.v2.AttributeValue;
+import com.google.devtools.cloudtrace.v2.Span;
+import com.google.protobuf.Empty;
+
+import api.MockTraceServiceGrpc;
+import io.quarkus.grpc.GrpcClient;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(GcpTraceBatchExporterTestResource.class)
