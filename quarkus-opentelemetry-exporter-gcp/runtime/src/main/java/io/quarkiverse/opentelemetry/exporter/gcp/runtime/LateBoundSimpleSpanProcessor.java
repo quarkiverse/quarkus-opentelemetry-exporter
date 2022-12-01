@@ -1,12 +1,13 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.runtime;
 
+import org.jboss.logging.Logger;
+
 import io.opentelemetry.context.Context;
 import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.trace.ReadWriteSpan;
 import io.opentelemetry.sdk.trace.ReadableSpan;
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import org.jboss.logging.Logger;
 
 public class LateBoundSimpleSpanProcessor implements SpanProcessor {
     private static final Logger log = Logger.getLogger(LateBoundSimpleSpanProcessor.class);

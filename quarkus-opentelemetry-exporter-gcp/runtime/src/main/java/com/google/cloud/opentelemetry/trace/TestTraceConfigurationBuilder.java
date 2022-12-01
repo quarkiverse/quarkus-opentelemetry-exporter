@@ -1,9 +1,9 @@
 package com.google.cloud.opentelemetry.trace;
 
-import com.google.devtools.cloudtrace.v2.AttributeValue;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.devtools.cloudtrace.v2.AttributeValue;
 
 public class TestTraceConfigurationBuilder {
     private static final String PROJECT_ID = "project-id";

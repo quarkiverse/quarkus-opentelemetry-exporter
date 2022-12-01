@@ -1,10 +1,9 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.runtime;
 
-import io.quarkus.arc.DefaultBean;
-
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
-import java.io.IOException;
+
+import io.quarkus.arc.DefaultBean;
 
 @Singleton
 public class GcpSimpleSpanExporterProvider {

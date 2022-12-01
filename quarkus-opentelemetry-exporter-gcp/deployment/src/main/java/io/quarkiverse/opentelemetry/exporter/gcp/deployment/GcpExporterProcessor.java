@@ -1,5 +1,9 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.deployment;
 
+import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
+
+import java.util.function.BooleanSupplier;
+
 import io.quarkiverse.opentelemetry.exporter.gcp.runtime.GcpExporterConfig;
 import io.quarkiverse.opentelemetry.exporter.gcp.runtime.GcpExporterProvider;
 import io.quarkiverse.opentelemetry.exporter.gcp.runtime.GcpRecorder;
@@ -9,10 +13,6 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.BuildSteps;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.LaunchModeBuildItem;
-
-import java.util.function.BooleanSupplier;
-
-import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
 
 @BuildSteps(onlyIf = GcpExporterProcessor.GcpExporterEnabled.class)
 public class GcpExporterProcessor {
