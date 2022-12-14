@@ -18,11 +18,9 @@ import com.google.protobuf.Empty;
 
 import api.MockTraceServiceGrpc;
 import io.quarkus.grpc.GrpcClient;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 
-@QuarkusTest
-@QuarkusTestResource(GcpTraceBatchExporterTestResource.class)
+//@QuarkusTest
+//@QuarkusTestResource(GcpTraceBatchExporterTestResource.class)
 class GcpTraceBatchExporterTest {
 
     @GrpcClient
