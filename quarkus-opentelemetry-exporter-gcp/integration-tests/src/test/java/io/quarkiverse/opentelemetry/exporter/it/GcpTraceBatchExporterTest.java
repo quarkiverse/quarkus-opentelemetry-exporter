@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.org.awaitility.Awaitility;
@@ -19,8 +21,8 @@ import com.google.protobuf.Empty;
 import api.MockTraceServiceGrpc;
 import io.quarkus.grpc.GrpcClient;
 
-//@QuarkusTest
-//@QuarkusTestResource(GcpTraceBatchExporterTestResource.class)
+@QuarkusTest
+@QuarkusTestResource(GcpTraceBatchExporterTestResource.class)
 class GcpTraceBatchExporterTest {
 
     @GrpcClient
