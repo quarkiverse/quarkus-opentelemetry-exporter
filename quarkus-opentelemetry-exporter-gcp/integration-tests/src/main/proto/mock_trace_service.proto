@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package api;
+
+import "google/devtools/cloudtrace/v2/trace.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/googleinterns/cloud-operations-api-mock/api;mocktrace";
+
+// Next available id: 2
+message ListSpansResponse {
+  repeated google.devtools.cloudtrace.v2.Span spans = 1;
+}
+
+service MockTraceService {
+  rpc ListSpans(google.protobuf.Empty) returns (ListSpansResponse) {}
+}

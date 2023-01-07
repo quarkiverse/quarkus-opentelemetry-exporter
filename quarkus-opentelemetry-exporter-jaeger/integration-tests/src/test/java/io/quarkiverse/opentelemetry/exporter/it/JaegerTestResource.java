@@ -30,7 +30,8 @@ public class JaegerTestResource implements QuarkusTestResourceLifecycleManager {
         jaegerContainer.start();
         final Map<String, String> properties = Map.of(
                 "quarkus.jaeger.port", "" + jaegerContainer.getMappedPort(QUERY_PORT),
-                "quarkus.opentelemetry.tracer.exporter.jaeger.endpoint", "http://localhost:" +
+                "quarkus.jaeger.host", "" + jaegerContainer.getHost(),
+                "quarkus.opentelemetry.tracer.exporter.jaeger.endpoint", "http://" + jaegerContainer.getHost() + ":" +
                         jaegerContainer.getMappedPort(COLLECTOR_PORT));
         return properties;
     }

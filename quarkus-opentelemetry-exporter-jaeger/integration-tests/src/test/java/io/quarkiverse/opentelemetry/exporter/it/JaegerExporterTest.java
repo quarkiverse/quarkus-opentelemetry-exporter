@@ -3,7 +3,7 @@ package io.quarkiverse.opentelemetry.exporter.it;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Duration;
 import java.util.List;
@@ -27,6 +27,9 @@ public class JaegerExporterTest {
     @ConfigProperty(name = "quarkus.jaeger.port")
     String jaegerPort;
 
+    @ConfigProperty(name = "quarkus.jaeger.host")
+    String jaegerHost;
+
     /**
      * Response format example:
      * result = {LinkedHashMap@11959} size = 5
@@ -36,7 +39,7 @@ public class JaegerExporterTest {
      * "offset" -> {Integer@11971} 0
      * "errors" -> null
      */
-    private static Map<String, Object> getJaegerTrace() {
+    private Map<String, Object> getJaegerTrace() {
         Map<String, Object> as = get("/api/traces?service=" + SERVICE_NAME)
                 .body().as(new TypeRef<>() {
                 });
@@ -53,6 +56,7 @@ public class JaegerExporterTest {
                 .body("message", equalTo("Direct trace"));
 
         RestAssured.port = Integer.parseInt(jaegerPort);
+        RestAssured.baseURI = String.format("http://%s", jaegerHost);
 
         Awaitility.await()
                 .atMost(Duration.ofSeconds(30))
