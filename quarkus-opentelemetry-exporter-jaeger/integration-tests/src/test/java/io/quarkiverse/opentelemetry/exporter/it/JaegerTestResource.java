@@ -1,11 +1,12 @@
 package io.quarkiverse.opentelemetry.exporter.it;
 
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import java.util.Map;
+
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.images.PullPolicy;
 
-import java.util.Map;
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 public class JaegerTestResource implements QuarkusTestResourceLifecycleManager {
 

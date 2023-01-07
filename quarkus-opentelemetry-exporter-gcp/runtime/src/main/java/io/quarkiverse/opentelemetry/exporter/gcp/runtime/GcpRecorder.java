@@ -18,7 +18,11 @@ import io.quarkus.runtime.annotations.Recorder;
 public class GcpRecorder {
     public void installSpanProcessorForGcp(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig, LaunchMode launchMode) {
         if (launchMode != LaunchMode.TEST) {
-            configureTraceExporter(runtimeConfig);
+            try {
+                configureTraceExporter(runtimeConfig);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to initialize GCP TraceExporter.", e);
+            }
         } else {
             TraceConfiguration.Builder builder = TestTraceConfigurationBuilder.buildTestTraceConfiguration();
 
@@ -26,11 +30,12 @@ public class GcpRecorder {
                 builder.setTraceServiceEndpoint(runtimeConfig.endpoint.get());
             }
 
-            try (TraceExporter testTraceExporter = TraceExporter.createWithConfiguration(builder.build())) {
+            TraceConfiguration config = builder.build();
+            try {
                 if (runtimeConfig.cloudrun) {
-                    configureSimpleSpanExporter(testTraceExporter);
+                    configureSimpleSpanExporter(config);
                 } else {
-                    configureBatchSpanExporter(testTraceExporter);
+                    configureBatchSpanExporter(config);
                 }
             } catch (IOException e) {
                 throw new RuntimeException("Unable to initialize GCP TraceExporter.", e);
@@ -39,27 +44,25 @@ public class GcpRecorder {
 
     }
 
-    private void configureTraceExporter(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig) {
+    private void configureTraceExporter(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig) throws IOException {
         TraceConfiguration.Builder builder = TraceConfiguration.builder();
 
         if (runtimeConfig.projectid.isPresent() && runtimeConfig.projectid.get().trim().length() > 0) {
             builder.setProjectId(runtimeConfig.projectid.get());
         }
 
+        TraceConfiguration traceConfig = builder.build();
         // Initialize GCP TraceExporter default configuration
-        try (TraceExporter traceExporter = TraceExporter.createWithConfiguration(builder.build())) {
-            if (runtimeConfig.cloudrun) {
-                configureSimpleSpanExporter(traceExporter);
-            } else {
-                configureBatchSpanExporter(traceExporter);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to initialize GCP TraceExporter.", e);
+        if (runtimeConfig.cloudrun) {
+            configureSimpleSpanExporter(traceConfig);
+        } else {
+            configureBatchSpanExporter(traceConfig);
         }
     }
 
-    private void configureBatchSpanExporter(TraceExporter traceExporter) {
-        BatchSpanProcessor batchSpanProcessor = BatchSpanProcessor.builder(traceExporter).build();
+    private void configureBatchSpanExporter(TraceConfiguration config) throws IOException {
+        BatchSpanProcessor batchSpanProcessor = BatchSpanProcessor.builder(TraceExporter.createWithConfiguration(config))
+                .build();
 
         LateBoundBatchSpanProcessor delayedProcessor = CDI.current()
                 .select(LateBoundBatchSpanProcessor.class, Any.Literal.INSTANCE).get();
@@ -67,7 +70,8 @@ public class GcpRecorder {
         delayedProcessor.setBatchSpanProcessorDelegate(batchSpanProcessor);
     }
 
-    private void configureSimpleSpanExporter(TraceExporter traceExporter) {
+    private void configureSimpleSpanExporter(TraceConfiguration config) throws IOException {
+        TraceExporter traceExporter = TraceExporter.createWithConfiguration(config);
         SimpleSpanProcessor spanProcessor = (SimpleSpanProcessor) SimpleSpanProcessor.create(traceExporter);
 
         LateBoundSimpleSpanProcessor delayedProcessor = CDI.current()
