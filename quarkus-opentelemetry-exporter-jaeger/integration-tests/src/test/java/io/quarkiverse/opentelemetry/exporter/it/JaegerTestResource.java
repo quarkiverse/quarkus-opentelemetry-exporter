@@ -10,7 +10,7 @@ import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 public class JaegerTestResource implements QuarkusTestResourceLifecycleManager {
 
-    private static final int QUERY_PORT = 16686;
+    public static final int QUERY_PORT = 16686;
     private static final int COLLECTOR_PORT = 14250;
     private static final int HEALTH_PORT = 14269;
 
