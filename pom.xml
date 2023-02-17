@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.quarkiverse</groupId>
         <artifactId>quarkiverse-parent</artifactId>
-        <version>11</version>
+        <version>12</version>
         <relativePath /> <!-- always from repository -->
     </parent>
 
@@ -26,11 +26,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <quarkus.version>2.13.1.Final</quarkus.version>
-        <opentelemetry.version>1.18.0</opentelemetry.version>
-        <opentelemetry-alpha.version>1.18.0-alpha</opentelemetry-alpha.version>
+        <quarkus.version>2.16.2.Final</quarkus.version>
+        <opentelemetry.version>1.21.0</opentelemetry.version>
+        <opentelemetry-alpha.version>1.21.0-alpha</opentelemetry-alpha.version>
 
-        <assertj-core.version>3.23.1</assertj-core.version>
+        <assertj-core.version>3.24.2</assertj-core.version>
         <junit-jupiter.version>1.17.6</junit-jupiter.version>
     </properties>
 
