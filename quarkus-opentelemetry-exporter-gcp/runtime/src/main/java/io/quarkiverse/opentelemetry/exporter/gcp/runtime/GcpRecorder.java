@@ -17,7 +17,7 @@ import io.quarkus.runtime.annotations.Recorder;
 @Recorder
 public class GcpRecorder {
     public void installSpanProcessorForGcp(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig, LaunchMode launchMode) {
-        if (launchMode != LaunchMode.TEST) {
+        if (launchMode != LaunchMode.TEST && !runtimeConfig.endpoint.isPresent()) {
             try {
                 configureTraceExporter(runtimeConfig);
             } catch (IOException e) {

@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.awaitility.Awaitility;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.common.QuarkusTestResource;

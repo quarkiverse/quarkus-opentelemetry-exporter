@@ -17,7 +17,8 @@ import com.google.devtools.cloudtrace.v2.Span;
 import com.google.protobuf.Empty;
 
 import api.MockTraceServiceGrpc;
-import io.quarkus.grpc.GrpcClient;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -25,11 +26,26 @@ import io.quarkus.test.junit.QuarkusTest;
 @QuarkusTestResource(GcpTraceBatchExporterTestResource.class)
 class GcpTraceBatchExporterTest {
 
-    @GrpcClient
-    MockTraceServiceGrpc.MockTraceServiceBlockingStub mockTraceServiceGrpc;
-
     @Test
     public void gcpExtensionTest() {
+        // native test needs to get port from inside the app.
+        String mockContainerHost = given()
+                .contentType("application/json")
+                .when().get("/config/host")
+                .then()
+                .statusCode(200)
+                .extract().body().asString();
+
+        Integer mockContainerPort = given()
+                .contentType("application/json")
+                .when().get("/config/port")
+                .then()
+                .statusCode(200)
+                .extract().as(Integer.class);
+
+        ManagedChannel channel = getChannel(mockContainerHost, mockContainerPort);
+        MockTraceServiceGrpc.MockTraceServiceBlockingStub mockTraceServiceGrpc = MockTraceServiceGrpc.newBlockingStub(channel);
+
         given()
                 .contentType("application/json")
                 .when().get("/direct")
@@ -47,9 +63,20 @@ class GcpTraceBatchExporterTest {
                 .filter(sp -> !sp.getDisplayName().getValue().equals("Sent.api.MockTraceService/ListSpans"))
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(1, mockApplicationSpans.size());
-        Map<String, AttributeValue> attributeMapMap = mockApplicationSpans.get(0).getAttributes().getAttributeMapMap();
+        Assertions.assertEquals(3, mockApplicationSpans.size());
+        Map<String, AttributeValue> hostAttributeMapMap = mockApplicationSpans.get(0).getAttributes().getAttributeMapMap();
+        Assertions.assertEquals("/config/host", hostAttributeMapMap.get("/http/route").getStringValue().getValue());
+
+        Map<String, AttributeValue> portAttributeMapMap = mockApplicationSpans.get(1).getAttributes().getAttributeMapMap();
+        Assertions.assertEquals("/config/port", portAttributeMapMap.get("/http/route").getStringValue().getValue());
+
+        Map<String, AttributeValue> attributeMapMap = mockApplicationSpans.get(2).getAttributes().getAttributeMapMap();
         Assertions.assertEquals("/direct", attributeMapMap.get("/http/route").getStringValue().getValue());
     }
 
+    private ManagedChannel getChannel(String host, Integer port) {
+        return ManagedChannelBuilder.forAddress(host, port)
+                .usePlaintext()
+                .build();
+    }
 }

@@ -8,7 +8,7 @@ import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 public class GcpTraceBatchExporterTestResource implements QuarkusTestResourceLifecycleManager {
 
-    private CloudOperationsMockContainer cloudOperationsMockContainer;
+    protected static CloudOperationsMockContainer cloudOperationsMockContainer;
 
     @Override
     public void init(Map<String, String> initArgs) {
@@ -26,8 +26,8 @@ public class GcpTraceBatchExporterTestResource implements QuarkusTestResourceLif
                 "quarkus.opentelemetry.tracer.exporter.gcp.endpoint",
                 String.format("%s:%d", cloudOperationsMockContainer.getHost(),
                         cloudOperationsMockContainer.getFirstMappedPort()),
-                "quarkus.grpc.clients.mockTraceServiceGrpc.host", cloudOperationsMockContainer.getHost(),
-                "quarkus.grpc.clients.mockTraceServiceGrpc.port", cloudOperationsMockContainer.getFirstMappedPort().toString());
+                "container.host", cloudOperationsMockContainer.getHost(),
+                "container.port", cloudOperationsMockContainer.getFirstMappedPort().toString());
     }
 
     @Override
