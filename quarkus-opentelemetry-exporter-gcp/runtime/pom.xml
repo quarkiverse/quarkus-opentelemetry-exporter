@@ -11,10 +11,6 @@
   <artifactId>quarkus-opentelemetry-exporter-gcp</artifactId>
   <name>Quarkus Opentelemetry Exporter GCP - Runtime</name>
 
-  <properties>
-    <gcp-opentelemetry.version>0.23.0</gcp-opentelemetry.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -51,12 +47,12 @@
     <dependency>
       <groupId>com.google.api</groupId>
       <artifactId>gax-grpc</artifactId>
-      <version>2.13.0</version>
+      <version>${gax-grpc.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.api</groupId>
       <artifactId>gax</artifactId>
-      <version>2.13.0</version>
+      <version>${gax-grpc.version}</version>
     </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>

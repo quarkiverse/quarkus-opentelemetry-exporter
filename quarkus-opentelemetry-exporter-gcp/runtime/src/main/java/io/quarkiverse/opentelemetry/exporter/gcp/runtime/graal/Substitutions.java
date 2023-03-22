@@ -1,4 +1,4 @@
-package io.quarkiverse.opentelemetry.exporter.it.graal;
+package io.quarkiverse.opentelemetry.exporter.gcp.runtime.graal;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -26,6 +26,8 @@ import io.grpc.Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.MethodDescriptor;
+import io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLogLevel;
+import io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLogger;
 
 /**
  * Cut out unsupported and optional features that are only present in grpc-alts.
@@ -149,5 +151,229 @@ final class GrpcChannelUUIDInterceptorTarget implements ClientInterceptor {
     public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> methodDescriptor,
             CallOptions callOptions, Channel channel) {
         throw new UnsupportedOperationException();
+    }
+}
+
+@TargetClass(className = "io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLoggerFactory")
+final class Targetio_grpc_netty_shaded_io_netty_util_internal_logging_InternalLoggerFactory {
+
+    @Substitute
+    static InternalLogger getInstance(Class<?> clazz) {
+        return new InternalLogger() {
+            @Override
+            public String name() {
+                return "noop";
+            }
+
+            @Override
+            public boolean isTraceEnabled() {
+                return false;
+            }
+
+            @Override
+            public void trace(String s) {
+
+            }
+
+            @Override
+            public void trace(String s, Object o) {
+
+            }
+
+            @Override
+            public void trace(String s, Object o, Object o1) {
+
+            }
+
+            @Override
+            public void trace(String s, Object... objects) {
+
+            }
+
+            @Override
+            public void trace(String s, Throwable throwable) {
+
+            }
+
+            @Override
+            public void trace(Throwable throwable) {
+
+            }
+
+            @Override
+            public boolean isDebugEnabled() {
+                return false;
+            }
+
+            @Override
+            public void debug(String s) {
+
+            }
+
+            @Override
+            public void debug(String s, Object o) {
+
+            }
+
+            @Override
+            public void debug(String s, Object o, Object o1) {
+
+            }
+
+            @Override
+            public void debug(String s, Object... objects) {
+
+            }
+
+            @Override
+            public void debug(String s, Throwable throwable) {
+
+            }
+
+            @Override
+            public void debug(Throwable throwable) {
+
+            }
+
+            @Override
+            public boolean isInfoEnabled() {
+                return false;
+            }
+
+            @Override
+            public void info(String s) {
+
+            }
+
+            @Override
+            public void info(String s, Object o) {
+
+            }
+
+            @Override
+            public void info(String s, Object o, Object o1) {
+
+            }
+
+            @Override
+            public void info(String s, Object... objects) {
+
+            }
+
+            @Override
+            public void info(String s, Throwable throwable) {
+
+            }
+
+            @Override
+            public void info(Throwable throwable) {
+
+            }
+
+            @Override
+            public boolean isWarnEnabled() {
+                return false;
+            }
+
+            @Override
+            public void warn(String s) {
+
+            }
+
+            @Override
+            public void warn(String s, Object o) {
+
+            }
+
+            @Override
+            public void warn(String s, Object... objects) {
+
+            }
+
+            @Override
+            public void warn(String s, Object o, Object o1) {
+
+            }
+
+            @Override
+            public void warn(String s, Throwable throwable) {
+
+            }
+
+            @Override
+            public void warn(Throwable throwable) {
+
+            }
+
+            @Override
+            public boolean isErrorEnabled() {
+                return false;
+            }
+
+            @Override
+            public void error(String s) {
+
+            }
+
+            @Override
+            public void error(String s, Object o) {
+
+            }
+
+            @Override
+            public void error(String s, Object o, Object o1) {
+
+            }
+
+            @Override
+            public void error(String s, Object... objects) {
+
+            }
+
+            @Override
+            public void error(String s, Throwable throwable) {
+
+            }
+
+            @Override
+            public void error(Throwable throwable) {
+
+            }
+
+            @Override
+            public boolean isEnabled(InternalLogLevel internalLogLevel) {
+                return false;
+            }
+
+            @Override
+            public void log(InternalLogLevel internalLogLevel, String s) {
+
+            }
+
+            @Override
+            public void log(InternalLogLevel internalLogLevel, String s, Object o) {
+
+            }
+
+            @Override
+            public void log(InternalLogLevel internalLogLevel, String s, Object o, Object o1) {
+
+            }
+
+            @Override
+            public void log(InternalLogLevel internalLogLevel, String s, Object... objects) {
+
+            }
+
+            @Override
+            public void log(InternalLogLevel internalLogLevel, String s, Throwable throwable) {
+
+            }
+
+            @Override
+            public void log(InternalLogLevel internalLogLevel, Throwable throwable) {
+
+            }
+        };
     }
 }
