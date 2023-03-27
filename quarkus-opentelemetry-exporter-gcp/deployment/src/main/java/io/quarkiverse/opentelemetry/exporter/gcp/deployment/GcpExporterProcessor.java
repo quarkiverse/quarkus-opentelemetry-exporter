@@ -7,7 +7,6 @@ import java.util.function.BooleanSupplier;
 import io.quarkiverse.opentelemetry.exporter.gcp.runtime.GcpExporterConfig;
 import io.quarkiverse.opentelemetry.exporter.gcp.runtime.GcpExporterProvider;
 import io.quarkiverse.opentelemetry.exporter.gcp.runtime.GcpRecorder;
-import io.quarkiverse.opentelemetry.exporter.gcp.runtime.GcpSimpleSpanExporterProvider;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.BuildSteps;
@@ -29,13 +28,6 @@ public class GcpExporterProcessor {
     AdditionalBeanBuildItem createBatchSpanProcessor() {
         return AdditionalBeanBuildItem.builder()
                 .addBeanClass(GcpExporterProvider.class)
-                .setUnremovable().build();
-    }
-
-    @BuildStep
-    AdditionalBeanBuildItem createSimpleSpanProcessor() {
-        return AdditionalBeanBuildItem.builder()
-                .addBeanClass(GcpSimpleSpanExporterProvider.class)
                 .setUnremovable().build();
     }
 

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import io.opentelemetry.api.OpenTelemetry;
-import io.quarkiverse.opentelemetry.exporter.jaeger.runtime.LateBoundBatchSpanProcessor;
+import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
 import io.quarkus.test.QuarkusUnitTest;
 
 public class JaegerExporterDisabledTest {
@@ -22,7 +22,7 @@ public class JaegerExporterDisabledTest {
     OpenTelemetry openTelemetry;
 
     @Inject
-    Instance<LateBoundBatchSpanProcessor> lateBoundBatchSpanProcessorInstance;
+    Instance<LateBoundSpanProcessor> lateBoundBatchSpanProcessorInstance;
 
     @Test
     void testOpenTelemetryButNoBatchSpanProcessor() {
