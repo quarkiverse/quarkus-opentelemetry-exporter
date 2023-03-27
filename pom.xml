@@ -15,6 +15,7 @@
     <name>Quarkus Opentelemetry Exporter - Parent</name>
 
     <modules>
+        <module>quarkus-opentelemetry-exporter-common</module>
         <module>quarkus-opentelemetry-exporter-jaeger</module>
         <module>quarkus-opentelemetry-exporter-gcp</module>
         <module>docs</module>
@@ -40,6 +41,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+                <artifactId>quarkus-opentelemetry-exporter-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-bom</artifactId>

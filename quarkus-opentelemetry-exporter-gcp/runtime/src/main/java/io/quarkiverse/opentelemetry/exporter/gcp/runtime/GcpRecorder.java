@@ -9,15 +9,17 @@ import com.google.cloud.opentelemetry.trace.TestTraceConfigurationBuilder;
 import com.google.cloud.opentelemetry.trace.TraceConfiguration;
 import com.google.cloud.opentelemetry.trace.TraceExporter;
 
+import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
 import io.quarkus.runtime.LaunchMode;
 import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
 public class GcpRecorder {
     public void installSpanProcessorForGcp(GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig, LaunchMode launchMode) {
-        if (launchMode != LaunchMode.TEST && !runtimeConfig.endpoint.isPresent()) {
+        if (launchMode != LaunchMode.TEST && runtimeConfig.endpoint.isEmpty()) {
             try {
                 configureTraceExporter(runtimeConfig);
             } catch (IOException e) {
@@ -64,19 +66,19 @@ public class GcpRecorder {
         BatchSpanProcessor batchSpanProcessor = BatchSpanProcessor.builder(TraceExporter.createWithConfiguration(config))
                 .build();
 
-        LateBoundBatchSpanProcessor delayedProcessor = CDI.current()
-                .select(LateBoundBatchSpanProcessor.class, Any.Literal.INSTANCE).get();
+        LateBoundSpanProcessor delayedProcessor = CDI.current()
+                .select(LateBoundSpanProcessor.class, Any.Literal.INSTANCE).get();
 
-        delayedProcessor.setBatchSpanProcessorDelegate(batchSpanProcessor);
+        delayedProcessor.setSpanProcessorDelegate(batchSpanProcessor);
     }
 
     private void configureSimpleSpanExporter(TraceConfiguration config) throws IOException {
         TraceExporter traceExporter = TraceExporter.createWithConfiguration(config);
-        SimpleSpanProcessor spanProcessor = (SimpleSpanProcessor) SimpleSpanProcessor.create(traceExporter);
+        SpanProcessor spanProcessor = SimpleSpanProcessor.create(traceExporter);
 
-        LateBoundSimpleSpanProcessor delayedProcessor = CDI.current()
-                .select(LateBoundSimpleSpanProcessor.class, Any.Literal.INSTANCE).get();
+        LateBoundSpanProcessor delayedProcessor = CDI.current()
+                .select(LateBoundSpanProcessor.class, Any.Literal.INSTANCE).get();
 
-        delayedProcessor.setSimpleSpanProcessorDelegate(spanProcessor);
+        delayedProcessor.setSpanProcessorDelegate(spanProcessor);
     }
 }

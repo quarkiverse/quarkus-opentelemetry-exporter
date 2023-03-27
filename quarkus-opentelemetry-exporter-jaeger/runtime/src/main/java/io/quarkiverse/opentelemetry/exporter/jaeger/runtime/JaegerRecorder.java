@@ -7,6 +7,7 @@ import javax.enterprise.inject.spi.CDI;
 
 import io.opentelemetry.exporter.jaeger.JaegerGrpcSpanExporter;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
 import io.quarkus.runtime.LaunchMode;
 import io.quarkus.runtime.annotations.Recorder;
 
@@ -28,10 +29,10 @@ public class JaegerRecorder {
                         .setTimeout(runtimeConfig.exportTimeout)
                         .build();
 
-                // Create BatchSpanProcessor for Jaeger and install into LateBoundBatchSpanProcessor
-                LateBoundBatchSpanProcessor delayedProcessor = CDI.current()
-                        .select(LateBoundBatchSpanProcessor.class, Any.Literal.INSTANCE).get();
-                delayedProcessor.setBatchSpanProcessorDelegate(BatchSpanProcessor.builder(jaegerSpanExporter).build());
+                // Create BatchSpanProcessor for Jaeger and install into LateBoundSpanProcessor
+                LateBoundSpanProcessor delayedProcessor = CDI.current()
+                        .select(LateBoundSpanProcessor.class, Any.Literal.INSTANCE).get();
+                delayedProcessor.setSpanProcessorDelegate(BatchSpanProcessor.builder(jaegerSpanExporter).build());
             } catch (IllegalArgumentException iae) {
                 throw new IllegalStateException("Unable to install Jaeger Exporter", iae);
             }

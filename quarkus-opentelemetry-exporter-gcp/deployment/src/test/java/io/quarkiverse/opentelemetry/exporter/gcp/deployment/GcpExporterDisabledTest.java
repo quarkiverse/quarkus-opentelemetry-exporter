@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import io.opentelemetry.api.OpenTelemetry;
-import io.quarkiverse.opentelemetry.exporter.gcp.runtime.LateBoundBatchSpanProcessor;
-import io.quarkiverse.opentelemetry.exporter.gcp.runtime.LateBoundSimpleSpanProcessor;
+import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
 import io.quarkus.test.QuarkusUnitTest;
 
 public class GcpExporterDisabledTest {
@@ -23,15 +22,11 @@ public class GcpExporterDisabledTest {
     OpenTelemetry openTelemetry;
 
     @Inject
-    Instance<LateBoundBatchSpanProcessor> lateBoundBatchSpanProcessorInstance;
-
-    @Inject
-    Instance<LateBoundSimpleSpanProcessor> lateBoundSimpleSpanProcessors;
+    Instance<LateBoundSpanProcessor> lateBoundSpanProcessorInstance;
 
     @Test
     void testOpenTelemetryButNoBatchSpanProcessor() {
         Assertions.assertNotNull(openTelemetry);
-        Assertions.assertFalse(lateBoundBatchSpanProcessorInstance.isResolvable());
-        Assertions.assertFalse(lateBoundSimpleSpanProcessors.isResolvable());
+        Assertions.assertFalse(lateBoundSpanProcessorInstance.isResolvable());
     }
 }
