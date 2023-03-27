@@ -1,0 +1,11 @@
+[
+    {
+      "name" : "com.google.api.client.json.GenericJson",
+      "allDeclaredConstructors" : true,
+      "allPublicConstructors" : true,
+      "allDeclaredMethods" : true,
+      "allPublicMethods" : true,
+      "allDeclaredFields" : true,
+      "allPublicFields" : true
+    }
+]
