@@ -1,7 +1,7 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.runtime;
 
-import javax.enterprise.inject.Produces;
-import javax.inject.Singleton;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Singleton;
 
 import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
 import io.quarkus.arc.DefaultBean;

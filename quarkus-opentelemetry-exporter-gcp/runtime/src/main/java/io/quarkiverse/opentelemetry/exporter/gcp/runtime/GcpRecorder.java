@@ -2,8 +2,8 @@ package io.quarkiverse.opentelemetry.exporter.gcp.runtime;
 
 import java.io.IOException;
 
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.spi.CDI;
+import jakarta.enterprise.inject.Any;
+import jakarta.enterprise.inject.spi.CDI;
 
 import com.google.cloud.opentelemetry.trace.TestTraceConfigurationBuilder;
 import com.google.cloud.opentelemetry.trace.TraceConfiguration;
