@@ -69,9 +69,9 @@ public class JaegerExporterTest {
         final List traces = (List) getJaegerTrace().get("data");
 
         assertEquals(2, traces.size());
-        final Map<String, Object> getPortTrace = getTrace(traces, "/get-port");
+        final Map<String, Object> getPortTrace = getTrace(traces, "GET /get-port");
         assertTrace(getPortTrace);
-        final Map<String, Object> directTrace = getTrace(traces, "/direct");
+        final Map<String, Object> directTrace = getTrace(traces, "GET /direct");
         assertTrace(directTrace);
     }
 
@@ -79,7 +79,7 @@ public class JaegerExporterTest {
         return (Map<String, Object>) data.stream()
                 .filter(entry -> ((Map<String, Object>) ((List) ((Map<String, Object>) entry)
                         .get("spans")).get(0))
-                        .get("operationName").equals("/direct"))
+                        .get("operationName").equals("GET /direct"))
                 .findFirst()
                 .orElse(Optional.empty());
     }

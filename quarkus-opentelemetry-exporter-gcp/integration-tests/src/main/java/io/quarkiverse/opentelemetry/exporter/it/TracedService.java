@@ -1,6 +1,6 @@
 package io.quarkiverse.opentelemetry.exporter.it;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 
