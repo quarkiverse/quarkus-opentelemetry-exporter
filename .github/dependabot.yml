@@ -13,7 +13,7 @@ updates:
     ignore:
       - dependency-name: "org.apache.maven.plugins:maven-compiler-plugin"
   - package-ecosystem: "maven"
-    target-branch: "2.x"
+    target-branch: "1.x"
     directory: "/"
     schedule:
       interval: "daily"
