@@ -21,6 +21,12 @@
         <module>docs</module>
     </modules>
 
+    <scm>
+        <connection>scm:git:git@github.com:quarkiverse/quarkus-opentelemetry-exporter.git</connection>
+        <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-opentelemetry-exporter.git</developerConnection>
+        <url>https://github.com/quarkiverse/quarkus-opentelemetry-exporter</url>
+    </scm>
+
     <properties>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <maven.compiler.release>11</maven.compiler.release>
