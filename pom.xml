@@ -29,7 +29,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <quarkus.version>2.16.6.Final</quarkus.version>
-        <opentelemetry.version>1.21.0</opentelemetry.version>
+        <opentelemetry.version>1.30.1</opentelemetry.version>
         <opentelemetry-alpha.version>1.21.0-alpha</opentelemetry-alpha.version>
 
         <gcp-opentelemetry.version>0.23.0</gcp-opentelemetry.version>
