@@ -30,7 +30,7 @@
 
         <quarkus.version>3.0.0.CR2</quarkus.version>
         <opentelemetry.version>1.23.1</opentelemetry.version>
-        <opentelemetry-alpha.version>1.23.0-alpha</opentelemetry-alpha.version>
+        <opentelemetry-alpha.version>1.30.0-alpha</opentelemetry-alpha.version>
 
         <gcp-opentelemetry.version>0.23.0</gcp-opentelemetry.version>
         <gax-grpc.version>2.13.0</gax-grpc.version>
