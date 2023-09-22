@@ -28,7 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <quarkus.version>3.0.0.CR2</quarkus.version>
+        <quarkus.version>3.4.1</quarkus.version>
         <opentelemetry.version>1.23.1</opentelemetry.version>
         <opentelemetry-alpha.version>1.23.0-alpha</opentelemetry-alpha.version>
 
