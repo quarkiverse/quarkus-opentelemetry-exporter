@@ -10,6 +10,8 @@ import io.quarkus.runtime.annotations.ConvertWith;
 import io.quarkus.runtime.configuration.TrimmedStringConverter;
 
 public class JaegerExporterConfig {
+    static final String DEFAULT_JAEGER_BASE_URI = "http://localhost:14250";
+
     @ConfigRoot(name = "opentelemetry.tracer.exporter.jaeger", phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED)
     public static class JaegerExporterBuildConfig {
         /**
@@ -26,7 +28,7 @@ public class JaegerExporterConfig {
         /**
          * The Jaeger endpoint to connect to. The endpoint must start with either http:// or https://.
          */
-        @ConfigItem
+        @ConfigItem(defaultValue = DEFAULT_JAEGER_BASE_URI)
         @ConvertWith(TrimmedStringConverter.class)
         public Optional<String> endpoint;
 
