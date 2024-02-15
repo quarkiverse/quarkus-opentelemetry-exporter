@@ -17,12 +17,7 @@ public class LateBoundSpanProcessor implements SpanProcessor {
     private boolean warningLogged = false;
     private SpanProcessor delegate;
 
-    /**
-     * Set the actual {@link SpanProcessor} to use as the delegate.
-     *
-     * @param delegate Properly constructed {@link SpanProcessor} for processing spans.
-     */
-    public void setSpanProcessorDelegate(SpanProcessor delegate) {
+    public LateBoundSpanProcessor(SpanProcessor delegate) {
         this.delegate = delegate;
     }
 

@@ -1,41 +1,47 @@
 package io.quarkiverse.opentelemetry.exporter.jaeger.runtime;
 
-import java.util.Optional;
+import java.net.URI;
+import java.util.function.Function;
 
-import jakarta.enterprise.inject.Any;
-import jakarta.enterprise.inject.spi.CDI;
-
+import io.opentelemetry.exporter.internal.ExporterBuilderUtil;
 import io.opentelemetry.exporter.jaeger.JaegerGrpcSpanExporter;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
-import io.quarkus.runtime.LaunchMode;
+import io.quarkiverse.opentelemetry.exporter.common.runtime.RemovableLateBoundSpanProcessor;
+import io.quarkus.arc.SyntheticCreationalContext;
 import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
 public class JaegerRecorder {
-    public void installBatchSpanProcessorForJaeger(JaegerExporterConfig.JaegerExporterRuntimeConfig runtimeConfig,
-            LaunchMode launchMode) {
 
-        if (launchMode == LaunchMode.DEVELOPMENT && !runtimeConfig.endpoint.isPresent()) {
-            // Default the endpoint for development only
-            runtimeConfig.endpoint = Optional.of("http://localhost:14250");
-        }
-
-        // Only create the JaegerGrpcSpanExporter if an endpoint was set in runtime config
-        if (runtimeConfig.endpoint.isPresent() && runtimeConfig.endpoint.get().trim().length() > 0) {
-            try {
-                JaegerGrpcSpanExporter jaegerSpanExporter = JaegerGrpcSpanExporter.builder()
-                        .setEndpoint(runtimeConfig.endpoint.get())
-                        .setTimeout(runtimeConfig.exportTimeout)
-                        .build();
-
-                // Create BatchSpanProcessor for Jaeger and install into LateBoundSpanProcessor
-                LateBoundSpanProcessor delayedProcessor = CDI.current()
-                        .select(LateBoundSpanProcessor.class, Any.Literal.INSTANCE).get();
-                delayedProcessor.setSpanProcessorDelegate(BatchSpanProcessor.builder(jaegerSpanExporter).build());
-            } catch (IllegalArgumentException iae) {
-                throw new IllegalStateException("Unable to install Jaeger Exporter", iae);
+    public Function<SyntheticCreationalContext<LateBoundSpanProcessor>, LateBoundSpanProcessor> createBatchSpanProcessorForJaeger(
+            JaegerExporterConfig.JaegerExporterRuntimeConfig runtimeConfig) {
+        URI baseUri = getBaseUri(runtimeConfig);
+        return new Function<>() {
+            @Override
+            public LateBoundSpanProcessor apply(SyntheticCreationalContext<LateBoundSpanProcessor> context) {
+                //Will embrace the default, if no endpoint is set
+                if (baseUri == null) {
+                    return RemovableLateBoundSpanProcessor.INSTANCE;
+                }
+                try {
+                    JaegerGrpcSpanExporter jaegerSpanExporter = JaegerGrpcSpanExporter.builder()
+                            .setEndpoint(baseUri.toString())
+                            .setTimeout(runtimeConfig.exportTimeout)
+                            .build();
+                    return new LateBoundSpanProcessor(BatchSpanProcessor.builder(jaegerSpanExporter).build());
+                } catch (IllegalArgumentException iae) {
+                    throw new IllegalStateException("Unable to install OTel Jaeger Exporter", iae);
+                }
             }
+        };
+    }
+
+    private URI getBaseUri(JaegerExporterConfig.JaegerExporterRuntimeConfig runtimeConfig) {
+        String endpoint = runtimeConfig.endpoint.orElse("").trim();
+        if (endpoint.isEmpty()) {
+            return null;
         }
+        return ExporterBuilderUtil.validateEndpoint(endpoint);
     }
 }

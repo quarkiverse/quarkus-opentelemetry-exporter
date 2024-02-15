@@ -1,9 +1,12 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.runtime.graal;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BooleanSupplier;
 
 import org.threeten.bp.Duration;
 
@@ -26,8 +29,11 @@ import io.grpc.Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.MethodDescriptor;
+import io.grpc.NameResolver;
 import io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLogLevel;
 import io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLogger;
+import io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLoggerFactory;
+import sun.misc.Unsafe;
 
 /**
  * Cut out unsupported and optional features that are only present in grpc-alts.
@@ -154,8 +160,63 @@ final class GrpcChannelUUIDInterceptorTarget implements ClientInterceptor {
     }
 }
 
+@TargetClass(className = "com.google.protobuf.UnsafeUtil")
+final class Target_com_google_protobuf_UnsafeUtil {
+    @Substitute
+    static sun.misc.Unsafe getUnsafe() {
+        try {
+            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+            theUnsafe.setAccessible(true);
+            return (Unsafe) theUnsafe.get(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+
+/**
+ * Copy from io.quarkus.grpc.common.runtime.graal.Target_io_grpc_netty_UdsNameResolverProvider
+ */
+@TargetClass(className = "io.grpc.netty.shaded.io.grpc.netty.UdsNameResolverProvider", onlyWith = NoDomainSocketPredicate.class)
+final class Target_io_grpc_netty_shaded_io_grpc_netty_UdsNameResolverProvider {
+
+    @Substitute
+    protected boolean isAvailable() {
+        return false;
+    }
+
+    @Substitute
+    public Object newNameResolver(URI targetUri, NameResolver.Args args) {
+        // gRPC calls this method without calling isAvailable, so, make sure we do not touch the UdsNameResolver class.
+        // (as it requires domain sockets)
+        return null;
+    }
+}
+
+final class NoDomainSocketPredicate implements BooleanSupplier {
+    @Override
+    public boolean getAsBoolean() {
+        try {
+            this.getClass().getClassLoader().loadClass("io.grpc.netty.shaded.io.netty.channel.unix.DomainSocketAddress");
+            return false;
+        } catch (Exception ignored) {
+            return true;
+        }
+    }
+}
+
 @TargetClass(className = "io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLoggerFactory")
 final class Targetio_grpc_netty_shaded_io_netty_util_internal_logging_InternalLoggerFactory {
+
+    @Substitute
+    public static InternalLoggerFactory newDefaultFactory(String name) {
+        return new InternalLoggerFactory() {
+            @Override
+            protected InternalLogger newInstance(String s) {
+                return getInstance(s);
+            }
+        };
+    }
 
     @Substitute
     static InternalLogger getInstance(Class<?> clazz) {

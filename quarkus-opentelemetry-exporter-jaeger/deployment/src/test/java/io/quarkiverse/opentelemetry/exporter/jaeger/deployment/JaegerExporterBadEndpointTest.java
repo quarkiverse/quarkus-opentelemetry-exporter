@@ -15,7 +15,7 @@ public class JaegerExporterBadEndpointTest {
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .withEmptyApplication()
             .overrideConfigKey("quarkus.opentelemetry.tracer.exporter.jaeger.endpoint", "httz://nada:zero")
-            .setExpectedException(IllegalStateException.class);
+            .setExpectedException(IllegalArgumentException.class);
 
     @Inject
     OpenTelemetry openTelemetry;

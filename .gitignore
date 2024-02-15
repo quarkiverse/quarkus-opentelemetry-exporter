@@ -12,3 +12,9 @@ buildNumber.properties
 /.idea/.gitignore
 /.idea/
 /docs/modules/ROOT/pages/includes/
+/docs/quarkus-opentelemetry-exporter-docs.iml
+/quarkus-opentelemetry-exporter-common/quarkus-opentelemetry-exporter-common.iml
+/quarkus-opentelemetry-exporter-gcp/deployment/quarkus-opentelemetry-exporter-gcp-deployment.iml
+/quarkus-opentelemetry-exporter-gcp/integration-tests/quarkus-opentelemetry-exporter-gcp-integration-tests.iml
+/quarkus-opentelemetry-exporter-gcp/runtime/quarkus-opentelemetry-exporter-gcp.iml
+/migrate.sh
