@@ -46,9 +46,7 @@ public class GcpExporterProcessor {
     @BuildStep
     NativeImageConfigBuildItem nativeImageConfiguration() {
         NativeImageConfigBuildItem.Builder builder = NativeImageConfigBuildItem.builder()
-                .addRuntimeReinitializedClass("com.google.protobuf.UnsafeUtil")
-                .addRuntimeInitializedClass("io.grpc.netty.shaded.io.grpc.netty.UdsNameResolverProvider");
-        //                .addRuntimeReinitializedClass("io.grpc.netty.shaded.io.grpc.netty.UdsNameResolverProvider");
+                .addRuntimeReinitializedClass("com.google.protobuf.UnsafeUtil");
         return builder.build();
     }
 
