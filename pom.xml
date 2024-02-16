@@ -32,7 +32,7 @@
         <opentelemetry.version>1.21.0</opentelemetry.version>
         <opentelemetry-alpha.version>1.21.0-alpha</opentelemetry-alpha.version>
 
-        <gcp-opentelemetry.version>0.23.0</gcp-opentelemetry.version>
+        <gcp-opentelemetry.version>0.27.0</gcp-opentelemetry.version>
         <gax-grpc.version>2.13.0</gax-grpc.version>
 
         <assertj-core.version>3.24.2</assertj-core.version>
