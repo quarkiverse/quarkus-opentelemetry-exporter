@@ -39,6 +39,7 @@
         <quarkus.version>3.5.0</quarkus.version>
         <opentelemetry.version>1.31.0</opentelemetry.version>
         <opentelemetry-alpha.version>1.31.0-alpha</opentelemetry-alpha.version>
+        <smallrye-config.version>3.5.4</smallrye-config.version>
 
         <gcp-opentelemetry.version>0.26.0</gcp-opentelemetry.version>
         <gax-grpc.version>2.39.0</gax-grpc.version>
