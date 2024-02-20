@@ -1,3 +1,5 @@
+package io.quarkiverse.opentelemetry.exporter.azure.runtime;
+
 import java.util.Optional;
 
 import io.quarkus.runtime.annotations.ConfigPhase;
