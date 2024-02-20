@@ -24,10 +24,10 @@ import io.quarkus.opentelemetry.deployment.exporter.otlp.ExternalOtelExporterBui
 public class AzureExporterProcessor {
 
     static class AzureExporterEnabled implements BooleanSupplier {
-        AzureExporterConfig.AzureExporterBuildConfig jaegerExporterConfig;
+        AzureExporterConfig.AzureExporterBuildConfig azureExporterConfig;
 
         public boolean getAsBoolean() {
-            return jaegerExporterConfig.enabled;
+            return azureExporterConfig.enabled;
         }
     }
 
