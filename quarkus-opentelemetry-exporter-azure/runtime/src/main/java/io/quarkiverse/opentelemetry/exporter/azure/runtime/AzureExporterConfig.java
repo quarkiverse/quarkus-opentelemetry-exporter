@@ -1,7 +1,5 @@
 package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
-import java.util.Optional;
-
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.quarkus.runtime.annotations.ConvertWith;
@@ -21,7 +19,7 @@ public class AzureExporterConfig {
          */
         @ConvertWith(TrimmedStringConverter.class)
         //applicationinsights.connection.string
-        public Optional<String> string;
+        public String string;
 
     }
 }
