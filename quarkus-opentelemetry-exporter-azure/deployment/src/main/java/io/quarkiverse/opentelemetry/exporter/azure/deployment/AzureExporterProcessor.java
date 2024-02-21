@@ -12,23 +12,37 @@ import org.jboss.jandex.Type;
 
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
-import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterConfig;
+import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterBuildConfig;
+import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterRuntimeConfig;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureRecorder;
 import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
-import io.quarkus.deployment.annotations.*;
+import io.quarkus.deployment.annotations.BuildProducer;
+import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.annotations.BuildSteps;
+import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
+import io.quarkus.deployment.builditem.nativeimage.NativeImageConfigBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.opentelemetry.deployment.exporter.otlp.ExternalOtelExporterBuildItem;
 
 @BuildSteps(onlyIf = AzureExporterProcessor.AzureExporterEnabled.class)
 public class AzureExporterProcessor {
 
-    static class AzureExporterEnabled implements BooleanSupplier {
-        AzureExporterConfig.AzureExporterBuildConfig azureExporterConfig;
+    public static class AzureExporterEnabled implements BooleanSupplier {
+        AzureExporterBuildConfig azureExporterConfig;
 
         public boolean getAsBoolean() {
-            return azureExporterConfig.enabled;
+            return azureExporterConfig.enabled();
         }
+    }
+
+    @BuildStep
+    NativeImageConfigBuildItem build(
+            BuildProducer<ReflectiveClassBuildItem> reflectiveClass) {
+        NativeImageConfigBuildItem.Builder builder = NativeImageConfigBuildItem.builder()
+                .addRuntimeInitializedClass("io.netty.handler.ssl.OpenSslClientContext");
+        return builder.build();
     }
 
     @BuildStep
@@ -39,7 +53,7 @@ public class AzureExporterProcessor {
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
     SyntheticBeanBuildItem installBatchSpanProcessorForAzure(AzureRecorder recorder,
-            AzureExporterConfig.AzureExporterRuntimeConfig runtimeConfig) {
+            AzureExporterRuntimeConfig runtimeConfig) {
         return SyntheticBeanBuildItem.configure(LateBoundSpanProcessor.class)
                 .types(SpanProcessor.class)
                 .setRuntimeInit()

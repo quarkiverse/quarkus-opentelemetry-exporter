@@ -14,13 +14,14 @@ import io.quarkus.runtime.annotations.Recorder;
 public class AzureRecorder {
 
     public Function<SyntheticCreationalContext<LateBoundSpanProcessor>, LateBoundSpanProcessor> createSpanProcessorForAzure(
-            AzureExporterConfig.AzureExporterRuntimeConfig runtimeConfig) {
+            AzureExporterRuntimeConfig runtimeConfig) {
         return new Function<>() {
             @Override
             public LateBoundSpanProcessor apply(SyntheticCreationalContext<LateBoundSpanProcessor> context) {
                 try {
-                    String azureConnectionString = runtimeConfig.connectionString;
-                    SpanExporter azureSpanExporter = new AzureMonitorExporterBuilder().connectionString(azureConnectionString)
+                    String azureConnectionString = runtimeConfig.connectionString();
+                    SpanExporter azureSpanExporter = new AzureMonitorExporterBuilder()
+                            .connectionString(azureConnectionString)
                             .buildTraceExporter();
                     return new LateBoundSpanProcessor(BatchSpanProcessor.builder(azureSpanExporter).build());
                 } catch (IllegalArgumentException iae) {
