@@ -22,8 +22,6 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.BuildSteps;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
-import io.quarkus.deployment.builditem.nativeimage.NativeImageConfigBuildItem;
-import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.opentelemetry.deployment.exporter.otlp.ExternalOtelExporterBuildItem;
 
 @BuildSteps(onlyIf = AzureExporterProcessor.AzureExporterEnabled.class)
@@ -37,13 +35,13 @@ public class AzureExporterProcessor {
         }
     }
 
-    @BuildStep
-    NativeImageConfigBuildItem build(
-            BuildProducer<ReflectiveClassBuildItem> reflectiveClass) {
-        NativeImageConfigBuildItem.Builder builder = NativeImageConfigBuildItem.builder()
-                .addRuntimeInitializedClass("io.netty.handler.ssl.OpenSslClientContext");
-        return builder.build();
-    }
+    //    @BuildStep
+    //    NativeImageConfigBuildItem build(
+    //            BuildProducer<ReflectiveClassBuildItem> reflectiveClass) {
+    //        NativeImageConfigBuildItem.Builder builder = NativeImageConfigBuildItem.builder()
+    //                .addRuntimeReinitializedClass("io.netty.handler.ssl.OpenSslClientContext");
+    //        return builder.build();
+    //    }
 
     @BuildStep
     void registerExternalExporter(BuildProducer<ExternalOtelExporterBuildItem> buildProducer) {
