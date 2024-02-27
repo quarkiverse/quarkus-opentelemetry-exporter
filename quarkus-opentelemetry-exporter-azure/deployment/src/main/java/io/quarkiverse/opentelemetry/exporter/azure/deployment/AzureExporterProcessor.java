@@ -1,6 +1,7 @@
 package io.quarkiverse.opentelemetry.exporter.azure.deployment;
 
 import java.util.function.BooleanSupplier;
+import java.util.stream.Stream;
 
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Singleton;
@@ -22,6 +23,8 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.BuildSteps;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
+import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 import io.quarkus.opentelemetry.deployment.exporter.otlp.ExternalOtelExporterBuildItem;
 
 @BuildSteps(onlyIf = AzureExporterProcessor.AzureExporterEnabled.class)
@@ -35,13 +38,30 @@ public class AzureExporterProcessor {
         }
     }
 
-    //    @BuildStep
-    //    NativeImageConfigBuildItem build(
-    //            BuildProducer<ReflectiveClassBuildItem> reflectiveClass) {
-    //        NativeImageConfigBuildItem.Builder builder = NativeImageConfigBuildItem.builder()
-    //                .addRuntimeReinitializedClass("io.netty.handler.ssl.OpenSslClientContext");
-    //        return builder.build();
-    //    }
+    @BuildStep
+    void runtimeInitializedClasses(BuildProducer<RuntimeInitializedClassBuildItem> runtimeInitializedClasses) {
+        Stream.of(
+                /*
+                 * The following io.netty.util.* items were not accepted
+                 * to quarkus via https://github.com/quarkusio/quarkus/pull/14994
+                 * Keeping them here for now
+                 */
+                "reactor.netty.http.client.HttpClientSecure",
+                "reactor.netty.tcp.TcpClientSecure")
+                .map(RuntimeInitializedClassBuildItem::new)
+                .forEach(runtimeInitializedClasses::produce);
+    }
+
+    @BuildStep
+    void reflectiveClasses(BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
+
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(
+                "reactor.netty.channel.BootstrapHandlers$BootstrapInitializerHandler",
+                "reactor.netty.channel.ChannelOperationsHandler",
+                "reactor.netty.resources.PooledConnectionProvider$PooledConnectionAllocator$PooledConnectionInitializer",
+                "reactor.netty.tcp.SslProvider$SslReadHandler").methods().build());
+
+    }
 
     @BuildStep
     void registerExternalExporter(BuildProducer<ExternalOtelExporterBuildItem> buildProducer) {

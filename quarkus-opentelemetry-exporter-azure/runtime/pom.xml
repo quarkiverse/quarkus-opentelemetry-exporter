@@ -10,6 +10,18 @@
   <artifactId>quarkus-opentelemetry-exporter-azure</artifactId>
   <name>Quarkus Opentelemetry Exporter Azure - Runtime</name>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-bom</artifactId>
+        <version>${netty-bom.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
@@ -36,16 +48,17 @@
       <version>${smallrye-config.version}</version>
     </dependency>
 
+<!--    Beware this library uses netty-resolver-dns-native-macos hardcoded to x86 arch. -->
+<!--    You will get a warning when building the native image.-->
     <dependency>
       <groupId>com.azure</groupId>
       <artifactId>azure-monitor-opentelemetry-exporter</artifactId>
-      <version>1.0.0-beta.17</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.azure</groupId>
-          <artifactId>azure-core-http-netty</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>${azure-monitor-opentelemetry-exporter.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-netty</artifactId>
     </dependency>
 
     <dependency>

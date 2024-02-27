@@ -7,7 +7,6 @@
         <version>999-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
     <artifactId>quarkus-opentelemetry-exporter-azure-parent</artifactId>
     <packaging>pom</packaging>
     <name>Quarkus Opentelemetry Exporter - Azure</name>
