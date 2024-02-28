@@ -51,6 +51,12 @@
             <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.wiremock</groupId>
+            <artifactId>quarkus-wiremock-test</artifactId>
+            <version>1.2.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -10,23 +10,9 @@ import jakarta.ws.rs.core.MediaType;
 @Path("")
 @Produces(MediaType.APPLICATION_JSON)
 public class SimpleResource {
-    //    @RegisterRestClient(configKey = "simple")
-    //    public interface SimpleClient {
-    //        @Path("")
-    //        @GET
-    //        TraceData noPath();
-    //
-    //        @Path("/")
-    //        @GET
-    //        TraceData slashPath();
-    //    }
 
     @Inject
     TracedService tracedService;
-
-    //    @Inject
-    //    @RestClient
-    //    SimpleClient simpleClient;
 
     @GET
     public TraceData noPath() {
@@ -34,18 +20,6 @@ public class SimpleResource {
         data.message = "No path trace";
         return data;
     }
-
-    //    @GET
-    //    @Path("/nopath")
-    //    public TraceData noPathClient() {
-    //        return simpleClient.noPath();
-    //    }
-    //
-    //    @GET
-    //    @Path("/slashpath")
-    //    public TraceData slashPathClient() {
-    //        return simpleClient.slashPath();
-    //    }
 
     @GET
     @Path("/direct")
