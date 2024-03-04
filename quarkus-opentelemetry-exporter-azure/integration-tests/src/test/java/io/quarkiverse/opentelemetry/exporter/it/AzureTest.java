@@ -1,46 +1,49 @@
 package io.quarkiverse.opentelemetry.exporter.it;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
-import io.quarkiverse.wiremock.devservice.ConnectWireMock;
-import io.quarkiverse.wiremock.devservice.WireMockConfigKey;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
-@ConnectWireMock
 @TestProfile(Profile.DynamicPort.class)
 public class AzureTest {
 
-    WireMock wiremock;
+    public static final int WIREMOCK_PORT_NUMBER = 8090;
+    public static final int HTTPS_PORT_NUMBER = 53602; // See application.properties file
+    public static final String WIREMOCK_HOST = "localhost";
+    private WireMockServer wireMockServer;
 
-    @ConfigProperty(name = WireMockConfigKey.PORT)
-    Integer port;
+    @BeforeEach
+    public void startWireMock() {
+        wireMockServer = new WireMockServer(
+                new WireMockConfiguration().httpsPort(HTTPS_PORT_NUMBER).port(WIREMOCK_PORT_NUMBER));
+        wireMockServer.start();
+        configureFor(WIREMOCK_HOST, WIREMOCK_PORT_NUMBER);
+    }
+
+    @AfterEach
+    public void stopWireMock() {
+        wireMockServer.stop();
+    }
 
     @Test
-    void connectionTest() {
+    void connectionTest() throws InterruptedException {
 
-        wiremock.register(post(urlEqualTo("/export"))
-                .withPort(port)
+        wireMockServer.stubFor(any(urlEqualTo("https:///localhost:" + HTTPS_PORT_NUMBER + "/export/v2.1/track"))
+                .withPort(HTTPS_PORT_NUMBER)
                 .willReturn(aResponse().withStatus(200)));
 
-        given()
-                .contentType("application/json")
-                .when().get("/direct")
-                .then()
-                .statusCode(200)
-                .body("message", equalTo("Direct trace"));
+        Thread.sleep(30_000);
 
-
-        wiremock.verify(1, getRequestedFor(urlEqualTo("http://localhost:" + port + "/export")));
+        wireMockServer.verify(1, getRequestedFor(urlEqualTo("http://localhost:" + HTTPS_PORT_NUMBER + "/export")));
 
     }
 }
