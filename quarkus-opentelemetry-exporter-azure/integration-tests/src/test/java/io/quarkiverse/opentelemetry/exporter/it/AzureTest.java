@@ -1,6 +1,8 @@
 package io.quarkiverse.opentelemetry.exporter.it;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,16 +19,16 @@ import io.quarkus.test.junit.TestProfile;
 public class AzureTest {
 
     public static final int WIREMOCK_PORT_NUMBER = 8090;
-    public static final int HTTPS_PORT_NUMBER = 53602; // See application.properties file
+    public static final int HTTP_PORT_NUMBER = 53602; // See application.properties file
     public static final String WIREMOCK_HOST = "localhost";
     private WireMockServer wireMockServer;
 
     @BeforeEach
     public void startWireMock() {
         wireMockServer = new WireMockServer(
-                new WireMockConfiguration().httpsPort(HTTPS_PORT_NUMBER).port(WIREMOCK_PORT_NUMBER));
+                new WireMockConfiguration().port(HTTP_PORT_NUMBER).bindAddress("127.0.0.1"));
+
         wireMockServer.start();
-        configureFor(WIREMOCK_HOST, WIREMOCK_PORT_NUMBER);
     }
 
     @AfterEach
@@ -37,13 +39,22 @@ public class AzureTest {
     @Test
     void connectionTest() throws InterruptedException {
 
-        wireMockServer.stubFor(any(urlEqualTo("https:///localhost:" + HTTPS_PORT_NUMBER + "/export/v2.1/track"))
-                .withPort(HTTPS_PORT_NUMBER)
-                .willReturn(aResponse().withStatus(200)));
+        wireMockServer.stubFor(
+                //any(urlEqualTo("http://127.0.0.1:53602/export")
+                any(urlMatching(".*"))
+                        .withPort(HTTP_PORT_NUMBER)
+                        .willReturn(aResponse().withStatus(200)));
 
-        Thread.sleep(30_000);
+        given()
+                .contentType("application/json")
+                .when().get("/direct")
+                .then()
+                .statusCode(200)
+                .body("message", equalTo("Direct trace"));
 
-        wireMockServer.verify(1, getRequestedFor(urlEqualTo("http://localhost:" + HTTPS_PORT_NUMBER + "/export")));
+        Thread.sleep(5_000);
+
+        wireMockServer.verify(1, postRequestedFor(urlEqualTo("/export/v2.1/track")));
 
     }
 }
