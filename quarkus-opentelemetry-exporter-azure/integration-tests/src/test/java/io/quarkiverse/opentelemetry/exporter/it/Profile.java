@@ -1,9 +1,9 @@
 package io.quarkiverse.opentelemetry.exporter.it;
 
+import java.util.Map;
+
 import io.quarkiverse.wiremock.devservice.WireMockConfigKey;
 import io.quarkus.test.junit.QuarkusTestProfile;
-
-import java.util.Map;
 
 class Profile {
 
