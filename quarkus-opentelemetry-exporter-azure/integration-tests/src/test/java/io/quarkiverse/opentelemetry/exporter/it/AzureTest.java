@@ -4,30 +4,29 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
+import java.time.Duration;
+import java.util.concurrent.Callable;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.org.awaitility.Awaitility;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
-@TestProfile(Profile.DynamicPort.class)
 public class AzureTest {
 
-    public static final int WIREMOCK_PORT_NUMBER = 8090;
     public static final int HTTP_PORT_NUMBER = 53602; // See application.properties file
-    public static final String WIREMOCK_HOST = "localhost";
     private WireMockServer wireMockServer;
 
     @BeforeEach
     public void startWireMock() {
-        wireMockServer = new WireMockServer(
-                new WireMockConfiguration().port(HTTP_PORT_NUMBER).bindAddress("127.0.0.1"));
-
+        WireMockConfiguration wireMockConfiguration = new WireMockConfiguration().port(HTTP_PORT_NUMBER);
+        wireMockServer = new WireMockServer(wireMockConfiguration);
         wireMockServer.start();
     }
 
@@ -37,10 +36,9 @@ public class AzureTest {
     }
 
     @Test
-    void connectionTest() throws InterruptedException {
+    void connectionTest() {
 
         wireMockServer.stubFor(
-                //any(urlEqualTo("http://127.0.0.1:53602/export")
                 any(urlMatching(".*"))
                         .withPort(HTTP_PORT_NUMBER)
                         .willReturn(aResponse().withStatus(200)));
@@ -52,9 +50,19 @@ public class AzureTest {
                 .statusCode(200)
                 .body("message", equalTo("Direct trace"));
 
-        Thread.sleep(5_000);
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(10))
+                .until(azureExportIsDone(wireMockServer));
+    }
 
-        wireMockServer.verify(1, postRequestedFor(urlEqualTo("/export/v2.1/track")));
-
+    private static Callable<Boolean> azureExportIsDone(WireMockServer wireMockServer) {
+        return () -> {
+            try {
+                wireMockServer.verify(1, postRequestedFor(urlEqualTo("/export/v2.1/track")));
+                return Boolean.TRUE;
+            } catch (AssertionError e) {
+                return Boolean.FALSE;
+            }
+        };
     }
 }
