@@ -14,5 +14,5 @@ public interface AzureExporterBuildConfig {
      * Azure Span Exporter support is enabled by default.
      */
     @WithDefault("true")
-    public Boolean enabled();
+    Boolean enabled();
 }

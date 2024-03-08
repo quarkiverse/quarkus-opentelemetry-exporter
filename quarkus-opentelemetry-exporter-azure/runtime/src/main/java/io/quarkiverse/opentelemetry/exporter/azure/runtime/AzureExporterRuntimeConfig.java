@@ -15,5 +15,5 @@ public interface AzureExporterRuntimeConfig {
      */
     @WithConverter(TrimmedStringConverter.class)
     @WithName("applicationinsights.connection.string")
-    public String connectionString();
+    String connectionString();
 }
