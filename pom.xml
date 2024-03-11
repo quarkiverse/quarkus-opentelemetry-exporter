@@ -51,7 +51,7 @@
 
         <azure-monitor-opentelemetry-exporter.version>1.0.0-beta.19</azure-monitor-opentelemetry-exporter.version>
 
-        <assertj-core.version>3.24.2</assertj-core.version>
+        <assertj-core.version>3.25.3</assertj-core.version>
         <junit-jupiter.version>1.18.0</junit-jupiter.version>
     </properties>
 
