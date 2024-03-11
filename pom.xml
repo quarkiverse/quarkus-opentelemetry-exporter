@@ -38,20 +38,21 @@
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.5.3</quarkus.version>
+        <quarkus.version>3.8.3</quarkus.version>
         <netty-bom.version>4.1.107.Final</netty-bom.version>
-        <opentelemetry.version>1.31.0</opentelemetry.version>
-        <opentelemetry-alpha.version>1.31.0-alpha</opentelemetry-alpha.version>
-        <smallrye-config.version>3.5.4</smallrye-config.version>
+        <opentelemetry.version>1.32.0</opentelemetry.version>
+        <opentelemetry-alpha.version>1.32.0-alpha</opentelemetry-alpha.version>
         <!-- End-->
 
         <gcp-opentelemetry.version>0.26.0</gcp-opentelemetry.version>
         <gax-grpc.version>2.39.0</gax-grpc.version>
 
         <azure-monitor-opentelemetry-exporter.version>1.0.0-beta.21</azure-monitor-opentelemetry-exporter.version>
+        <quarkus-azure-services-bom.version>1.0.2</quarkus-azure-services-bom.version>
 
-        <assertj-core.version>3.24.2</assertj-core.version>
-        <junit-jupiter.version>1.18.0</junit-jupiter.version>
+        <assertj-core.version>3.25.3</assertj-core.version>
+        <testcontainers-junit-jupiter.version>1.19.7</testcontainers-junit-jupiter.version>
+        <quarkus-wiremock-test.version>1.2.0</quarkus-wiremock-test.version>
     </properties>
 
     <dependencyManagement>
