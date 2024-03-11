@@ -8,6 +8,7 @@ Currently, we support this implementation:
 * Microsoft Azure
 * Google Cloud Platform (Not available in native mode)
 
+This extension's version is aligned with the latest Quarkus version at the moment of each release, since v3.5.0.
 ## Documentation
 
 The documentation for this extension is stored in the `docs/` directory.
