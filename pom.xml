@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.quarkiverse</groupId>
         <artifactId>quarkiverse-parent</artifactId>
         <version>15</version>
-        <relativePath /> <!-- always from repository -->
+        <relativePath/> <!-- always from repository -->
     </parent>
 
     <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
@@ -17,6 +18,7 @@
     <modules>
         <module>quarkus-opentelemetry-exporter-common</module>
         <module>quarkus-opentelemetry-exporter-jaeger</module>
+        <module>quarkus-opentelemetry-exporter-azure</module>
         <module>quarkus-opentelemetry-exporter-gcp</module>
         <module>docs</module>
     </modules>
@@ -25,8 +27,8 @@
         <connection>scm:git:git@github.com:quarkiverse/quarkus-opentelemetry-exporter.git</connection>
         <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-opentelemetry-exporter.git</developerConnection>
         <url>https://github.com/quarkiverse/quarkus-opentelemetry-exporter</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
@@ -35,12 +37,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
+        <!-- Start-->
         <quarkus.version>3.5.0</quarkus.version>
+        <netty-bom.version>4.1.107.Final</netty-bom.version>
         <opentelemetry.version>1.31.0</opentelemetry.version>
         <opentelemetry-alpha.version>1.31.0-alpha</opentelemetry-alpha.version>
+        <smallrye-config.version>3.5.4</smallrye-config.version>
+        <!-- End-->
 
         <gcp-opentelemetry.version>0.26.0</gcp-opentelemetry.version>
         <gax-grpc.version>2.39.0</gax-grpc.version>
+
+        <azure-monitor-opentelemetry-exporter.version>1.0.0-beta.19</azure-monitor-opentelemetry-exporter.version>
 
         <assertj-core.version>3.24.2</assertj-core.version>
         <junit-jupiter.version>1.18.0</junit-jupiter.version>
