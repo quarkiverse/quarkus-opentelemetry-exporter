@@ -7,7 +7,7 @@ import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithConverter;
 import io.smallrye.config.WithName;
 
-@ConfigMapping(prefix = "quarkus.otel.azure")
+@ConfigMapping(prefix = "applicationinsights")
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
 public interface AzureExporterRuntimeConfig {
     /**
