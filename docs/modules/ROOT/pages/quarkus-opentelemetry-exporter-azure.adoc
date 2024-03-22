@@ -1,18 +1,14 @@
 = Quarkus Opentelemetry Exporter for Azure
 
-include::./includes/attributes.adoc[]
-
-Exporters are OpenTelemetry SDK Plugins which implement the Exporter interface, and emit telemetry to consumers, usually observability vendors.
+include::./includes/attributes.adoc[]s.
 
 This exporter sends data to the Azure portal.
 
-== Installation
+== General configuration
 
-To use this extension, first, add the `io.quarkiverse.opentelemetry.exporter:quarkus-opentelemetry` extension to your build file.
+First, add the [quarkus-opentelemetry extension](https://mvnrepository.com/artifact/io.quarkus/quarkus-opentelemetry) to your build file.
 
-After, add the Azure extensions.
-
-For Maven:
+After, add the [Azure extension](https://mvnrepository.com/artifact/io.quarkiverse.opentelemetry.exporter/quarkus-opentelemetry-exporter-azure) to be able to send the telemetry data to the Azure portal.
 
 [source,xml,subs=attributes+]
 ----
@@ -23,26 +19,31 @@ For Maven:
 </dependency>
 ----
 
-`quarkus-opentelemetry` extension already includes the default OTLP exporter. To deactivate that default exporter and only have this Azure extension exporting data, please set the following property in the `application.properties`:
+You also need an Application Insights resource receiving the telemetry data. Go to the Azure portal, search for your Application Insights resource or create a new one. On the overview page of your resource, you will find a connection string [in the top right corner](https://learn.microsoft.com/azure/azure-monitor/app/sdk-connection-string).
 
-[source]
-----
-quarkus.opentelemetry.tracer.exporter.otlp.enabled=false
-----
-
-Enable the Azure export by adding following properties in the `application.properties`:
-
-[source]
-----
-quarkus.opentelemetry.tracer.exporter.azure.enabled=true
-----
-
-You need an Application Insights resource receiving the telemetry data. Go to the Azure portal, search for your Application Insights resource or create a new one. On the overview page of your resource, you will find a connection string [in the top right corner](https://learn.microsoft.com/azure/azure-monitor/app/sdk-connection-string).
+You can set the connection string:
+* In the `application.properties` file:
 
 [source]
 ----
 quarkus.otel.azure.applicationinsights.connection.string=your_connection_string
 ----
+
+* Or as an environment variable: `QUARKUS_OTEL_AZURE_APPLICATIONINSIGHTS_CONNECTION_STRING=your_connection_string`
+
+You can disable the Azure export in this way:
+
+[source]
+----
+quarkus.opentelemetry.tracer.exporter.azure.enabled=false
+----
+
+Read [this page](https://quarkus.io/guides/opentelemetry#configuration-reference) to learn more configuration options.
+
+== Enable more instrumentation
+
+* Read [this documentation](https://quarkus.io/guides/opentelemetry#jdbc) to enable the JDBC instrumentation
+* Read [this documentation](https://quarkus.io/guides/opentelemetry#additional-instrumentation) to enable additional instrumentations
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference
