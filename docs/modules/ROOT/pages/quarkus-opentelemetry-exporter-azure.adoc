@@ -1,14 +1,14 @@
 = Quarkus Opentelemetry Exporter for Microsoft Azure
 
-include::./includes/attributes.adoc[]s.
+include::./includes/attributes.adoc[]
 
 This exporter sends data to the Azure portal.
 
 == General configuration
 
-First, add the [quarkus-opentelemetry extension](https://mvnrepository.com/artifact/io.quarkus/quarkus-opentelemetry) to your build file.
+First, add the https://mvnrepository.com/artifact/io.quarkus/quarkus-opentelemetry[quarkus-opentelemetry extension] to your build file.
 
-After, add the [Azure extension](https://mvnrepository.com/artifact/io.quarkiverse.opentelemetry.exporter/quarkus-opentelemetry-exporter-azure) to be able to send the telemetry data to the Azure portal.
+After, add the https://mvnrepository.com/artifact/io.quarkiverse.opentelemetry.exporter/quarkus-opentelemetry-exporter-azure[Azure extension] to be able to send the telemetry data to the Azure portal.
 
 [source,xml,subs=attributes+]
 ----
@@ -19,7 +19,7 @@ After, add the [Azure extension](https://mvnrepository.com/artifact/io.quarkiver
 </dependency>
 ----
 
-You also need an Application Insights resource receiving the telemetry data. Go to the Azure portal, search for your Application Insights resource or create a new one. On the overview page of your resource, you will find a connection string [in the top right corner](https://learn.microsoft.com/azure/azure-monitor/app/sdk-connection-string).
+You also need an Application Insights resource receiving the telemetry data. Go to the Azure portal, search for your Application Insights resource or create a new one. On the overview page of your resource, you will find a connection string https://learn.microsoft.com/azure/azure-monitor/app/sdk-connection-string[in the top right corner].
 
 You can set the connection string:
 * In the `application.properties` file:
@@ -38,12 +38,12 @@ You can disable the Azure export in this way:
 quarkus.opentelemetry.tracer.exporter.azure.enabled=false
 ----
 
-Read [this page](https://quarkus.io/guides/opentelemetry#configuration-reference) to learn more configuration options.
+Read https://quarkus.io/guides/opentelemetry#configuration-reference[this page] to learn more configuration options.
 
 == Enable more instrumentation
 
-* Read [this documentation](https://quarkus.io/guides/opentelemetry#jdbc) to enable the JDBC instrumentation
-* Read [this documentation](https://quarkus.io/guides/opentelemetry#additional-instrumentation) to enable additional instrumentations
+* Read https://quarkus.io/guides/opentelemetry#jdbc[this documentation] to enable the JDBC instrumentation
+* Read https://quarkus.io/guides/opentelemetry#additional-instrumentation[this documentation] to enable additional instrumentations
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference
