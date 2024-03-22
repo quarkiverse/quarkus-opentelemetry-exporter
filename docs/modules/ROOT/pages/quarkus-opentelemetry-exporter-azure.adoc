@@ -1,4 +1,4 @@
-= Quarkus Opentelemetry Exporter for Azure
+= Quarkus Opentelemetry Exporter for Microsoft Azure
 
 include::./includes/attributes.adoc[]s.
 
