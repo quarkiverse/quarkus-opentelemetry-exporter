@@ -22,6 +22,7 @@ After, add the https://mvnrepository.com/artifact/io.quarkiverse.opentelemetry.e
 You also need an Application Insights resource receiving the telemetry data. Go to the Azure portal, search for your Application Insights resource or create a new one. On the overview page of your resource, you will find a connection string https://learn.microsoft.com/azure/azure-monitor/app/sdk-connection-string[in the top right corner].
 
 You can set the connection string:
+
 * In the `application.properties` file:
 
 [source]
