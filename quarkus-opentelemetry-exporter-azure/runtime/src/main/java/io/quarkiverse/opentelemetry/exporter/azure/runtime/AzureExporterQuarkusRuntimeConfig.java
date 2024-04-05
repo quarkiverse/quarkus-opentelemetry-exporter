@@ -9,13 +9,13 @@ import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithConverter;
 import io.smallrye.config.WithName;
 
-@ConfigMapping(prefix = "applicationinsights")
+@ConfigMapping(prefix = "quarkus.otel.azure")
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
-public interface AzureExporterRuntimeConfig {
+public interface AzureExporterQuarkusRuntimeConfig {
     /**
      * The Azure connection string.
      */
     @WithConverter(TrimmedStringConverter.class)
-    @WithName("connection.string")
+    @WithName("applicationinsights.connection.string")
     Optional<String> connectionString();
 }

@@ -14,6 +14,7 @@ import org.jboss.jandex.Type;
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterBuildConfig;
+import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterQuarkusRuntimeConfig;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterRuntimeConfig;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureRecorder;
 import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
@@ -71,7 +72,7 @@ public class AzureExporterProcessor {
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
     SyntheticBeanBuildItem installBatchSpanProcessorForAzure(AzureRecorder recorder,
-            AzureExporterRuntimeConfig runtimeConfig) {
+            AzureExporterRuntimeConfig runtimeConfig, AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
         return SyntheticBeanBuildItem.configure(LateBoundSpanProcessor.class)
                 .types(SpanProcessor.class)
                 .setRuntimeInit()
@@ -79,7 +80,7 @@ public class AzureExporterProcessor {
                 .unremovable()
                 .addInjectionPoint(ParameterizedType.create(DotName.createSimple(Instance.class),
                         new Type[] { ClassType.create(DotName.createSimple(SpanExporter.class.getName())) }, null))
-                .createWith(recorder.createSpanProcessorForAzure(runtimeConfig))
+                .createWith(recorder.createSpanProcessorForAzure(runtimeConfig, quarkusRuntimeConfig))
                 .done();
     }
 }
