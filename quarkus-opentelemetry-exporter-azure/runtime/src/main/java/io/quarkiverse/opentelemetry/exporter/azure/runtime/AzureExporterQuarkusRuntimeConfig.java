@@ -9,14 +9,14 @@ import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithConverter;
 import io.smallrye.config.WithName;
 
-@ConfigMapping(prefix = "applicationinsights")
+@ConfigMapping(prefix = "quarkus.otel.azure")
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
-public interface AzureExporterRuntimeConfig {
+public interface AzureExporterQuarkusRuntimeConfig {
     /**
-     * The Azure connection string. Same as `quarkus.otel.azure.applicationinsights.connection.string` but with higher priority.
-     * Created for convenience because it's the recommended property name in Azure cloud.
+     * The Azure connection string. Same as `applicationinsights.connection.string`. Setting
+     * `applicationinsights.connection.string` takes precedence over the value set here.
      */
     @WithConverter(TrimmedStringConverter.class)
-    @WithName("connection.string")
+    @WithName("applicationinsights.connection.string")
     Optional<String> connectionString();
 }
