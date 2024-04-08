@@ -13,7 +13,7 @@ import io.smallrye.config.WithName;
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
 public interface AzureExporterRuntimeConfig {
     /**
-     * The Azure connection string.
+     * The Azure connection string. Same as `quarkus.otel.azure.applicationinsights.connection.string` but with higher priority. Created for convenience because it's the recommended property name in Azure cloud.
      */
     @WithConverter(TrimmedStringConverter.class)
     @WithName("connection.string")
