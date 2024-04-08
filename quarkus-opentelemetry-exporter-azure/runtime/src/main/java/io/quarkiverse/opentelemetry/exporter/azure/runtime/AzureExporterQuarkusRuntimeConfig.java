@@ -13,7 +13,8 @@ import io.smallrye.config.WithName;
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
 public interface AzureExporterQuarkusRuntimeConfig {
     /**
-     * The Azure connection string. Same as `applicationinsights.connection.string`. Setting `applicationinsights.connection.string` takes precedence over the value set here.
+     * The Azure connection string. Same as `applicationinsights.connection.string`. Setting
+     * `applicationinsights.connection.string` takes precedence over the value set here.
      */
     @WithConverter(TrimmedStringConverter.class)
     @WithName("applicationinsights.connection.string")
