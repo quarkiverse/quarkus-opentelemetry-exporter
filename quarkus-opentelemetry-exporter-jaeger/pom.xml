@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
         <artifactId>quarkus-opentelemetry-exporter-parent</artifactId>
-        <version>999-SNAPSHOT</version>
+        <version>3.8.3.0</version>
     </parent>
 
     <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
