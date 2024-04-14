@@ -13,9 +13,9 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>io.netty</groupId>
-        <artifactId>netty-bom</artifactId>
-        <version>${netty-bom.version}</version>
+        <groupId>io.quarkiverse.azureservices</groupId>
+        <artifactId>quarkus-azure-services-bom</artifactId>
+        <version>1.0.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -42,23 +42,23 @@
       <artifactId>quarkus-opentelemetry</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>io.smallrye.config</groupId>
-      <artifactId>smallrye-config</artifactId>
-      <version>${smallrye-config.version}</version>
-    </dependency>
-
 <!--    Beware this library uses netty-resolver-dns-native-macos hardcoded to x86 arch. -->
 <!--    You will get a warning when building the native image.-->
     <dependency>
       <groupId>com.azure</groupId>
       <artifactId>azure-monitor-opentelemetry-exporter</artifactId>
       <version>${azure-monitor-opentelemetry-exporter.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.azure</groupId>
+          <artifactId>azure-core-http-netty</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-netty</artifactId>
+      <groupId>io.quarkiverse.azureservices</groupId>
+      <artifactId>quarkus-azure-http-client-vertx</artifactId>
     </dependency>
 
     <dependency>
