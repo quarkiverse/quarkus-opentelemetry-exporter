@@ -45,7 +45,7 @@
         <!-- End-->
 
         <gcp-opentelemetry.version>0.26.0</gcp-opentelemetry.version>
-        <gax-grpc.version>2.39.0</gax-grpc.version>
+        <gax-grpc.version>2.47.0</gax-grpc.version>
 
         <azure-monitor-opentelemetry-exporter.version>1.0.0-beta.21</azure-monitor-opentelemetry-exporter.version>
         <quarkus-azure-services-bom.version>1.0.2</quarkus-azure-services-bom.version>
