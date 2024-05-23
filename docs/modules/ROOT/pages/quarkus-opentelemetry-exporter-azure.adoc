@@ -21,16 +21,28 @@ After, add the https://mvnrepository.com/artifact/io.quarkiverse.opentelemetry.e
 
 You also need an Application Insights resource receiving the telemetry data. Go to the Azure portal, search for your Application Insights resource or create a new one. On the overview page of your resource, you will find a connection string https://learn.microsoft.com/azure/azure-monitor/app/sdk-connection-string[in the top right corner].
 
-You can set the connection string:
+You then can set the connection string:
 
-* In the `application.properties` file:
+* In the `application.properties` file
 
 [source]
 ----
 quarkus.otel.azure.applicationinsights.connection.string=your_connection_string
 ----
 
-* Or as an environment variable: `QUARKUS_OTEL_AZURE_APPLICATIONINSIGHTS_CONNECTION_STRING=your_connection_string`
+* With the `QUARKUS_OTEL_AZURE_APPLICATIONINSIGHTS_CONNECTION_STRING=your_connection_string` environment variable
+
+You can also set the connection string with the standard Azure Application Insights way that takes precedence over the previous configuration:
+
+* In the `application.properties` file
+
+[source]
+----
+azure.applicationinsights.connection.string=your_connection_string
+----
+
+* With the `AZURE_APPLICATIONINSIGHTS_CONNECTION_STRING=your_connection_string` environment variable
+
 
 You can disable the Azure export in this way:
 
