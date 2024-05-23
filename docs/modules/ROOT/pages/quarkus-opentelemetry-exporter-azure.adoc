@@ -25,7 +25,7 @@ You have two options to set the connection string, one using the Quarkus naming 
 
 To set the connection string with the Quarkus naming semantics:
 
-* In the `application.properties` file
+* With the `application.properties` file
 
 [source]
 ----
@@ -34,9 +34,10 @@ quarkus.otel.azure.applicationinsights.connection.string=your_connection_string
 
 * With the `QUARKUS_OTEL_AZURE_APPLICATIONINSIGHTS_CONNECTION_STRING=your_connection_string` environment variable
 
-To set the connection string with the standard Azure Application Insights way that takes precedence over the Quarkus way:
 
-* In the `application.properties` file
+If you want to use the Azure Application Insights way of specifying the connection string, which takes precedence over the Quarkus way:
+
+* With the `application.properties` file
 
 [source]
 ----
