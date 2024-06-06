@@ -41,10 +41,10 @@ If you want to use the Azure Application Insights way of specifying the connecti
 
 [source]
 ----
-azure.applicationinsights.connection.string=your_connection_string
+applicationinsights.connection.string=your_connection_string
 ----
 
-* With the `AZURE_APPLICATIONINSIGHTS_CONNECTION_STRING=your_connection_string` environment variable
+* With the `APPLICATIONINSIGHTS_CONNECTION_STRING=your_connection_string` environment variable
 
 
 You can disable the Azure export in this way:
@@ -60,6 +60,9 @@ Read https://quarkus.io/guides/opentelemetry#configuration-reference[this page] 
 
 * Read https://quarkus.io/guides/opentelemetry#jdbc[this documentation] to enable the JDBC instrumentation
 * Read https://quarkus.io/guides/opentelemetry#additional-instrumentation[this documentation] to enable additional instrumentations
+
+== Enable more Azure extensions
+* Read https://docs.quarkiverse.io/quarkus-azure-services/dev/index.html[Quarkus Azure Services]
 
 [[extension-configuration-reference]]
 == Extension Configuration Reference
