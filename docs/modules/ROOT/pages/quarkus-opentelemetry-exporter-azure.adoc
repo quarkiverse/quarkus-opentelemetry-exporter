@@ -6,9 +6,9 @@ This exporter sends data to the Azure portal.
 
 == General configuration
 
-First, add the https://mvnrepository.com/artifact/io.quarkus/quarkus-opentelemetry[quarkus-opentelemetry extension] to your build file.
+Add the https://mvnrepository.com/artifact/io.quarkiverse.opentelemetry.exporter/quarkus-opentelemetry-exporter-azure[Azure exporter extension] to your build file.
 
-After, add the https://mvnrepository.com/artifact/io.quarkiverse.opentelemetry.exporter/quarkus-opentelemetry-exporter-azure[Azure extension] to be able to send the telemetry data to the Azure portal.
+For Maven:
 
 [source,xml,subs=attributes+]
 ----
