@@ -40,7 +40,7 @@
         <!-- Start-->
         <quarkus.version>3.8.3</quarkus.version>
         <netty-bom.version>4.1.107.Final</netty-bom.version>
-        <opentelemetry.version>1.32.0</opentelemetry.version>
+        <opentelemetry.version>1.40.0</opentelemetry.version>
         <opentelemetry-alpha.version>1.32.0-alpha</opentelemetry-alpha.version>
         <!-- End-->
 
