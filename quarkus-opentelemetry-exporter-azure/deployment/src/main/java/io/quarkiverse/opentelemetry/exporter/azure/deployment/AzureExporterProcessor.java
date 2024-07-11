@@ -5,8 +5,6 @@ import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Stream;
 
-import io.opentelemetry.sdk.trace.samplers.Sampler;
-import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureEndpointSampler;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Singleton;
 
@@ -22,6 +20,8 @@ import com.azure.core.http.vertx.VertxProvider;
 import io.netty.handler.ssl.OpenSsl;
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureEndpointSampler;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterBuildConfig;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterQuarkusRuntimeConfig;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterRuntimeConfig;
@@ -154,8 +154,8 @@ public class AzureExporterProcessor {
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
     SyntheticBeanBuildItem installAzureEndpointSampler(AzureRecorder recorder,
-                                                       AzureExporterRuntimeConfig runtimeConfig,
-                                                       AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
+            AzureExporterRuntimeConfig runtimeConfig,
+            AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
         return SyntheticBeanBuildItem.configure(AzureEndpointSampler.class)
                 .types(Sampler.class)
                 .setRuntimeInit()

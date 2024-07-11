@@ -1,5 +1,7 @@
 package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
+import java.util.List;
+
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.context.Context;
@@ -7,8 +9,6 @@ import io.opentelemetry.sdk.trace.data.LinkData;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import io.opentelemetry.sdk.trace.samplers.SamplingResult;
 import io.opentelemetry.semconv.SemanticAttributes;
-
-import java.util.List;
 
 /**
  * Sampler that drops spans based on the target of the request.
@@ -24,11 +24,11 @@ public class AzureEndpointSampler implements Sampler {
 
     @Override
     public SamplingResult shouldSample(Context context,
-                                       String s,
-                                       String s1,
-                                       SpanKind spanKind,
-                                       Attributes attributes,
-                                       List<LinkData> list) {
+            String s,
+            String s1,
+            SpanKind spanKind,
+            Attributes attributes,
+            List<LinkData> list) {
         if (spanKind.equals(SpanKind.SERVER)) {
             // HTTP_TARGET was split into url.path and url.query
             String path = attributes.get(SemanticAttributes.URL_PATH);

@@ -34,6 +34,16 @@ public class AzureRecorder {
         };
     }
 
+    public Function<SyntheticCreationalContext<AzureEndpointSampler>, AzureEndpointSampler> createSampler() {
+        return new Function<>() {
+            @Override
+            public AzureEndpointSampler apply(SyntheticCreationalContext<AzureEndpointSampler> context) {
+                List<String> dropTargets = Collections.emptyList();
+                return new AzureEndpointSampler(dropTargets);
+            }
+        };
+    }
+
     private static String findConnectionString(AzureExporterRuntimeConfig runtimeConfig,
             AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
         Optional<String> azureConnectionString = runtimeConfig.connectionString();
@@ -42,10 +52,5 @@ public class AzureRecorder {
         }
         return quarkusRuntimeConfig.connectionString()
                 .orElseThrow(() -> new IllegalStateException("Azure connection string is missing"));
-    }
-
-    public Function<SyntheticCreationalContext<Object>, Object> createSampler() {
-        List<String> dropTargets = Collections.emptyList();
-        return new AzureEndpointSampler(dropTargets);
     }
 }
