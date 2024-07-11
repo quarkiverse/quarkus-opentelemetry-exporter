@@ -1,5 +1,7 @@
 package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -43,6 +45,7 @@ public class AzureRecorder {
     }
 
     public Function<SyntheticCreationalContext<Object>, Object> createSampler() {
+        List<String> dropTargets = Collections.emptyList();
         return new AzureEndpointSampler(dropTargets);
     }
 }
