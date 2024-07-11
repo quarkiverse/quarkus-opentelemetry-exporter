@@ -41,4 +41,8 @@ public class AzureRecorder {
         return quarkusRuntimeConfig.connectionString()
                 .orElseThrow(() -> new IllegalStateException("Azure connection string is missing"));
     }
+
+    public Function<SyntheticCreationalContext<Object>, Object> createSampler() {
+        return new AzureEndpointSampler(dropTargets);
+    }
 }

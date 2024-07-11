@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Stream;
 
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureEndpointSampler;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Singleton;
 
@@ -146,6 +148,22 @@ public class AzureExporterProcessor {
                 .addInjectionPoint(ParameterizedType.create(DotName.createSimple(Instance.class),
                         new Type[] { ClassType.create(DotName.createSimple(SpanExporter.class.getName())) }, null))
                 .createWith(recorder.createSpanProcessorForAzure(runtimeConfig, quarkusRuntimeConfig))
+                .done();
+    }
+
+    @BuildStep
+    @Record(ExecutionTime.RUNTIME_INIT)
+    SyntheticBeanBuildItem installAzureEndpointSampler(AzureRecorder recorder,
+                                                       AzureExporterRuntimeConfig runtimeConfig,
+                                                       AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
+        return SyntheticBeanBuildItem.configure(AzureEndpointSampler.class)
+                .types(Sampler.class)
+                .setRuntimeInit()
+                .scope(Singleton.class)
+                .unremovable()
+                .addInjectionPoint(ParameterizedType.create(DotName.createSimple(Instance.class),
+                        new Type[] { ClassType.create(DotName.createSimple(Sampler.class.getName())) }, null))
+                .createWith(recorder.createSampler())
                 .done();
     }
 }
