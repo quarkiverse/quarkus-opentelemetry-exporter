@@ -1,8 +1,6 @@
 package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 import com.azure.monitor.opentelemetry.exporter.AzureMonitorExporterBuilder;
@@ -34,11 +32,18 @@ public class AzureRecorder {
         };
     }
 
-    public Function<SyntheticCreationalContext<AzureEndpointSampler>, AzureEndpointSampler> createSampler() {
+    public Function<SyntheticCreationalContext<AzureEndpointSampler>, AzureEndpointSampler> createSampler(
+            AzureExporterRuntimeConfig runtimeConfig, AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
         return new Function<>() {
             @Override
             public AzureEndpointSampler apply(SyntheticCreationalContext<AzureEndpointSampler> context) {
-                List<String> dropTargets = Collections.emptyList();
+                List<String> dropTargets = new ArrayList<>();
+                List<String> defaultAzureEndpoints = Arrays.asList("https://dc.services.visualstudio.com/",
+                        "https://rt.services.visualstudio.com/", "https://agent.azureserviceprofiler.net/");
+                dropTargets.addAll(defaultAzureEndpoints);
+                String connectionString = findConnectionString(runtimeConfig, quarkusRuntimeConfig);
+                List<String> urlsFromConnectionString = extractUrlsFrom(connectionString);
+                dropTargets.addAll(urlsFromConnectionString);
                 return new AzureEndpointSampler(dropTargets);
             }
         };
@@ -52,5 +57,15 @@ public class AzureRecorder {
         }
         return quarkusRuntimeConfig.connectionString()
                 .orElseThrow(() -> new IllegalStateException("Azure connection string is missing"));
+    }
+
+    private static List<String> extractUrlsFrom(String connectionString) {
+        String[] connectionElements = connectionString.split(";");
+        return Arrays.stream(connectionElements)
+                .map(element -> element.replaceAll("IngestionEndpoint=", ""))
+                .map(element -> element.replaceAll("LiveEndpoint=", ""))
+                .map(element -> element.replaceAll("ProfilerEndpoint=", ""))
+                .filter(element -> element.startsWith("http"))
+                .toList();
     }
 }

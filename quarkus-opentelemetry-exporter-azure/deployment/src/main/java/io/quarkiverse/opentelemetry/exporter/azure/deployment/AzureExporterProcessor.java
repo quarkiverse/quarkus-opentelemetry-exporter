@@ -163,7 +163,7 @@ public class AzureExporterProcessor {
                 .unremovable()
                 .addInjectionPoint(ParameterizedType.create(DotName.createSimple(Instance.class),
                         new Type[] { ClassType.create(DotName.createSimple(Sampler.class.getName())) }, null))
-                .createWith(recorder.createSampler())
+                .createWith(recorder.createSampler(runtimeConfig, quarkusRuntimeConfig))
                 .done();
     }
 }
