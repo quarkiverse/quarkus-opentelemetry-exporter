@@ -29,12 +29,11 @@ public class AzureEndpointSampler implements Sampler {
             SpanKind spanKind,
             Attributes attributes,
             List<LinkData> list) {
-        if (spanKind.equals(SpanKind.SERVER)) {
-            // HTTP_TARGET was split into url.path and url.query
-            String path = attributes.get(SemanticAttributes.URL_PATH);
-            String query = attributes.get(SemanticAttributes.URL_QUERY);
-            String target = path + (query == null ? "" : "?" + query);
-
+        if (spanKind.equals(SpanKind.CLIENT)) {
+            String target = attributes.get(SemanticAttributes.HTTP_URL);
+            if (target == null) {
+                target = attributes.get(SemanticAttributes.URL_FULL);
+            }
             if (shouldDrop(target)) {
                 return SamplingResult.drop();
             }

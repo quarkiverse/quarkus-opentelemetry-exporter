@@ -2,18 +2,22 @@ package io.quarkiverse.opentelemetry.exporter.it;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.awaitility.Awaitility;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -36,7 +40,7 @@ public class AzureTest {
     }
 
     @Test
-    void connectionTest() {
+    void connectionTest() throws InterruptedException {
 
         wireMockServer.stubFor(
                 any(urlMatching(".*"))
@@ -50,19 +54,27 @@ public class AzureTest {
                 .statusCode(200)
                 .body("message", equalTo("Direct trace"));
 
-        Awaitility.await()
+        await()
                 .atMost(Duration.ofSeconds(10))
-                .until(azureExportIsDone(wireMockServer));
+                .until(telemetryDataContainTheHttpCall(wireMockServer));
+
+        // Non regression test for https://github.com/Azure/azure-sdk-for-java/issues/41040
+        Thread.sleep(10_000);
+        List<LoggedRequest> telemetryExport = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")));
+        List<String> requestBodies = telemetryExport
+                .stream()
+                .map(request -> new String(request.getBody())).toList();
+        requestBodies.stream().forEach(System.out::println); // It's convenient to print the telemetry data on the console to spot potential issues
+        Optional<String> telemetryDataExport = requestBodies.stream()
+                .filter(body -> body.contains("RemoteDependency") && body.contains("POST /export/v2.1/track"))
+                .findAny();
+        assertThat(telemetryDataExport).as("Telemetry export request should not appear as a dependency.").isEmpty();
     }
 
-    private static Callable<Boolean> azureExportIsDone(WireMockServer wireMockServer) {
-        return () -> {
-            try {
-                wireMockServer.verify(1, postRequestedFor(urlEqualTo("/export/v2.1/track")));
-                return Boolean.TRUE;
-            } catch (AssertionError e) {
-                return Boolean.FALSE;
-            }
-        };
+    private static Callable<Boolean> telemetryDataContainTheHttpCall(WireMockServer wireMockServer) {
+        return () -> wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")))
+                .stream()
+                .map(request -> new String(request.getBody()))
+                .anyMatch(body -> body.contains("Request") && body.contains("GET /direct"));
     }
 }
