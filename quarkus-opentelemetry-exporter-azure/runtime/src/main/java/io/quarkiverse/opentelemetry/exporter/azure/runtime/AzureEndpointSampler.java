@@ -58,13 +58,6 @@ public class AzureEndpointSampler implements Sampler {
                 return true;
             }
         }
-        int lastSlashIndex = target.lastIndexOf('/');
-        if (lastSlashIndex != -1) {
-            if (safeContains(target.substring(0, lastSlashIndex) + "*")
-                    || safeContains(target.substring(0, lastSlashIndex) + "/*")) { // check if a wildcard matches
-                return true;
-            }
-        }
         return false;
     }
 

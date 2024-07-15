@@ -41,7 +41,11 @@ public class AzureRecorder {
             @Override
             public AzureEndpointSampler apply(SyntheticCreationalContext<AzureEndpointSampler> context) {
                 List<String> ingestionUrls = findIngestionUrls(runtimeConfig, quarkusRuntimeConfig);
-                List<String> dropTargets = addTrackPartInUrl(ingestionUrls);
+                List<String> statsBeatUrls = Arrays.asList("https://westeurope-5.in.applicationinsights.azure.com/",
+                        "https://westus-0.in.applicationinsights.azure.com/");
+                List<String> dropTargets = new ArrayList<>();
+                dropTargets.addAll(addTrackPartInUrl(ingestionUrls));
+                dropTargets.addAll(addTrackPartInUrl(statsBeatUrls));
                 return new AzureEndpointSampler(dropTargets);
             }
         };
