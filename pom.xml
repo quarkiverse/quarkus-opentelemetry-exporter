@@ -38,10 +38,11 @@
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.8.3</quarkus.version>
-        <netty-bom.version>4.1.107.Final</netty-bom.version>
-        <opentelemetry.version>1.32.0</opentelemetry.version>
-        <opentelemetry-alpha.version>1.32.0-alpha</opentelemetry-alpha.version>
+        <quarkus.version>3.13.0.CR1</quarkus.version>
+        <netty-bom.version>4.1.111.Final</netty-bom.version>
+        <opentelemetry.version>1.39.0</opentelemetry.version>
+        <opentelemetry-alpha.version>1.39.0-alpha</opentelemetry-alpha.version>
+        <opentelemetry-instrumentation-alpha.version>2.5.0-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
         <gcp-opentelemetry.version>0.26.0</gcp-opentelemetry.version>
@@ -86,7 +87,7 @@
             <dependency>
                 <groupId>io.opentelemetry.instrumentation</groupId>
                 <artifactId>opentelemetry-instrumentation-bom-alpha</artifactId>
-                <version>${opentelemetry-alpha.version}</version>
+                <version>${opentelemetry-instrumentation-alpha.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
