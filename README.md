@@ -4,7 +4,7 @@
 
 Exporters are OpenTelemetry SDK Plugins which implement the Exporter interface, and emit telemetry to consumers, usually observability vendors.
 Currently, we support this implementation:
-* Jaeger
+* Jaeger (Deprecated)
 * Microsoft Azure
 * Google Cloud Platform (Not available in native mode)
 
