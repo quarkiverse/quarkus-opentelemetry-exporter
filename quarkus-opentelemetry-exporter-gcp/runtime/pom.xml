@@ -30,18 +30,8 @@
       <artifactId>quarkus-opentelemetry</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-grpc-common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api</groupId>
-      <artifactId>gax-grpc</artifactId>
-      <version>${gax-grpc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.api</groupId>
-      <artifactId>gax</artifactId>
-      <version>${gax-grpc.version}</version>
+      <groupId>io.quarkiverse.googlecloudservices</groupId>
+      <artifactId>quarkus-google-cloud-common</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.cloud.opentelemetry</groupId>
