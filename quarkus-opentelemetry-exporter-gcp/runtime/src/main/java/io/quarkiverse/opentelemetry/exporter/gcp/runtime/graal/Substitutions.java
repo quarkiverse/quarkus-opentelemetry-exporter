@@ -1,7 +1,6 @@
 package io.quarkiverse.opentelemetry.exporter.gcp.runtime.graal;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.util.concurrent.Executor;
@@ -33,7 +32,6 @@ import io.grpc.NameResolver;
 import io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLogLevel;
 import io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLogger;
 import io.grpc.netty.shaded.io.netty.util.internal.logging.InternalLoggerFactory;
-import sun.misc.Unsafe;
 
 /**
  * Cut out unsupported and optional features that are only present in grpc-alts.
@@ -157,20 +155,6 @@ final class GrpcChannelUUIDInterceptorTarget implements ClientInterceptor {
     public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> methodDescriptor,
             CallOptions callOptions, Channel channel) {
         throw new UnsupportedOperationException();
-    }
-}
-
-@TargetClass(className = "com.google.protobuf.UnsafeUtil")
-final class Target_com_google_protobuf_UnsafeUtil {
-    @Substitute
-    static sun.misc.Unsafe getUnsafe() {
-        try {
-            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
-            theUnsafe.setAccessible(true);
-            return (Unsafe) theUnsafe.get(null);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
 

@@ -20,10 +20,6 @@
             <artifactId>quarkus-resteasy-jackson</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest-client</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
             <artifactId>quarkus-opentelemetry-exporter-azure</artifactId>
             <version>${project.version}</version>

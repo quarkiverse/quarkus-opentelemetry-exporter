@@ -15,7 +15,7 @@
         <!-- Make sure the doc is built after the other artifacts -->
         <dependency>
             <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
-            <artifactId>quarkus-opentelemetry-exporter-jaeger</artifactId>
+            <artifactId>quarkus-opentelemetry-exporter-azure</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

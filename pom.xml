@@ -16,7 +16,6 @@
 
     <modules>
         <module>quarkus-opentelemetry-exporter-common</module>
-        <module>quarkus-opentelemetry-exporter-jaeger</module>
         <module>quarkus-opentelemetry-exporter-azure</module>
         <module>quarkus-opentelemetry-exporter-gcp</module>
         <module>docs</module>
@@ -38,14 +37,15 @@
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.8.3</quarkus.version>
-        <netty-bom.version>4.1.107.Final</netty-bom.version>
-        <opentelemetry.version>1.32.0</opentelemetry.version>
-        <opentelemetry-alpha.version>1.32.0-alpha</opentelemetry-alpha.version>
+        <quarkus.version>3.13.0.CR1</quarkus.version>
+        <netty-bom.version>4.1.111.Final</netty-bom.version>
+        <opentelemetry.version>1.39.0</opentelemetry.version>
+        <opentelemetry-alpha.version>1.39.0-alpha</opentelemetry-alpha.version>
+        <opentelemetry-instrumentation-alpha.version>2.5.0-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
-        <gcp-opentelemetry.version>0.26.0</gcp-opentelemetry.version>
-        <gax-grpc.version>2.39.0</gax-grpc.version>
+        <gcp-opentelemetry.version>0.27.0</gcp-opentelemetry.version>
+<!--        <gax-grpc.version>2.39.0</gax-grpc.version>-->
 
         <azure-monitor-opentelemetry-exporter.version>1.0.0-beta.21</azure-monitor-opentelemetry-exporter.version>
         <quarkus-azure-services-bom.version>1.0.2</quarkus-azure-services-bom.version>
@@ -53,6 +53,7 @@
         <assertj-core.version>3.25.3</assertj-core.version>
         <testcontainers-junit-jupiter.version>1.19.7</testcontainers-junit-jupiter.version>
         <quarkus-wiremock-test.version>1.2.0</quarkus-wiremock-test.version>
+        <quarkus-google-cloud-services-bom.version>2.9.0</quarkus-google-cloud-services-bom.version>
     </properties>
 
     <dependencyManagement>
@@ -86,7 +87,14 @@
             <dependency>
                 <groupId>io.opentelemetry.instrumentation</groupId>
                 <artifactId>opentelemetry-instrumentation-bom-alpha</artifactId>
-                <version>${opentelemetry-alpha.version}</version>
+                <version>${opentelemetry-instrumentation-alpha.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.quarkiverse.googlecloudservices</groupId>
+                <artifactId>quarkus-google-cloud-services-bom</artifactId>
+                <version>${quarkus-google-cloud-services-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
