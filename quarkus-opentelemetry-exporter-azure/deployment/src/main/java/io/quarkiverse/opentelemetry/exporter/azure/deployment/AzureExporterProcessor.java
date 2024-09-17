@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Stream;
 
+import io.quarkus.opentelemetry.runtime.AutoConfiguredOpenTelemetrySdkBuilderCustomizer;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Singleton;
 
@@ -18,15 +19,9 @@ import com.azure.core.http.HttpClientProvider;
 import com.azure.core.http.vertx.VertxProvider;
 
 import io.netty.handler.ssl.OpenSsl;
-import io.opentelemetry.sdk.trace.SpanProcessor;
-import io.opentelemetry.sdk.trace.export.SpanExporter;
+import io.opentelemetry.sdk.autoconfigure.spi.AutoConfigurationCustomizerProvider;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
-import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureEndpointSampler;
-import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterBuildConfig;
-import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterQuarkusRuntimeConfig;
-import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureExporterRuntimeConfig;
-import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureRecorder;
-import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
+import io.quarkiverse.opentelemetry.exporter.azure.runtime.*;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
@@ -138,17 +133,20 @@ public class AzureExporterProcessor {
 
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
-    SyntheticBeanBuildItem installBatchSpanProcessorForAzure(AzureRecorder recorder,
+    SyntheticBeanBuildItem openTelemetryCustomizer(AzureRecorder recorder,
             AzureExporterRuntimeConfig runtimeConfig, AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
-        return SyntheticBeanBuildItem.configure(LateBoundSpanProcessor.class)
-                .types(SpanProcessor.class)
+        return SyntheticBeanBuildItem.configure(AutoConfiguredOpenTelemetrySdkBuilderCustomizer.class)
+                .types(AutoConfigurationCustomizerProvider.class)
                 .setRuntimeInit()
                 .scope(Singleton.class)
                 .unremovable()
                 .addInjectionPoint(ParameterizedType.create(DotName.createSimple(Instance.class),
-                        new Type[] { ClassType.create(DotName.createSimple(SpanExporter.class.getName())) }, null))
-                .createWith(recorder.createSpanProcessorForAzure(runtimeConfig, quarkusRuntimeConfig))
+                        new Type[] {
+                                ClassType.create(DotName.createSimple(AutoConfigurationCustomizerProvider.class.getName())) },
+                        null))
+                .createWith(recorder.createAzureMonitorCustomizer(runtimeConfig, quarkusRuntimeConfig))
                 .done();
+
     }
 
     @BuildStep
