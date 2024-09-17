@@ -4,11 +4,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import com.azure.monitor.opentelemetry.exporter.AzureMonitorExporterBuilder;
-
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
-import io.opentelemetry.sdk.trace.export.SpanExporter;
-import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
 import io.quarkus.arc.SyntheticCreationalContext;
 import io.quarkus.runtime.annotations.Recorder;
 
@@ -17,20 +12,14 @@ public class AzureRecorder {
 
     public static final Pattern SEMI_COLON_PATTERN = Pattern.compile(";");
 
-    public Function<SyntheticCreationalContext<LateBoundSpanProcessor>, LateBoundSpanProcessor> createSpanProcessorForAzure(
+    public Function<SyntheticCreationalContext<AzureMonitorCustomizer>, AzureMonitorCustomizer> createAzureMonitorCustomizer(
             AzureExporterRuntimeConfig runtimeConfig, AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
         return new Function<>() {
             @Override
-            public LateBoundSpanProcessor apply(SyntheticCreationalContext<LateBoundSpanProcessor> context) {
-                try {
-                    String azureConnectionString = findConnectionString(runtimeConfig, quarkusRuntimeConfig);
-                    SpanExporter azureSpanExporter = new AzureMonitorExporterBuilder()
-                            .connectionString(azureConnectionString)
-                            .buildTraceExporter();
-                    return new LateBoundSpanProcessor(BatchSpanProcessor.builder(azureSpanExporter).build());
-                } catch (IllegalArgumentException iae) {
-                    throw new IllegalStateException("Unable to install OTel Azure Exporter", iae);
-                }
+            public AzureMonitorCustomizer apply(
+                    SyntheticCreationalContext<AzureMonitorCustomizer> objectSyntheticCreationalContext) {
+                String azureConnectionString = findConnectionString(runtimeConfig, quarkusRuntimeConfig);
+                return new AzureMonitorCustomizer(azureConnectionString);
             }
         };
     }
