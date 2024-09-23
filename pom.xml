@@ -53,7 +53,7 @@
         <assertj-core.version>3.25.3</assertj-core.version>
         <testcontainers-junit-jupiter.version>1.19.7</testcontainers-junit-jupiter.version>
         <quarkus-wiremock-test.version>1.2.0</quarkus-wiremock-test.version>
-        <quarkus-google-cloud-services-bom.version>2.9.0</quarkus-google-cloud-services-bom.version>
+        <quarkus-google-cloud-services-bom.version>2.12.1</quarkus-google-cloud-services-bom.version>
     </properties>
 
     <dependencyManagement>
