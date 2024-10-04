@@ -48,7 +48,7 @@
         <azure-monitor-opentelemetry-exporter.version>1.0.0-beta.26</azure-monitor-opentelemetry-exporter.version>
         <quarkus-azure-services-bom.version>1.0.2</quarkus-azure-services-bom.version>
 
-        <assertj-core.version>3.25.3</assertj-core.version>
+        <assertj-core.version>3.26.3</assertj-core.version>
         <testcontainers-junit-jupiter.version>1.19.7</testcontainers-junit-jupiter.version>
         <quarkus-wiremock-test.version>1.2.0</quarkus-wiremock-test.version>
         <quarkus-google-cloud-services-bom.version>2.9.0</quarkus-google-cloud-services-bom.version>
