@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Stream;
 
-import io.quarkus.opentelemetry.runtime.AutoConfiguredOpenTelemetrySdkBuilderCustomizer;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Singleton;
 
@@ -37,6 +36,7 @@ import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildI
 import io.quarkus.deployment.builditem.nativeimage.ServiceProviderBuildItem;
 import io.quarkus.deployment.util.ServiceUtil;
 import io.quarkus.opentelemetry.deployment.exporter.otlp.ExternalOtelExporterBuildItem;
+import io.quarkus.opentelemetry.runtime.AutoConfiguredOpenTelemetrySdkBuilderCustomizer;
 
 @BuildSteps(onlyIf = AzureExporterProcessor.AzureExporterEnabled.class)
 public class AzureExporterProcessor {
