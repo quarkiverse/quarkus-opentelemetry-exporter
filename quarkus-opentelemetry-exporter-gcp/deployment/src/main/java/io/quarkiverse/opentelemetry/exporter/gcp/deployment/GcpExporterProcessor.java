@@ -34,7 +34,7 @@ public class GcpExporterProcessor {
         GcpExporterConfig.GcpExporterBuildConfig gcpExporterConfig;
 
         public boolean getAsBoolean() {
-            return gcpExporterConfig.enabled;
+            return gcpExporterConfig.enabled();
         }
     }
 

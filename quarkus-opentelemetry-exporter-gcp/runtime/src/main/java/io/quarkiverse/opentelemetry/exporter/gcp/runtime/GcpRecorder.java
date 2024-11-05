@@ -26,7 +26,7 @@ public class GcpRecorder {
             public LateBoundSpanProcessor apply(
                     SyntheticCreationalContext<LateBoundSpanProcessor> lateBoundSpanProcessorSyntheticCreationalContext) {
 
-                if (launchMode != LaunchMode.TEST && runtimeConfig.endpoint.isEmpty()) {
+                if (launchMode != LaunchMode.TEST && runtimeConfig.endpoint().isEmpty()) {
                     try {
                         return configureTraceExporter(runtimeConfig);
                     } catch (IOException e) {
@@ -35,13 +35,13 @@ public class GcpRecorder {
                 } else {
                     TraceConfiguration.Builder builder = TestTraceConfigurationBuilder.buildTestTraceConfiguration();
 
-                    if (runtimeConfig.endpoint.isPresent() && runtimeConfig.endpoint.get().trim().length() > 0) {
-                        builder.setTraceServiceEndpoint(runtimeConfig.endpoint.get());
+                    if (runtimeConfig.endpoint().isPresent() && runtimeConfig.endpoint().get().trim().length() > 0) {
+                        builder.setTraceServiceEndpoint(runtimeConfig.endpoint().get());
                     }
 
                     TraceConfiguration config = builder.build();
                     try {
-                        if (runtimeConfig.cloudrun) {
+                        if (runtimeConfig.cloudrun()) {
                             return configureSimpleSpanExporter(config);
                         } else {
                             return configureBatchSpanExporter(config);
@@ -58,13 +58,13 @@ public class GcpRecorder {
             throws IOException {
         TraceConfiguration.Builder builder = TraceConfiguration.builder();
 
-        if (runtimeConfig.projectid.isPresent() && runtimeConfig.projectid.get().trim().length() > 0) {
-            builder.setProjectId(runtimeConfig.projectid.get());
+        if (runtimeConfig.projectid().isPresent() && runtimeConfig.projectid().get().trim().length() > 0) {
+            builder.setProjectId(runtimeConfig.projectid().get());
         }
 
         TraceConfiguration traceConfig = builder.build();
         // Initialize GCP TraceExporter default configuration
-        if (runtimeConfig.cloudrun) {
+        if (runtimeConfig.cloudrun()) {
             return configureSimpleSpanExporter(traceConfig);
         } else {
             return configureBatchSpanExporter(traceConfig);
