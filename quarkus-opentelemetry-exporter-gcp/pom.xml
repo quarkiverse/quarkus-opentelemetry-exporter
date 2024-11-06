@@ -12,8 +12,8 @@
     <name>Quarkus Opentelemetry Exporter - GCP</name>
 
     <modules>
-        <module>runtime</module>
         <module>deployment</module>
+        <module>runtime</module>
     </modules>
 
     <profiles>

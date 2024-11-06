@@ -12,8 +12,8 @@
     <name>Quarkus Opentelemetry Exporter - Azure</name>
 
     <modules>
-        <module>runtime</module>
         <module>deployment</module>
+        <module>runtime</module>
     </modules>
 
     <profiles>
