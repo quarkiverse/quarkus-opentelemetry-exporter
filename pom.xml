@@ -133,19 +133,5 @@
                 <module>docs</module>
             </modules>
         </profile>
-
-        <profile>
-            <id>it</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>!true</value>
-                </property>
-            </activation>
-            <modules>
-                <module>quarkus-opentelemetry-exporter-azure/integration-tests</module>
-                <module>quarkus-opentelemetry-exporter-gcp/integration-tests</module>
-            </modules>
-        </profile>
     </profiles>
 </project>
