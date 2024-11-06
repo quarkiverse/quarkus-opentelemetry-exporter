@@ -42,7 +42,7 @@
         <opentelemetry-instrumentation-alpha.version>2.5.0-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
-        <gcp-opentelemetry.version>0.27.0</gcp-opentelemetry.version>
+        <gcp-opentelemetry.version>0.33.0</gcp-opentelemetry.version>
 <!--        <gax-grpc.version>2.39.0</gax-grpc.version>-->
 
         <azure-monitor-opentelemetry-exporter.version>1.0.0-beta.26</azure-monitor-opentelemetry-exporter.version>
