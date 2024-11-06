@@ -1,0 +1,47 @@
+= Quarkus Opentelemetry Exporter for Sentry
+
+include::./includes/attributes.adoc[]
+
+This exporter sends data to sentry.
+
+== General configuration
+
+Add the https://mvnrepository.com/artifact/io.quarkiverse.opentelemetry.exporter/quarkus-opentelemetry-exporter-sentry[Sentry exporter extension] to your build file.
+
+For Maven:
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+    <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+    <artifactId>quarkus-opentelemetry-exporter-sentry</artifactId>
+    <version>{project-version}</version>
+</dependency>
+----
+
+You also need a sentry project to receive the telemetry data. Go to the sentry portal, search for your project or create a new one. On the overview page of your project, you will find a DSN https://docs.sentry.io/product/sentry-basics/dsn-explained[in the top right corner].
+
+You can then set the dsn in your project configuration:
+
+* With the `application.properties` file
+
+[source]
+----
+quarkus.otel.sentry.dsn=your_dsn
+----
+
+* With the `QUARKUS_OTEL_SENTRY_DSN=your_dsn` environment variable
+
+
+Read https://quarkus.io/guides/opentelemetry#configuration-reference[this page] to learn more configuration options.
+
+== Enable more instrumentation
+
+* Read https://quarkus.io/guides/opentelemetry#jdbc[this documentation] to enable the JDBC instrumentation
+* Read https://quarkus.io/guides/opentelemetry#additional-instrumentation[this documentation] to enable additional instrumentations
+
+
+[[extension-configuration-reference]]
+== Extension Configuration Reference
+
+include::includes/quarkus-opentelemetry-tracer-exporter-sentry.adoc[leveloffset=+1, opts=optional]
