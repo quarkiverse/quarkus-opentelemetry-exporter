@@ -44,16 +44,6 @@ If you want to use the Azure Application Insights way of specifying the connecti
 applicationinsights.connection.string=your_connection_string
 ----
 
-* With the `APPLICATIONINSIGHTS_CONNECTION_STRING=your_connection_string` environment variable
-
-
-You can disable the Azure export in this way:
-
-[source]
-----
-quarkus.opentelemetry.tracer.exporter.azure.enabled=false
-----
-
 Read https://quarkus.io/guides/opentelemetry#configuration-reference[this page] to learn more configuration options.
 
 == Enable more instrumentation
@@ -67,4 +57,8 @@ Read https://quarkus.io/guides/opentelemetry#configuration-reference[this page] 
 [[extension-configuration-reference]]
 == Extension Configuration Reference
 
-include::includes/quarkus-opentelemetry-tracer-exporter-azure.adoc[leveloffset=+1, opts=optional]
+include::includes/quarkus-opentelemetry-exporter-azure_quarkus.otel.adoc[leveloffset=+1, opts=optional]
+
+Configurations using the Azure semantics:
+
+include::includes/quarkus-opentelemetry-exporter-azure_applicationinsights.adoc[leveloffset=+1, opts=optional]
