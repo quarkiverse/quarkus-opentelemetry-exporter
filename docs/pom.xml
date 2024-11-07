@@ -13,21 +13,6 @@
     <name>Quarkus Opentelemetry Exporter - Documentation</name>
 
     <dependencies>
-        <dependency>
-            <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
-            <artifactId>quarkus-opentelemetry-exporter-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
-            <artifactId>quarkus-opentelemetry-exporter-gcp</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
-            <artifactId>quarkus-opentelemetry-exporter-azure</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <!-- Make sure the doc is built after the other artifacts -->
         <dependency>
@@ -45,7 +30,7 @@
         </dependency>
         <dependency>
             <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
-            <artifactId>quarkus-opentelemetry-exporter-azure</artifactId>
+            <artifactId>quarkus-opentelemetry-exporter-azure-deployment</artifactId>
             <version>${project.version}</version>
             <type>pom</type>
             <scope>test</scope>
