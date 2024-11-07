@@ -2,6 +2,8 @@ package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
 import java.util.List;
 
+import jakarta.inject.Singleton;
+
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.context.Context;
@@ -14,6 +16,7 @@ import io.opentelemetry.semconv.SemanticAttributes;
  * Sampler that drops spans based on the target of the request.
  * Inspired by {@link io.quarkus.opentelemetry.runtime.tracing.DropTargetsSampler}
  */
+@Singleton
 public class AzureEndpointSampler implements Sampler {
 
     private final List<String> dropTargets;

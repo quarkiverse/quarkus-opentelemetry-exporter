@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
@@ -12,11 +13,48 @@
     <name>Quarkus Opentelemetry Exporter - Documentation</name>
 
     <dependencies>
-        <!-- Make sure the doc is built after the other artifacts -->
+        <dependency>
+            <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+            <artifactId>quarkus-opentelemetry-exporter-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+            <artifactId>quarkus-opentelemetry-exporter-gcp</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
             <artifactId>quarkus-opentelemetry-exporter-azure</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <!-- Make sure the doc is built after the other artifacts -->
+        <dependency>
+            <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+            <artifactId>quarkus-opentelemetry-exporter-gcp-deployment</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
+            <artifactId>quarkus-opentelemetry-exporter-azure</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -52,6 +90,14 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-config-doc-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <targetDirectory>${project.basedir}/modules/ROOT/pages/includes/</targetDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
@@ -63,11 +109,6 @@
                         <configuration>
                             <outputDirectory>modules/ROOT/pages/includes</outputDirectory>
                             <resources>
-                                <resource>
-                                    <directory>${project.basedir}/../target/asciidoc/generated/config/</directory>
-                                    <include>quarkus-opentelemetry-tracer-exporter-*.adoc</include>
-                                    <filtering>false</filtering>
-                                </resource>
                                 <resource>
                                     <directory>${project.basedir}/templates/includes</directory>
                                     <include>attributes.adoc</include>
