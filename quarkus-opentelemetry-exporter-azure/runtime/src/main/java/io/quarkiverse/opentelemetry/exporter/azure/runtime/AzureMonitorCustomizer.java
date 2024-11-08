@@ -1,7 +1,8 @@
 package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
-import com.azure.monitor.opentelemetry.exporter.AzureMonitorExporter;
 import jakarta.inject.Singleton;
+
+import com.azure.monitor.opentelemetry.exporter.AzureMonitorExporter;
 
 import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdkBuilder;
 import io.quarkus.opentelemetry.runtime.AutoConfiguredOpenTelemetrySdkBuilderCustomizer;
