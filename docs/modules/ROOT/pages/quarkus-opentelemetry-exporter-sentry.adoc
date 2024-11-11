@@ -19,7 +19,7 @@ For Maven:
 </dependency>
 ----
 
-You also need a sentry project to receive the telemetry data. Go to the sentry portal, search for your project or create a new one. On the overview page of your project, you will find a DSN https://docs.sentry.io/product/sentry-basics/dsn-explained[in the top right corner].
+You also need a sentry project to receive the telemetry data. Go to the sentry portal, search for your project or create a new one. On the overview page of your project, you will find a DSN https://docs.sentry.io/concepts/key-terms/dsn-explainer[in the top right corner].
 
 You can then set the dsn in your project configuration:
 
