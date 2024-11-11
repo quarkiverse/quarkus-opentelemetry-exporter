@@ -48,8 +48,9 @@ Read https://quarkus.io/guides/opentelemetry#configuration-reference[this page] 
 
 == Enable more instrumentation
 
-* Read https://quarkus.io/guides/opentelemetry#jdbc[this documentation] to enable the JDBC instrumentation
-* Read https://quarkus.io/guides/opentelemetry#additional-instrumentation[this documentation] to enable additional instrumentations
+* Set the `quarkus.otel.logs.enabled` property to `true` to enable the logging instrumentation
+* Read https://quarkus.io/guides/opentelemetry-tracing#jdbc[this documentation] to enable the JDBC instrumentation
+* Read https://quarkus.io/guides/opentelemetry-tracing#additional-instrumentation[this documentation] to enable additional instrumentations
 
 == Enable more Azure extensions
 * Read https://docs.quarkiverse.io/quarkus-azure-services/dev/index.html[Quarkus Azure Services]
