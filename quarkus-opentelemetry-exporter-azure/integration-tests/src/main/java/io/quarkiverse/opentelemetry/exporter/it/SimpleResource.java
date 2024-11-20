@@ -1,5 +1,8 @@
 package io.quarkiverse.opentelemetry.exporter.it;
 
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.metrics.LongHistogram;
+import io.opentelemetry.api.metrics.Meter;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -14,6 +17,13 @@ public class SimpleResource {
     @Inject
     TracedService tracedService;
 
+    @Inject
+    OpenTelemetry openTelemetry;
+
+    public static final String METER_SCOPE = "meter-scope";
+
+    public static final String TEST_HISTOGRAM = "test-histogram";
+
     @GET
     public TraceData noPath() {
         TraceData data = new TraceData();
@@ -24,6 +34,10 @@ public class SimpleResource {
     @GET
     @Path("/direct")
     public TraceData directTrace() {
+        Meter meter = openTelemetry.getMeter(METER_SCOPE);
+        LongHistogram histogram = meter.histogramBuilder(TEST_HISTOGRAM).ofLongs().build();
+        histogram.record(10);
+
         TraceData data = new TraceData();
         data.message = "Direct trace";
 

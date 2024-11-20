@@ -58,6 +58,8 @@ public class AzureTest {
                 .atMost(Duration.ofSeconds(10))
                 .until(telemetryDataContainTheHttpCall(wireMockServer));
 
+        telemetryDataContainTheOTelMetric(wireMockServer);
+
         // Non regression test for https://github.com/Azure/azure-sdk-for-java/issues/41040
         Thread.sleep(10_000);
         List<LoggedRequest> telemetryExport = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")));
@@ -76,5 +78,13 @@ public class AzureTest {
                 .stream()
                 .map(request -> new String(request.getBody()))
                 .anyMatch(body -> body.contains("Request") && body.contains("GET /direct"));
+    }
+
+    private static Callable<Boolean> telemetryDataContainTheOTelMetric(WireMockServer wireMockServer) {
+        return () -> wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")))
+                .stream()
+                .map(request -> new String(request.getBody()))
+                .anyMatch(body -> body.contains("Metric") && body.contains("baseData\":{\"ver\":2,\"metrics\":[{\"name\":\""
+                        + SimpleResource.TEST_HISTOGRAM + "\",\"value\":10.0,\"count\":1,\"min\":10.0,\"max\":10.0"));
     }
 }
