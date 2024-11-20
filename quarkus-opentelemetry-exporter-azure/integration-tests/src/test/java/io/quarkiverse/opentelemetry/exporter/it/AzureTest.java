@@ -84,6 +84,7 @@ public class AzureTest {
         return () -> wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")))
                 .stream()
                 .map(request -> new String(request.getBody()))
-                .anyMatch(body -> body.contains("Metric") && body.contains("baseData\":{\"ver\":2,\"metrics\":[{\"name\":\"" + SimpleResource.TEST_HISTOGRAM + "\",\"value\":10.0,\"count\":1,\"min\":10.0,\"max\":10.0"));
+                .anyMatch(body -> body.contains("Metric") && body.contains("baseData\":{\"ver\":2,\"metrics\":[{\"name\":\""
+                        + SimpleResource.TEST_HISTOGRAM + "\",\"value\":10.0,\"count\":1,\"min\":10.0,\"max\":10.0"));
     }
 }
