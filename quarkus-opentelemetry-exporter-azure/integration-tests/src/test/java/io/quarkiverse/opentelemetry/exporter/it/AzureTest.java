@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,12 +59,10 @@ public class AzureTest {
                 .atMost(Duration.ofSeconds(10))
                 .until(telemetryDataContainTheHttpCall(wireMockServer));
 
-        telemetryDataContainTheOTelMetric(wireMockServer);
-
         // Non regression test for https://github.com/Azure/azure-sdk-for-java/issues/41040
         Thread.sleep(10_000);
-        List<LoggedRequest> telemetryExport = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")));
-        List<String> requestBodies = telemetryExport
+        List<LoggedRequest> telemetryHttpRequests = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")));
+        List<String> requestBodies = telemetryHttpRequests
                 .stream()
                 .map(request -> new String(request.getBody())).toList();
         requestBodies.stream().forEach(System.out::println); // It's convenient to print the telemetry data on the console to spot potential issues
@@ -71,6 +70,10 @@ public class AzureTest {
                 .filter(body -> body.contains("RemoteDependency") && body.contains("POST /export/v2.1/track"))
                 .findAny();
         assertThat(telemetryDataExport).as("Telemetry export request should not appear as a dependency.").isEmpty();
+
+        containOTeLog(telemetryHttpRequests);
+
+        containOTelMetric(telemetryHttpRequests);
     }
 
     private static Callable<Boolean> telemetryDataContainTheHttpCall(WireMockServer wireMockServer) {
@@ -80,11 +83,23 @@ public class AzureTest {
                 .anyMatch(body -> body.contains("Request") && body.contains("GET /direct"));
     }
 
-    private static Callable<Boolean> telemetryDataContainTheOTelMetric(WireMockServer wireMockServer) {
-        return () -> wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")))
+    private void containOTeLog(List<LoggedRequest> telemetryHttpRequests) {
+        assertThat(telemetryHttpRequests
+                .stream()
+                .map(request -> new String(request.getBody()))
+                .anyMatch(body -> body.contains("\"message\":\"opentelemetry-exporter-azure-integration-test")
+                        && body.contains("(powered by Quarkus ")
+                        && body.contains("started in") && body.contains(
+                                "{\"LoggerName\":\"io.quarkus.opentelemetry\",\"LoggingLevel\":\"INFO\",\"log.logger.namespace\":\"org.jboss.logging.Logger\"")))
+                .as("Should contain OTel log.").isTrue();
+    }
+
+    private void containOTelMetric(List<LoggedRequest> telemetryHttpRequests) {
+        Assertions.assertThat(telemetryHttpRequests
                 .stream()
                 .map(request -> new String(request.getBody()))
                 .anyMatch(body -> body.contains("Metric") && body.contains("baseData\":{\"ver\":2,\"metrics\":[{\"name\":\""
-                        + SimpleResource.TEST_HISTOGRAM + "\",\"value\":10.0,\"count\":1,\"min\":10.0,\"max\":10.0"));
+                        + SimpleResource.TEST_HISTOGRAM + "\",\"value\":10.0,\"count\":1,\"min\":10.0,\"max\":10.0")))
+                .as("Should contain OTel metric.").isTrue();
     }
 }
