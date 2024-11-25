@@ -1,0 +1,1 @@
+io.quarkiverse.opentelemetry.exporter.sentry.otel.SentryPropagatorProvider

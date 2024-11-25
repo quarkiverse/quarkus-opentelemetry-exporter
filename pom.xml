@@ -17,6 +17,7 @@
         <module>quarkus-opentelemetry-exporter-common</module>
         <module>quarkus-opentelemetry-exporter-azure</module>
         <module>quarkus-opentelemetry-exporter-gcp</module>
+        <module>quarkus-opentelemetry-exporter-sentry</module>
     </modules>
 
     <scm>
