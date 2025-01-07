@@ -1,3 +1,4 @@
 * xref:index.adoc[Introduction]
 * xref:quarkus-opentelemetry-exporter-azure.adoc[Quarkus Opentelemetry Exporter for Microsoft Azure]
 * xref:quarkus-opentelemetry-exporter-gcp.adoc[Quarkus Opentelemetry Exporter for Google Cloud Platform]
+* xref:quarkus-opentelemetry-exporter-sentry.adoc[Quarkus Opentelemetry Exporter for Sentry]
