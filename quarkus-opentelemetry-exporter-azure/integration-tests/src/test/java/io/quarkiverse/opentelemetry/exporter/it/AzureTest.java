@@ -80,7 +80,8 @@ public class AzureTest {
         return () -> wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")))
                 .stream()
                 .map(request -> new String(request.getBody()))
-                .anyMatch(body -> body.contains("Request") && body.contains("GET /direct"));
+                .anyMatch(
+                        body -> body.contains("Request") && body.contains("GET /direct") && body.contains(":dsq999-SNAPSHOT"));
     }
 
     private void containOTeLog(List<LoggedRequest> telemetryHttpRequests) {
