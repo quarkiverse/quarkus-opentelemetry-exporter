@@ -37,8 +37,8 @@
 <!--    You will get a warning when building the native image.-->
     <dependency>
       <groupId>com.azure</groupId>
-      <artifactId>azure-monitor-opentelemetry-exporter</artifactId>
-      <version>${azure-monitor-opentelemetry-exporter.version}</version>
+      <artifactId>azure-monitor-opentelemetry-autoconfigure</artifactId>
+      <version>${azure-monitor-opentelemetry-autoconfigure.version}</version>
       <exclusions>
         <exclusion>
           <groupId>com.azure</groupId>
@@ -60,6 +60,15 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>*.properties</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>io.quarkus</groupId>

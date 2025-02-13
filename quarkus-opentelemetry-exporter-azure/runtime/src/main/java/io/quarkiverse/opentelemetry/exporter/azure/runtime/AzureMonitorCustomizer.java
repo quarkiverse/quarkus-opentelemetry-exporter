@@ -2,7 +2,7 @@ package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
 import jakarta.inject.Singleton;
 
-import com.azure.monitor.opentelemetry.exporter.AzureMonitorExporter;
+import com.azure.monitor.opentelemetry.autoconfigure.AzureMonitorAutoConfigure;
 
 import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdkBuilder;
 import io.quarkus.opentelemetry.runtime.AutoConfiguredOpenTelemetrySdkBuilderCustomizer;
@@ -18,6 +18,6 @@ public class AzureMonitorCustomizer implements AutoConfiguredOpenTelemetrySdkBui
 
     @Override
     public void customize(AutoConfiguredOpenTelemetrySdkBuilder sdkBuilder) {
-        AzureMonitorExporter.customize(sdkBuilder, azureConnectionString);
+        AzureMonitorAutoConfigure.customize(sdkBuilder, azureConnectionString);
     }
 }

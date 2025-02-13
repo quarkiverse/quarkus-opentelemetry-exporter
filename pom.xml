@@ -46,7 +46,7 @@
         <gcp-opentelemetry.version>0.27.0</gcp-opentelemetry.version>
 <!--        <gax-grpc.version>2.39.0</gax-grpc.version>-->
 
-        <azure-monitor-opentelemetry-exporter.version>1.0.0-beta.31</azure-monitor-opentelemetry-exporter.version>
+        <azure-monitor-opentelemetry-autoconfigure.version>1.0.0-beta.2</azure-monitor-opentelemetry-autoconfigure.version>
         <quarkus-azure-services-bom.version>1.0.2</quarkus-azure-services-bom.version>
 
         <assertj-core.version>3.26.3</assertj-core.version>
