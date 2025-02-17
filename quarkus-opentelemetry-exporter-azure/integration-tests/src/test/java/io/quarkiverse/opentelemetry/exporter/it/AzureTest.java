@@ -69,10 +69,8 @@ public class AzureTest {
                             .map(request -> new String(request.getBody()))
                             .toList();
 
-                    System.out.println("telemetryBodies for metrics = " +
-                            telemetryBodies.stream()
-                                    .filter(body -> body.contains("MessageData"))
-                                    .collect(toList()));
+                    System.out.println("telemetryBodies = " +
+                            telemetryBodies);
 
                     return telemetryBodies.stream().anyMatch(body -> body.contains("MessageData")) &&
                             telemetryBodies.stream().anyMatch(body -> body.contains("MetricData"));
