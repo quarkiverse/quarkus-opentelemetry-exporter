@@ -35,7 +35,7 @@
         <gcp-opentelemetry.version>0.23.0</gcp-opentelemetry.version>
         <gax-grpc.version>2.13.0</gax-grpc.version>
 
-        <assertj-core.version>3.24.2</assertj-core.version>
+        <assertj-core.version>3.27.3</assertj-core.version>
         <junit-jupiter.version>1.18.0</junit-jupiter.version>
     </properties>
 
