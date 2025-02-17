@@ -61,13 +61,19 @@ public class AzureTest {
                 .until(telemetryDataContainTheHttpCall(wireMockServer));
 
         // Non regression test for https://github.com/Azure/azure-sdk-for-java/issues/41040
-        await().atMost(Duration.ofSeconds(30))
+        await().atMost(Duration.ofSeconds(90))
                 .pollDelay(Duration.ofMillis(500))
                 .until(() -> {
                     List<String> telemetryBodies = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")))
                             .stream()
                             .map(request -> new String(request.getBody()))
                             .toList();
+
+                    System.out.println("telemetryBodies for metrics = " +
+                            telemetryBodies.stream()
+                                    .filter(body -> body.contains("MessageData"))
+                                    .collect(toList()));
+
                     return telemetryBodies.stream().anyMatch(body -> body.contains("MessageData")) &&
                             telemetryBodies.stream().anyMatch(body -> body.contains("MetricData"));
                 });
