@@ -36,22 +36,19 @@
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.16.2</quarkus.version>
-        <netty-bom.version>4.1.111.Final</netty-bom.version>
-        <opentelemetry.version>1.42.1</opentelemetry.version>
-        <opentelemetry-alpha.version>1.42.1-alpha</opentelemetry-alpha.version>
+        <quarkus.version>3.18.3</quarkus.version>
+        <netty-bom.version>4.1.118.Final</netty-bom.version>
         <opentelemetry-instrumentation-alpha.version>2.8.0-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
-        <gcp-opentelemetry.version>0.27.0</gcp-opentelemetry.version>
-<!--        <gax-grpc.version>2.39.0</gax-grpc.version>-->
+        <gcp-opentelemetry.version>0.33.0</gcp-opentelemetry.version>
 
         <azure-monitor-opentelemetry-autoconfigure.version>1.0.0-beta.2</azure-monitor-opentelemetry-autoconfigure.version>
         <quarkus-azure-services-bom.version>1.0.2</quarkus-azure-services-bom.version>
 
         <assertj-core.version>3.26.3</assertj-core.version>
-        <testcontainers-junit-jupiter.version>1.20.3</testcontainers-junit-jupiter.version>
-        <quarkus-wiremock-test.version>1.2.0</quarkus-wiremock-test.version>
+        <testcontainers-junit-jupiter.version>1.20.4</testcontainers-junit-jupiter.version>
+        <quarkus-wiremock-test.version>1.4.1</quarkus-wiremock-test.version>
         <quarkus-google-cloud-services-bom.version>2.14.0</quarkus-google-cloud-services-bom.version>
     </properties>
 
@@ -66,20 +63,6 @@
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-bom</artifactId>
                 <version>${quarkus.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.opentelemetry</groupId>
-                <artifactId>opentelemetry-bom</artifactId>
-                <version>${opentelemetry.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.opentelemetry</groupId>
-                <artifactId>opentelemetry-bom-alpha</artifactId>
-                <version>${opentelemetry-alpha.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
