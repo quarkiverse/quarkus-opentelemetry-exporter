@@ -2,6 +2,7 @@ package io.quarkiverse.opentelemetry.exporter.it;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
@@ -60,7 +61,15 @@ public class AzureTest {
                 .until(telemetryDataContainTheHttpCall(wireMockServer));
 
         // Non regression test for https://github.com/Azure/azure-sdk-for-java/issues/41040
-        Thread.sleep(10_000);
+        await().atMost(Duration.ofSeconds(10)).until(() -> {
+            List<String> telemetryBodies = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")))
+                    .stream()
+                    .map(request -> new String(request.getBody()))
+                    .toList();
+            return telemetryBodies.stream().anyMatch(body -> body.contains("MessageData")) &&
+                    telemetryBodies.stream().anyMatch(body -> body.contains("MetricData"));
+        });
+
         List<LoggedRequest> telemetryHttpRequests = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")));
         List<String> requestBodies = telemetryHttpRequests
                 .stream()
