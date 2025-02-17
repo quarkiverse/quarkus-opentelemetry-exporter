@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Stream;
 
+import io.quarkus.arc.deployment.OpenTelemetrySdkBuildItem;
+import io.quarkus.deployment.annotations.Consume;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Singleton;
 
@@ -132,6 +134,7 @@ public class AzureExporterProcessor {
     }
 
     @BuildStep
+    @Consume(OpenTelemetrySdkBuildItem.class)
     @Record(ExecutionTime.RUNTIME_INIT)
     SyntheticBeanBuildItem openTelemetryCustomizer(AzureRecorder recorder,
             AzureExporterRuntimeConfig runtimeConfig, AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
@@ -150,6 +153,7 @@ public class AzureExporterProcessor {
     }
 
     @BuildStep
+    @Consume(OpenTelemetrySdkBuildItem.class)
     @Record(ExecutionTime.RUNTIME_INIT)
     SyntheticBeanBuildItem installAzureEndpointSampler(AzureRecorder recorder,
             AzureExporterRuntimeConfig runtimeConfig,
