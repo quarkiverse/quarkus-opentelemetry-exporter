@@ -21,10 +21,12 @@ import io.netty.handler.ssl.OpenSsl;
 import io.opentelemetry.sdk.autoconfigure.spi.AutoConfigurationCustomizerProvider;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.*;
+import io.quarkus.arc.deployment.OpenTelemetrySdkBuildItem;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.BuildSteps;
+import io.quarkus.deployment.annotations.Consume;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
@@ -132,6 +134,7 @@ public class AzureExporterProcessor {
     }
 
     @BuildStep
+    @Consume(OpenTelemetrySdkBuildItem.class)
     @Record(ExecutionTime.RUNTIME_INIT)
     SyntheticBeanBuildItem openTelemetryCustomizer(AzureRecorder recorder,
             AzureExporterRuntimeConfig runtimeConfig, AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
@@ -150,6 +153,7 @@ public class AzureExporterProcessor {
     }
 
     @BuildStep
+    @Consume(OpenTelemetrySdkBuildItem.class)
     @Record(ExecutionTime.RUNTIME_INIT)
     SyntheticBeanBuildItem installAzureEndpointSampler(AzureRecorder recorder,
             AzureExporterRuntimeConfig runtimeConfig,
