@@ -65,7 +65,8 @@ public class AzureTest {
         List<String> requestBodies = telemetryHttpRequests
                 .stream()
                 .map(request -> new String(request.getBody())).toList();
-        requestBodies.stream().forEach(System.out::println); // It's convenient to print the telemetry data on the console to spot potential issues
+        // Cannot be on by default but it's convenient to print the telemetry data on the console to spot potential issues:
+        //        requestBodies.stream().forEach(System.out::println);
         Optional<String> telemetryDataExport = requestBodies.stream()
                 .filter(body -> body.contains("RemoteDependency") && body.contains("POST /export/v2.1/track"))
                 .findAny();
