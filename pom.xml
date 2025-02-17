@@ -50,7 +50,7 @@
         <quarkus-azure-services-bom.version>1.0.2</quarkus-azure-services-bom.version>
 
         <assertj-core.version>3.26.3</assertj-core.version>
-        <testcontainers-junit-jupiter.version>1.20.3</testcontainers-junit-jupiter.version>
+        <testcontainers-junit-jupiter.version>1.20.4</testcontainers-junit-jupiter.version>
         <quarkus-wiremock-test.version>1.2.0</quarkus-wiremock-test.version>
         <quarkus-google-cloud-services-bom.version>2.14.0</quarkus-google-cloud-services-bom.version>
     </properties>
