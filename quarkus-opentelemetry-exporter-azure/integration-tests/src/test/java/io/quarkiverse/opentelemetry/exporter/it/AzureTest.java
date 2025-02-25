@@ -41,40 +41,6 @@ public class AzureTest {
     }
 
     @Test
-    void exportRequestAbsenceTest() throws InterruptedException {
-
-        wireMockServer.stubFor(
-                any(urlMatching(".*"))
-                        .withPort(HTTP_PORT_NUMBER)
-                        .willReturn(aResponse().withStatus(200)));
-
-        given()
-                .contentType("application/json")
-                .when().get("/direct")
-                .then()
-                .statusCode(200)
-                .body("message", equalTo("Direct trace"));
-
-        await()
-                .atMost(Duration.ofSeconds(10))
-                .until(telemetryDataContainTheHttpCall(wireMockServer));
-
-        // Non regression test for https://github.com/Azure/azure-sdk-for-java/issues/41040
-        Thread.sleep(10_000);
-
-        List<LoggedRequest> telemetryHttpRequests = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")));
-        List<String> requestBodies = telemetryHttpRequests
-                .stream()
-                .map(request -> new String(request.getBody())).toList();
-        // Cannot be on by default but it's convenient to print the telemetry data on the console to spot potential issues:
-        requestBodies.stream().forEach(System.out::println);
-        Optional<String> telemetryDataExport = requestBodies.stream()
-                .filter(body -> body.contains("RemoteDependency") && body.contains("POST /export/v2.1/track"))
-                .findAny();
-        assertThat(telemetryDataExport).as("Telemetry export request should not appear as a dependency.").isEmpty();
-    }
-
-    @Test
     void connectionTest() throws InterruptedException {
 
         wireMockServer.stubFor(
@@ -94,24 +60,16 @@ public class AzureTest {
                 .until(telemetryDataContainTheHttpCall(wireMockServer));
 
         // Non regression test for https://github.com/Azure/azure-sdk-for-java/issues/41040
-        await().atMost(Duration.ofSeconds(90))
-                .pollDelay(Duration.ofMillis(500))
-                .until(() -> {
-                    List<String> telemetryBodies = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")))
-                            .stream()
-                            .map(request -> new String(request.getBody()))
-                            .toList();
-
-                    System.out.println("telemetryBodies = " +
-                            telemetryBodies);
-
-                    return telemetryBodies.stream().anyMatch(body -> body.contains("MessageData")) &&
-                            telemetryBodies.stream().anyMatch(body -> body.contains("MetricData"));
-                });
-
+        Thread.sleep(10_000);
         List<LoggedRequest> telemetryHttpRequests = wireMockServer.findAll(postRequestedFor(urlEqualTo("/export/v2.1/track")));
-        // Cannot be on by default but it's convenient to print the telemetry data on the console to spot potential issues:
-        //        requestBodies.stream().forEach(System.out::println);
+        List<String> requestBodies = telemetryHttpRequests
+                .stream()
+                .map(request -> new String(request.getBody())).toList();
+        requestBodies.stream().forEach(System.out::println); // It's convenient to print the telemetry data on the console to spot potential issues
+        Optional<String> telemetryDataExport = requestBodies.stream()
+                .filter(body -> body.contains("RemoteDependency") && body.contains("POST /export/v2.1/track"))
+                .findAny();
+        assertThat(telemetryDataExport).as("Telemetry export request should not appear as a dependency.").isEmpty();
 
         containOTeLog(telemetryHttpRequests);
 
