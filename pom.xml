@@ -9,7 +9,7 @@
 
     <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
     <artifactId>quarkus-opentelemetry-exporter-parent</artifactId>
-    <version>3.18.3.1</version>
+    <version>999-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Quarkus Opentelemetry Exporter - Parent</name>
 
@@ -24,7 +24,7 @@
         <connection>scm:git:git@github.com:quarkiverse/quarkus-opentelemetry-exporter.git</connection>
         <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-opentelemetry-exporter.git</developerConnection>
         <url>https://github.com/quarkiverse/quarkus-opentelemetry-exporter</url>
-        <tag>3.18.3.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
