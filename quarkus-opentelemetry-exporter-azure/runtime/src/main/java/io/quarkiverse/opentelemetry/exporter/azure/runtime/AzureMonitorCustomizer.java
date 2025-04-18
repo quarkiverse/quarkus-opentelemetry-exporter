@@ -1,5 +1,6 @@
 package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import jakarta.inject.Singleton;
@@ -25,7 +26,8 @@ public class AzureMonitorCustomizer implements AutoConfiguredOpenTelemetrySdkBui
     @Override
     public void customize(AutoConfiguredOpenTelemetrySdkBuilder sdkBuilder) {
         if (connectionString.isPresent()) {
-            sdkBuilder.addPropertiesSupplier(() -> Collections.singletonMap("applicationinsights.live.metrics.enabled", "false"));
+            sdkBuilder
+                    .addPropertiesSupplier(() -> Collections.singletonMap("applicationinsights.live.metrics.enabled", "false"));
             AzureMonitorAutoConfigure.customize(sdkBuilder, connectionString.get());
         } else {
             log.info(
