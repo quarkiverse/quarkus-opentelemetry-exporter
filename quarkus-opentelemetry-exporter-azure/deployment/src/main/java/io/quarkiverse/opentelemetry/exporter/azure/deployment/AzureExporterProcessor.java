@@ -69,6 +69,8 @@ public class AzureExporterProcessor {
                 new RuntimeInitializedClassBuildItem("com.azure.core.http.vertx.VertxHttpClientBuilder$DefaultVertx"));
         runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(
                 "com.azure.monitor.opentelemetry.autoconfigure.implementation.quickpulse.QuickPulseDataCollector"));
+        runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(
+                "com.azure.monitor.opentelemetry.autoconfigure.implementation.heartbeat.HeartbeatDefaultPayload"));
     }
 
     @BuildStep
