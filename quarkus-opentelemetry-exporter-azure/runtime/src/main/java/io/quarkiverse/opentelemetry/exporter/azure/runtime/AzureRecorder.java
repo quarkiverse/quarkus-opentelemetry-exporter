@@ -18,8 +18,8 @@ public class AzureRecorder {
             @Override
             public AzureMonitorCustomizer apply(
                     SyntheticCreationalContext<AzureMonitorCustomizer> objectSyntheticCreationalContext) {
-                String azureConnectionString = findConnectionString(runtimeConfig, quarkusRuntimeConfig);
-                return new AzureMonitorCustomizer(azureConnectionString);
+                Optional<String> connectionString = findConnectionString(runtimeConfig, quarkusRuntimeConfig);
+                return new AzureMonitorCustomizer(connectionString);
             }
         };
     }
@@ -29,20 +29,21 @@ public class AzureRecorder {
         return new Function<>() {
             @Override
             public AzureEndpointSampler apply(SyntheticCreationalContext<AzureEndpointSampler> context) {
-                List<String> ingestionUrls = findIngestionUrls(runtimeConfig, quarkusRuntimeConfig);
-                List<String> statsBeatUrls = Arrays.asList("https://westeurope-5.in.applicationinsights.azure.com/",
-                        "https://westus-0.in.applicationinsights.azure.com/");
+                Optional<String> connectionString = findConnectionString(runtimeConfig, quarkusRuntimeConfig);
                 List<String> dropTargets = new ArrayList<>();
-                dropTargets.addAll(addTrackPartInUrl(ingestionUrls));
-                dropTargets.addAll(addTrackPartInUrl(statsBeatUrls));
+                if (connectionString.isPresent()) {
+                    List<String> ingestionUrls = findIngestionUrls(connectionString.get());
+                    List<String> statsBeatUrls = Arrays.asList("https://westeurope-5.in.applicationinsights.azure.com/",
+                            "https://westus-0.in.applicationinsights.azure.com/");
+                    dropTargets.addAll(addTrackPartInUrl(ingestionUrls));
+                    dropTargets.addAll(addTrackPartInUrl(statsBeatUrls));
+                }
                 return new AzureEndpointSampler(dropTargets);
             }
         };
     }
 
-    private static List<String> findIngestionUrls(AzureExporterRuntimeConfig runtimeConfig,
-            AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
-        String connectionString = findConnectionString(runtimeConfig, quarkusRuntimeConfig);
+    private static List<String> findIngestionUrls(String connectionString) {
         Optional<String> ingestionEndpoint = extractIngestionEndpointFrom(connectionString);
         if (ingestionEndpoint.isPresent()) {
             return Collections.singletonList(ingestionEndpoint.get());
@@ -61,14 +62,10 @@ public class AzureRecorder {
                 .map(ingestionPartOfConnectionString -> ingestionPartOfConnectionString.replaceAll("IngestionEndpoint=", ""));
     }
 
-    private static String findConnectionString(AzureExporterRuntimeConfig runtimeConfig,
+    private static Optional<String> findConnectionString(AzureExporterRuntimeConfig azureRuntimeConfig,
             AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
-        Optional<String> azureConnectionString = runtimeConfig.connectionString();
-        if (azureConnectionString.isPresent()) {
-            return azureConnectionString.get();
-        }
-        return quarkusRuntimeConfig.connectionString()
-                .orElseThrow(() -> new IllegalStateException("Azure connection string is missing"));
+        return azureRuntimeConfig.connectionString()
+                .or(quarkusRuntimeConfig::connectionString);
     }
 
     private static List<String> addTrackPartInUrl(List<String> ingestionUrls) {
