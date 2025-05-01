@@ -17,7 +17,7 @@
     </modules>
 
     <properties>
-        <sentry.version>7.16.0</sentry.version>
+        <sentry.version>8.11.1</sentry.version>
     </properties>
     <dependencyManagement>
         <dependencies>
