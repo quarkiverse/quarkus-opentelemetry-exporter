@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import io.quarkus.opentelemetry.runtime.config.build.ExporterType;
 import jakarta.inject.Singleton;
 
 import org.jboss.logging.Logger;
@@ -14,6 +13,7 @@ import com.azure.monitor.opentelemetry.autoconfigure.AzureMonitorAutoConfigure;
 
 import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdkBuilder;
 import io.quarkus.opentelemetry.runtime.AutoConfiguredOpenTelemetrySdkBuilderCustomizer;
+import io.quarkus.opentelemetry.runtime.config.build.ExporterType;
 
 @Singleton
 public class AzureMonitorCustomizer implements AutoConfiguredOpenTelemetrySdkBuilderCustomizer {
@@ -34,7 +34,8 @@ public class AzureMonitorCustomizer implements AutoConfiguredOpenTelemetrySdkBui
             AzureMonitorAutoConfigure.customize(sdkBuilder, connectionString.get());
         } else {
             sdkBuilder.addPropertiesSupplier(() -> {
-                Map<String, String> props = new HashMap();
+                Map<String, String> props = new HashMap<>();
+                props.put("applicationinsights.live.metrics.enabled", "false");
                 props.put("otel.traces.exporter", ExporterType.NONE.getValue());
                 props.put("otel.metrics.exporter", ExporterType.NONE.getValue());
                 props.put("otel.logs.exporter", ExporterType.NONE.getValue());
