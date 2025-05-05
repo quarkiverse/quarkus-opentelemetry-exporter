@@ -1,8 +1,11 @@
 package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+import io.quarkus.opentelemetry.runtime.config.build.ExporterType;
 import jakarta.inject.Singleton;
 
 import org.jboss.logging.Logger;
@@ -30,6 +33,13 @@ public class AzureMonitorCustomizer implements AutoConfiguredOpenTelemetrySdkBui
                     .addPropertiesSupplier(() -> Collections.singletonMap("applicationinsights.live.metrics.enabled", "false"));
             AzureMonitorAutoConfigure.customize(sdkBuilder, connectionString.get());
         } else {
+            sdkBuilder.addPropertiesSupplier(() -> {
+                Map<String, String> props = new HashMap();
+                props.put("otel.traces.exporter", ExporterType.NONE.getValue());
+                props.put("otel.metrics.exporter", ExporterType.NONE.getValue());
+                props.put("otel.logs.exporter", ExporterType.NONE.getValue());
+                return props;
+            });
             log.info(
                     "Quarkus Opentelemetry Exporter for Microsoft Azure is not enabled because no Application Insights connection string provided.");
         }
