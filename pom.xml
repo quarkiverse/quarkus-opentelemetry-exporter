@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.quarkiverse</groupId>
         <artifactId>quarkiverse-parent</artifactId>
-        <version>18</version> <!-- always from repository -->
+        <version>20</version> <!-- always from repository -->
     </parent>
 
     <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
@@ -36,17 +36,17 @@
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.18.3</quarkus.version>
+        <quarkus.version>3.20.0</quarkus.version>
         <netty-bom.version>4.1.118.Final</netty-bom.version>
-        <opentelemetry-instrumentation-alpha.version>2.8.0-alpha</opentelemetry-instrumentation-alpha.version>
+        <opentelemetry-instrumentation-alpha.version>2.10.0-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
-        <gcp-opentelemetry.version>0.33.0</gcp-opentelemetry.version>
+        <gcp-opentelemetry.version>0.34.0</gcp-opentelemetry.version>
 
         <azure-monitor-opentelemetry-autoconfigure.version>1.2.0</azure-monitor-opentelemetry-autoconfigure.version>
 
         <assertj-core.version>3.27.3</assertj-core.version>
-        <testcontainers-junit-jupiter.version>1.20.4</testcontainers-junit-jupiter.version>
+        <testcontainers-junit-jupiter.version>1.21.0</testcontainers-junit-jupiter.version>
         <quarkus-wiremock-test.version>1.4.1</quarkus-wiremock-test.version>
         <quarkus-google-cloud-services-bom.version>2.14.0</quarkus-google-cloud-services-bom.version>
     </properties>
