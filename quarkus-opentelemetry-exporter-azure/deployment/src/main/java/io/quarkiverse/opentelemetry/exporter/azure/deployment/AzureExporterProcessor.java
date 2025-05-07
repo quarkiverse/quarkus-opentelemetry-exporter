@@ -64,9 +64,13 @@ public class AzureExporterProcessor {
         runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem("io.netty.internal.tcnative.SSL"));
         runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem("io.netty.util.concurrent.GlobalEventExecutor"));
         runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(
-                "com.azure.core.http.vertx.VertxAsyncHttpClientProvider$GlobalVertxHttpClient"));
+                "com.azure.core.http.vertx.VertxHttpClientProvider$GlobalVertxHttpClient"));
         runtimeInitializedClasses.produce(
-                new RuntimeInitializedClassBuildItem("com.azure.core.http.vertx.VertxAsyncHttpClientBuilder$DefaultVertx"));
+                new RuntimeInitializedClassBuildItem("com.azure.core.http.vertx.VertxHttpClientBuilder$DefaultVertx"));
+        runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(
+                "com.azure.monitor.opentelemetry.autoconfigure.implementation.quickpulse.QuickPulseDataCollector"));
+        runtimeInitializedClasses.produce(new RuntimeInitializedClassBuildItem(
+                "com.azure.monitor.opentelemetry.autoconfigure.implementation.heartbeat.HeartbeatDefaultPayload"));
     }
 
     @BuildStep

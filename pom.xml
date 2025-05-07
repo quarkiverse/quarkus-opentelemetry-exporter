@@ -43,7 +43,7 @@
 
         <gcp-opentelemetry.version>0.33.0</gcp-opentelemetry.version>
 
-        <azure-monitor-opentelemetry-autoconfigure.version>1.0.0-beta.2</azure-monitor-opentelemetry-autoconfigure.version>
+        <azure-monitor-opentelemetry-autoconfigure.version>1.2.0</azure-monitor-opentelemetry-autoconfigure.version>
 
         <assertj-core.version>3.27.3</assertj-core.version>
         <testcontainers-junit-jupiter.version>1.20.4</testcontainers-junit-jupiter.version>
