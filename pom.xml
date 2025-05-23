@@ -36,7 +36,7 @@
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.20.0</quarkus.version>
+        <quarkus.version>3.23.0</quarkus.version>
         <netty-bom.version>4.1.118.Final</netty-bom.version>
         <opentelemetry-instrumentation-alpha.version>2.10.0-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
