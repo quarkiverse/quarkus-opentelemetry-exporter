@@ -140,8 +140,7 @@ public class AzureExporterProcessor {
     @BuildStep
     @Consume(OpenTelemetrySdkBuildItem.class)
     @Record(ExecutionTime.RUNTIME_INIT)
-    SyntheticBeanBuildItem openTelemetryCustomizer(AzureRecorder recorder,
-            AzureExporterRuntimeConfig runtimeConfig, AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
+    SyntheticBeanBuildItem openTelemetryCustomizer(AzureRecorder recorder) {
         return SyntheticBeanBuildItem.configure(AutoConfiguredOpenTelemetrySdkBuilderCustomizer.class)
                 .types(AutoConfigurationCustomizerProvider.class)
                 .setRuntimeInit()
@@ -151,7 +150,7 @@ public class AzureExporterProcessor {
                         new Type[] {
                                 ClassType.create(DotName.createSimple(AutoConfigurationCustomizerProvider.class.getName())) },
                         null))
-                .createWith(recorder.createAzureMonitorCustomizer(runtimeConfig, quarkusRuntimeConfig))
+                .createWith(recorder.createAzureMonitorCustomizer())
                 .done();
 
     }
@@ -159,9 +158,7 @@ public class AzureExporterProcessor {
     @BuildStep
     @Consume(OpenTelemetrySdkBuildItem.class)
     @Record(ExecutionTime.RUNTIME_INIT)
-    SyntheticBeanBuildItem installAzureEndpointSampler(AzureRecorder recorder,
-            AzureExporterRuntimeConfig runtimeConfig,
-            AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
+    SyntheticBeanBuildItem installAzureEndpointSampler(AzureRecorder recorder) {
         return SyntheticBeanBuildItem.configure(AzureEndpointSampler.class)
                 .types(Sampler.class)
                 .setRuntimeInit()
@@ -169,7 +166,7 @@ public class AzureExporterProcessor {
                 .unremovable()
                 .addInjectionPoint(ParameterizedType.create(DotName.createSimple(Instance.class),
                         new Type[] { ClassType.create(DotName.createSimple(Sampler.class.getName())) }, null))
-                .createWith(recorder.createSampler(runtimeConfig, quarkusRuntimeConfig))
+                .createWith(recorder.createSampler())
                 .done();
     }
 }

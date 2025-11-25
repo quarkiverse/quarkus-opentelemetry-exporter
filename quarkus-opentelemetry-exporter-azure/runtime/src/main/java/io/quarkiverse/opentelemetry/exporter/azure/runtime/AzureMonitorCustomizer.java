@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import jakarta.inject.Singleton;
 
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.jboss.logging.Logger;
 
 import com.azure.monitor.opentelemetry.autoconfigure.AzureMonitorAutoConfigure;
@@ -20,14 +21,19 @@ public class AzureMonitorCustomizer implements AutoConfiguredOpenTelemetrySdkBui
 
     private static final Logger log = Logger.getLogger(AzureMonitorCustomizer.class);
 
-    private final Optional<String> connectionString;
+    public AzureMonitorCustomizer() {
 
-    public AzureMonitorCustomizer(Optional<String> connectionString) {
-        this.connectionString = connectionString;
     }
 
     @Override
     public void customize(AutoConfiguredOpenTelemetrySdkBuilder sdkBuilder) {
+        Optional<String> azureConnectionString = ConfigProvider.getConfig()
+                .getOptionalValue("applicationinsights.connection.string", String.class);
+        Optional<String> quarkusConnectionString = ConfigProvider.getConfig()
+                .getOptionalValue("quarkus.otel.azure.applicationinsights.connection.string", String.class);
+
+        Optional<String> connectionString = azureConnectionString.or(() -> quarkusConnectionString);
+
         if (connectionString.isPresent()) {
             sdkBuilder
                     .addPropertiesSupplier(() -> Collections.singletonMap("applicationinsights.live.metrics.enabled", "false"));

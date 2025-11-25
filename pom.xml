@@ -9,7 +9,7 @@
 
     <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
     <artifactId>quarkus-opentelemetry-exporter-parent</artifactId>
-    <version>999-SNAPSHOT</version>
+    <version>3.27.1</version>
     <packaging>pom</packaging>
     <name>Quarkus Opentelemetry Exporter - Parent</name>
 
@@ -29,6 +29,8 @@
 
     <properties>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,18 +38,18 @@
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.20.0</quarkus.version>
-        <netty-bom.version>4.1.118.Final</netty-bom.version>
+        <quarkus.version>3.27.1</quarkus.version>
+        <netty-bom.version>4.1.128.Final</netty-bom.version>
         <opentelemetry-instrumentation-alpha.version>2.10.0-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
         <gcp-opentelemetry.version>0.34.0</gcp-opentelemetry.version>
 
-        <azure-monitor-opentelemetry-autoconfigure.version>1.2.0</azure-monitor-opentelemetry-autoconfigure.version>
+        <azure-monitor-opentelemetry-autoconfigure.version>1.4.0</azure-monitor-opentelemetry-autoconfigure.version>
 
-        <assertj-core.version>3.27.3</assertj-core.version>
-        <testcontainers-junit-jupiter.version>1.21.0</testcontainers-junit-jupiter.version>
-        <quarkus-wiremock-test.version>1.4.1</quarkus-wiremock-test.version>
+        <assertj-core.version>3.27.6</assertj-core.version>
+        <testcontainers-junit-jupiter.version>1.21.3</testcontainers-junit-jupiter.version>
+        <quarkus-wiremock-test.version>1.5.2</quarkus-wiremock-test.version>
         <quarkus-google-cloud-services-bom.version>2.14.0</quarkus-google-cloud-services-bom.version>
     </properties>
 
