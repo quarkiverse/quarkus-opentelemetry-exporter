@@ -40,15 +40,14 @@
         <!-- Start-->
         <quarkus.version>3.27.1</quarkus.version>
         <netty-bom.version>4.1.128.Final</netty-bom.version>
-        <opentelemetry-instrumentation-alpha.version>2.10.0-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
         <gcp-opentelemetry.version>0.34.0</gcp-opentelemetry.version>
 
-        <azure-monitor-opentelemetry-autoconfigure.version>1.4.0</azure-monitor-opentelemetry-autoconfigure.version>
+        <azure-monitor-opentelemetry-autoconfigure.version>1.3.0</azure-monitor-opentelemetry-autoconfigure.version>
 
         <assertj-core.version>3.27.6</assertj-core.version>
-        <testcontainers-junit-jupiter.version>1.21.3</testcontainers-junit-jupiter.version>
+        <testcontainers-junit-jupiter.version>2.0.2</testcontainers-junit-jupiter.version>
         <quarkus-wiremock-test.version>1.5.2</quarkus-wiremock-test.version>
         <quarkus-google-cloud-services-bom.version>2.14.0</quarkus-google-cloud-services-bom.version>
     </properties>
@@ -64,13 +63,6 @@
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-bom</artifactId>
                 <version>${quarkus.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.opentelemetry.instrumentation</groupId>
-                <artifactId>opentelemetry-instrumentation-bom-alpha</artifactId>
-                <version>${opentelemetry-instrumentation-alpha.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

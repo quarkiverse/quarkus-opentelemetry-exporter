@@ -11,14 +11,14 @@ import jakarta.inject.Singleton;
 
 import org.eclipse.microprofile.config.ConfigProvider;
 
+import com.azure.monitor.opentelemetry.autoconfigure.implementation.SemanticAttributes;
+
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.sdk.trace.data.LinkData;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import io.opentelemetry.sdk.trace.samplers.SamplingResult;
-import io.opentelemetry.semconv.SemanticAttributes;
-import io.quarkus.runtime.RuntimeValue;
 
 /**
  * Sampler that drops spans based on the target of the request.
@@ -26,6 +26,9 @@ import io.quarkus.runtime.RuntimeValue;
  */
 @Singleton
 public class AzureEndpointSampler implements Sampler {
+
+    public static final Pattern APPLICATION_INSIGHT_AZURE = Pattern
+            .compile("https://(.*?)\\.in\\.applicationinsights\\.azure\\.com/v[0-9.]+/track");
 
     private final List<String> dropTargets = new ArrayList<>();
 
@@ -39,10 +42,7 @@ public class AzureEndpointSampler implements Sampler {
 
         if (connectionString.isPresent()) {
             List<String> ingestionUrls = findIngestionUrls(connectionString.get());
-            List<String> statsBeatUrls = Arrays.asList("https://westeurope-5.in.applicationinsights.azure.com/",
-                    "https://westus-0.in.applicationinsights.azure.com/");
             dropTargets.addAll(addTrackPartInUrl(ingestionUrls));
-            dropTargets.addAll(addTrackPartInUrl(statsBeatUrls));
         }
     }
 
@@ -82,6 +82,11 @@ public class AzureEndpointSampler implements Sampler {
                 return true;
             }
         }
+
+        if (APPLICATION_INSIGHT_AZURE.matcher(target).matches()) {
+            return true;
+        }
+
         return false;
     }
 
@@ -108,12 +113,6 @@ public class AzureEndpointSampler implements Sampler {
         }
         return Arrays.asList("https://dc.services.visualstudio.com/",
                 "https://rt.services.visualstudio.com/");
-    }
-
-    private static Optional<String> findConnectionString(RuntimeValue<AzureExporterRuntimeConfig> azureRuntimeConfig,
-            RuntimeValue<AzureExporterQuarkusRuntimeConfig> quarkusRuntimeConfig) {
-        return azureRuntimeConfig.getValue().connectionString()
-                .or(() -> quarkusRuntimeConfig.getValue().connectionString());
     }
 
     private static List<String> addTrackPartInUrl(List<String> ingestionUrls) {
