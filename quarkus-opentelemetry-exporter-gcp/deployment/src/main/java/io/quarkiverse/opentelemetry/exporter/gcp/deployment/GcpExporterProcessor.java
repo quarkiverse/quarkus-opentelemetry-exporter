@@ -60,9 +60,7 @@ public class GcpExporterProcessor {
 
     @BuildStep
     @Record(RUNTIME_INIT)
-    SyntheticBeanBuildItem installBatchSpanProcessorForGcp(GcpRecorder recorder,
-            LaunchModeBuildItem launchModeBuildItem,
-            GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig) {
+    SyntheticBeanBuildItem installBatchSpanProcessorForGcp(GcpRecorder recorder, LaunchModeBuildItem launchModeBuildItem) {
 
         return SyntheticBeanBuildItem.configure(LateBoundSpanProcessor.class)
                 .types(SpanProcessor.class)
@@ -71,7 +69,7 @@ public class GcpExporterProcessor {
                 .unremovable()
                 .addInjectionPoint(ParameterizedType.create(DotName.createSimple(Instance.class),
                         new Type[] { ClassType.create(DotName.createSimple(SpanExporter.class.getName())) }, null))
-                .createWith(recorder.installSpanProcessorForGcp(runtimeConfig, launchModeBuildItem.getLaunchMode()))
+                .createWith(recorder.installSpanProcessorForGcp(launchModeBuildItem.getLaunchMode()))
                 .done();
     }
 }

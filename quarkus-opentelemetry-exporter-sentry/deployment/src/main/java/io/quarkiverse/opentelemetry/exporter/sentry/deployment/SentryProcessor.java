@@ -7,7 +7,6 @@ import java.util.function.BooleanSupplier;
 
 import io.quarkiverse.opentelemetry.exporter.sentry.beans.SentrySpanProcessorProducer;
 import io.quarkiverse.opentelemetry.exporter.sentry.config.SentryConfig;
-import io.quarkiverse.opentelemetry.exporter.sentry.config.SentryConfig.SentryExporterRuntimeConfig;
 import io.quarkiverse.opentelemetry.exporter.sentry.filters.SentryFilter;
 import io.quarkiverse.opentelemetry.exporter.sentry.recorders.SentryRecorder;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
@@ -18,6 +17,7 @@ import io.quarkus.deployment.annotations.BuildSteps;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.LogHandlerBuildItem;
+import io.quarkus.deployment.builditem.SystemPropertyBuildItem;
 import io.quarkus.opentelemetry.deployment.exporter.otlp.ExternalOtelExporterBuildItem;
 
 @BuildSteps(onlyIf = SentryProcessor.SentryExporterEnabled.class)
@@ -44,9 +44,16 @@ public final class SentryProcessor {
     }
 
     @BuildStep
+    SystemPropertyBuildItem setContextStorageProvider() {
+        return new SystemPropertyBuildItem(
+                "io.opentelemetry.context.contextStorageProvider",
+                "io.quarkus.opentelemetry.runtime.OpenTelemetryContextStorageProvider");
+    }
+
+    @BuildStep
     @Record(RUNTIME_INIT)
-    LogHandlerBuildItem addSentryHandler(final SentryExporterRuntimeConfig config, final SentryRecorder recorder) {
-        return new LogHandlerBuildItem(recorder.create(config));
+    LogHandlerBuildItem addSentryHandler(final SentryRecorder recorder) {
+        return new LogHandlerBuildItem(recorder.create());
     }
 
     @BuildStep

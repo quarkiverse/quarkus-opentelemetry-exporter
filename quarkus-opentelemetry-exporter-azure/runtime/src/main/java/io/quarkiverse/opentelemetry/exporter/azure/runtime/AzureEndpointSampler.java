@@ -8,7 +8,7 @@ import io.opentelemetry.context.Context;
 import io.opentelemetry.sdk.trace.data.LinkData;
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 import io.opentelemetry.sdk.trace.samplers.SamplingResult;
-import io.opentelemetry.semconv.SemanticAttributes;
+import io.opentelemetry.semconv.UrlAttributes;
 
 /**
  * Sampler that drops spans based on the target of the request.
@@ -30,10 +30,7 @@ public class AzureEndpointSampler implements Sampler {
             Attributes attributes,
             List<LinkData> list) {
         if (spanKind.equals(SpanKind.CLIENT)) {
-            String target = attributes.get(SemanticAttributes.HTTP_URL);
-            if (target == null) {
-                target = attributes.get(SemanticAttributes.URL_FULL);
-            }
+            String target = attributes.get(UrlAttributes.URL_FULL);
             if (shouldDrop(target)) {
                 return SamplingResult.drop();
             }

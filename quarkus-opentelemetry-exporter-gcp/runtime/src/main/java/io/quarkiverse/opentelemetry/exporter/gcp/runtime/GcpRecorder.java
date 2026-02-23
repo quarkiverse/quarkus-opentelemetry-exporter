@@ -13,38 +13,44 @@ import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.quarkiverse.opentelemetry.exporter.common.runtime.LateBoundSpanProcessor;
 import io.quarkus.arc.SyntheticCreationalContext;
 import io.quarkus.runtime.LaunchMode;
+import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
 public class GcpRecorder {
 
+    private final RuntimeValue<GcpExporterConfig.GcpExporterRuntimeConfig> runtimeConfig;
+
+    public GcpRecorder(RuntimeValue<GcpExporterConfig.GcpExporterRuntimeConfig> runtimeConfig) {
+        this.runtimeConfig = runtimeConfig;
+    }
+
     public Function<SyntheticCreationalContext<LateBoundSpanProcessor>, LateBoundSpanProcessor> installSpanProcessorForGcp(
-            GcpExporterConfig.GcpExporterRuntimeConfig runtimeConfig,
             LaunchMode launchMode) {
         return new Function<>() {
             @Override
             public LateBoundSpanProcessor apply(
                     SyntheticCreationalContext<LateBoundSpanProcessor> lateBoundSpanProcessorSyntheticCreationalContext) {
-
-                if (launchMode != LaunchMode.TEST && runtimeConfig.endpoint().isEmpty()) {
+                var config = runtimeConfig.getValue();
+                if (launchMode != LaunchMode.TEST && config.endpoint().isEmpty()) {
                     try {
-                        return configureTraceExporter(runtimeConfig);
+                        return configureTraceExporter(config);
                     } catch (IOException e) {
                         throw new RuntimeException("Unable to initialize GCP TraceExporter.", e);
                     }
                 } else {
                     TraceConfiguration.Builder builder = TestTraceConfigurationBuilder.buildTestTraceConfiguration();
 
-                    if (runtimeConfig.endpoint().isPresent() && runtimeConfig.endpoint().get().trim().length() > 0) {
-                        builder.setTraceServiceEndpoint(runtimeConfig.endpoint().get());
+                    if (config.endpoint().isPresent() && config.endpoint().get().trim().length() > 0) {
+                        builder.setTraceServiceEndpoint(config.endpoint().get());
                     }
 
-                    TraceConfiguration config = builder.build();
+                    TraceConfiguration traceConfig = builder.build();
                     try {
-                        if (runtimeConfig.cloudrun()) {
-                            return configureSimpleSpanExporter(config);
+                        if (config.cloudrun()) {
+                            return configureSimpleSpanExporter(traceConfig);
                         } else {
-                            return configureBatchSpanExporter(config);
+                            return configureBatchSpanExporter(traceConfig);
                         }
                     } catch (IOException e) {
                         throw new RuntimeException("Unable to initialize GCP TraceExporter.", e);
