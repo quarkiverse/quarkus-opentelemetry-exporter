@@ -17,7 +17,6 @@ import io.quarkus.deployment.annotations.BuildSteps;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.LogHandlerBuildItem;
-import io.quarkus.deployment.builditem.SystemPropertyBuildItem;
 import io.quarkus.opentelemetry.deployment.exporter.otlp.ExternalOtelExporterBuildItem;
 
 @BuildSteps(onlyIf = SentryProcessor.SentryExporterEnabled.class)
@@ -41,13 +40,6 @@ public final class SentryProcessor {
     @BuildStep
     void registerExternalExporter(BuildProducer<ExternalOtelExporterBuildItem> buildProducer) {
         buildProducer.produce(new ExternalOtelExporterBuildItem("sentry"));
-    }
-
-    @BuildStep
-    SystemPropertyBuildItem setContextStorageProvider() {
-        return new SystemPropertyBuildItem(
-                "io.opentelemetry.context.contextStorageProvider",
-                "io.quarkus.opentelemetry.runtime.OpenTelemetryContextStorageProvider");
     }
 
     @BuildStep
