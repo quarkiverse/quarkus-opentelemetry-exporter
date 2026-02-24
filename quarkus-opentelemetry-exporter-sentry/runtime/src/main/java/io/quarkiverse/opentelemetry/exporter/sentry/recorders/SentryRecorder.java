@@ -10,15 +10,22 @@ import org.eclipse.microprofile.config.ConfigProvider;
 import io.quarkiverse.opentelemetry.exporter.sentry.config.SentryConfig.SentryExporterRuntimeConfig;
 import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;
-import io.sentry.Instrumenter;
 import io.sentry.Sentry;
+import io.sentry.SentryOpenTelemetryMode;
 import io.sentry.SentryOptions;
 import io.sentry.jul.SentryHandler;
-import io.sentry.opentelemetry.OpenTelemetryLinkErrorEventProcessor;
 
 @Recorder
 public class SentryRecorder {
-    public RuntimeValue<Optional<Handler>> create(final SentryExporterRuntimeConfig sentryConfig) {
+
+    private final RuntimeValue<SentryExporterRuntimeConfig> runtimeConfig;
+
+    public SentryRecorder(RuntimeValue<SentryExporterRuntimeConfig> runtimeConfig) {
+        this.runtimeConfig = runtimeConfig;
+    }
+
+    public RuntimeValue<Optional<Handler>> create() {
+        var sentryConfig = runtimeConfig.getValue();
         if (sentryConfig.dsn().isEmpty()) {
             return new RuntimeValue<>(Optional.empty());
         }
@@ -41,8 +48,7 @@ public class SentryRecorder {
                         it.setEnableSpotlight(true);
                     });
                     it.setRelease(appName + '@' + appVersion);
-                    it.setInstrumenter(Instrumenter.OTEL);
-                    it.addEventProcessor(new OpenTelemetryLinkErrorEventProcessor());
+                    it.setOpenTelemetryMode(SentryOpenTelemetryMode.OFF);
                     options.set(it);
                 });
 

@@ -16,7 +16,7 @@ public class SentryExporterEnabledTest {
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .withEmptyApplication()
-            .overrideConfigKey("quarkus.otel.sentry.sentry.enabled", "true")
+            .overrideConfigKey("quarkus.otel.sentry.enabled", "true")
             .overrideConfigKey("quarkus.otel.sentry.dsn", "https://1234@test/1234");
 
     @Inject

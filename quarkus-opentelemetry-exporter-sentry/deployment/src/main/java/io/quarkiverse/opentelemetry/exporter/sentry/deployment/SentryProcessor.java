@@ -7,7 +7,6 @@ import java.util.function.BooleanSupplier;
 
 import io.quarkiverse.opentelemetry.exporter.sentry.beans.SentrySpanProcessorProducer;
 import io.quarkiverse.opentelemetry.exporter.sentry.config.SentryConfig;
-import io.quarkiverse.opentelemetry.exporter.sentry.config.SentryConfig.SentryExporterRuntimeConfig;
 import io.quarkiverse.opentelemetry.exporter.sentry.filters.SentryFilter;
 import io.quarkiverse.opentelemetry.exporter.sentry.recorders.SentryRecorder;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
@@ -45,8 +44,8 @@ public final class SentryProcessor {
 
     @BuildStep
     @Record(RUNTIME_INIT)
-    LogHandlerBuildItem addSentryHandler(final SentryExporterRuntimeConfig config, final SentryRecorder recorder) {
-        return new LogHandlerBuildItem(recorder.create(config));
+    LogHandlerBuildItem addSentryHandler(final SentryRecorder recorder) {
+        return new LogHandlerBuildItem(recorder.create());
     }
 
     @BuildStep

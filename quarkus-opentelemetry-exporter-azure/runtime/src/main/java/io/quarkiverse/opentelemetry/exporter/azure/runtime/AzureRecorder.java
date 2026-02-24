@@ -5,6 +5,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 import io.quarkus.arc.SyntheticCreationalContext;
+import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
@@ -12,8 +13,17 @@ public class AzureRecorder {
 
     public static final Pattern SEMI_COLON_PATTERN = Pattern.compile(";");
 
-    public Function<SyntheticCreationalContext<AzureMonitorCustomizer>, AzureMonitorCustomizer> createAzureMonitorCustomizer(
-            AzureExporterRuntimeConfig runtimeConfig, AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
+    private final RuntimeValue<AzureExporterRuntimeConfig> runtimeConfig;
+
+    private final RuntimeValue<AzureExporterQuarkusRuntimeConfig> quarkusRuntimeConfig;
+
+    public AzureRecorder(RuntimeValue<AzureExporterRuntimeConfig> runtimeConfig,
+            RuntimeValue<AzureExporterQuarkusRuntimeConfig> quarkusRuntimeConfig) {
+        this.runtimeConfig = runtimeConfig;
+        this.quarkusRuntimeConfig = quarkusRuntimeConfig;
+    }
+
+    public Function<SyntheticCreationalContext<AzureMonitorCustomizer>, AzureMonitorCustomizer> createAzureMonitorCustomizer() {
         return new Function<>() {
             @Override
             public AzureMonitorCustomizer apply(
@@ -24,8 +34,7 @@ public class AzureRecorder {
         };
     }
 
-    public Function<SyntheticCreationalContext<AzureEndpointSampler>, AzureEndpointSampler> createSampler(
-            AzureExporterRuntimeConfig runtimeConfig, AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
+    public Function<SyntheticCreationalContext<AzureEndpointSampler>, AzureEndpointSampler> createSampler() {
         return new Function<>() {
             @Override
             public AzureEndpointSampler apply(SyntheticCreationalContext<AzureEndpointSampler> context) {
@@ -62,10 +71,10 @@ public class AzureRecorder {
                 .map(ingestionPartOfConnectionString -> ingestionPartOfConnectionString.replaceAll("IngestionEndpoint=", ""));
     }
 
-    private static Optional<String> findConnectionString(AzureExporterRuntimeConfig azureRuntimeConfig,
-            AzureExporterQuarkusRuntimeConfig quarkusRuntimeConfig) {
-        return azureRuntimeConfig.connectionString()
-                .or(quarkusRuntimeConfig::connectionString);
+    private static Optional<String> findConnectionString(RuntimeValue<AzureExporterRuntimeConfig> azureRuntimeConfig,
+            RuntimeValue<AzureExporterQuarkusRuntimeConfig> quarkusRuntimeConfig) {
+        return azureRuntimeConfig.getValue().connectionString()
+                .or(quarkusRuntimeConfig.getValue()::connectionString);
     }
 
     private static List<String> addTrackPartInUrl(List<String> ingestionUrls) {
