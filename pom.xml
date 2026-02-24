@@ -38,7 +38,7 @@
         <!-- Start-->
         <quarkus.version>3.31.4</quarkus.version>
         <netty-bom.version>4.1.130.Final</netty-bom.version>
-        <opentelemetry-instrumentation-alpha.version>2.23.0-alpha</opentelemetry-instrumentation-alpha.version>
+        <opentelemetry-instrumentation-alpha.version>2.25.0-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
         <gcp-opentelemetry.version>0.36.0</gcp-opentelemetry.version>
