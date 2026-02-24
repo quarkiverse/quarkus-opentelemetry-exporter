@@ -28,7 +28,7 @@
     </scm>
 
     <properties>
-        <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <compiler-plugin.version>3.15.0</compiler-plugin.version>
         <maven.compiler.release>17</maven.compiler.release>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,10 +45,10 @@
 
         <azure-monitor-opentelemetry-autoconfigure.version>1.2.0</azure-monitor-opentelemetry-autoconfigure.version>
 
-        <assertj-core.version>3.27.3</assertj-core.version>
-        <testcontainers-junit-jupiter.version>1.21.0</testcontainers-junit-jupiter.version>
+        <assertj-core.version>3.27.7</assertj-core.version>
+        <testcontainers-junit-jupiter.version>1.21.4</testcontainers-junit-jupiter.version>
         <quarkus-wiremock-test.version>1.5.3</quarkus-wiremock-test.version>
-        <quarkus-google-cloud-services-bom.version>2.14.0</quarkus-google-cloud-services-bom.version>
+        <quarkus-google-cloud-services-bom.version>2.18.0</quarkus-google-cloud-services-bom.version>
     </properties>
 
     <dependencyManagement>
@@ -89,6 +89,7 @@
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-maven-plugin</artifactId>
                     <version>${quarkus.version}</version>
+                    <extensions>true</extensions>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
