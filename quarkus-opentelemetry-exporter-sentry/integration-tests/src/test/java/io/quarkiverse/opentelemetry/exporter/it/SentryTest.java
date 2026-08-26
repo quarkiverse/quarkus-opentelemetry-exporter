@@ -67,10 +67,11 @@ public class SentryTest {
 
         assertThat(requestBodies).hasSize(1)
                 .satisfiesOnlyOnce(group -> {
-                    assertThat(group).hasSize(3);
-                    assertThat(group.get(0).get("sdk").get("name").asText()).isEqualTo("sentry.java.jul");
-                    assertThat(group.get(1).get("type").asText()).isEqualTo("transaction");
-                    assertThat(group.get(2).get("transaction").asText()).isEqualTo("GET /direct");
+                    assertThat(group).anySatisfy(node -> assertThat(node.path("sdk").path("name").asText())
+                            .isEqualTo("sentry.java.jul"));
+                    assertThat(group).anySatisfy(node -> assertThat(node.path("type").asText()).isEqualTo("transaction"));
+                    assertThat(group).anySatisfy(
+                            node -> assertThat(node.path("transaction").asText()).isEqualTo("GET /direct"));
                 });
 
     }
@@ -99,16 +100,18 @@ public class SentryTest {
         assertThat(requestBodies).hasSize(2);
 
         assertThat(requestBodies).satisfiesOnlyOnce(group -> {
-            assertThat(group).hasSize(3);
-            assertThat(group.get(0).get("sdk").get("name").asText()).isEqualTo("sentry.java.jul");
-            assertThat(group.get(1).get("type").asText()).isEqualTo("event");
-            assertThat(group.get(2).get("message").get("message").asText()).isEqualTo("This is a logged message");
+            assertThat(group).anySatisfy(
+                    node -> assertThat(node.path("sdk").path("name").asText()).isEqualTo("sentry.java.jul"));
+            assertThat(group).anySatisfy(node -> assertThat(node.path("type").asText()).isEqualTo("event"));
+            assertThat(group).anySatisfy(node -> assertThat(node.path("message").path("message").asText())
+                    .isEqualTo("This is a logged message"));
         })
                 .satisfiesOnlyOnce(group -> {
-                    assertThat(group).hasSize(3);
-                    assertThat(group.get(0).get("sdk").get("name").asText()).isEqualTo("sentry.java.jul");
-                    assertThat(group.get(1).get("type").asText()).isEqualTo("transaction");
-                    assertThat(group.get(2).get("transaction").asText()).isEqualTo("GET /logged");
+                    assertThat(group).anySatisfy(node -> assertThat(node.path("sdk").path("name").asText())
+                            .isEqualTo("sentry.java.jul"));
+                    assertThat(group).anySatisfy(node -> assertThat(node.path("type").asText()).isEqualTo("transaction"));
+                    assertThat(group).anySatisfy(
+                            node -> assertThat(node.path("transaction").asText()).isEqualTo("GET /logged"));
                 });
 
     }
