@@ -52,6 +52,30 @@ Read https://quarkus.io/guides/opentelemetry#configuration-reference[this page] 
 * Read https://quarkus.io/guides/opentelemetry-tracing#jdbc[this documentation] to enable the JDBC instrumentation
 * Read https://quarkus.io/guides/opentelemetry-tracing#additional-instrumentation[this documentation] to enable additional instrumentations
 
+== Sampling
+
+The extension registers its own OpenTelemetry `Sampler` bean, the Azure endpoint sampler. It drops the spans of the HTTP
+requests sent by the exporter itself to the Application Insights ingestion and statsbeat endpoints, so that the
+telemetry export does not show up as a dependency of your application, and samples every other span (`always_on`).
+
+Quarkus uses a single `Sampler` bean, the one with the highest priority. The Azure endpoint sampler is registered with
+priority `100`, which makes it take precedence over a `Sampler` bean declared by the application with the default
+priority: such a sampler is ignored.
+
+To use your own sampler instead, give it a priority higher than `100`:
+
+[source,java]
+----
+@Singleton
+@Priority(200)
+public class MySampler implements Sampler {
+    // ...
+}
+----
+
+Your sampler then replaces the Azure endpoint sampler entirely, which means the export requests are traced again
+unless your implementation drops them as well.
+
 == Enable more Azure extensions
 * Read https://docs.quarkiverse.io/quarkus-azure-services/dev/index.html[Quarkus Azure Services]
 

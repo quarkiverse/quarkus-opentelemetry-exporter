@@ -1,10 +1,15 @@
 package io.quarkiverse.opentelemetry.exporter.azure.runtime;
 
 import java.util.*;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.util.TypeLiteral;
+
 import io.quarkus.arc.SyntheticCreationalContext;
+import io.quarkus.opentelemetry.runtime.config.runtime.OTelRuntimeConfig;
 import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;
 
@@ -17,19 +22,26 @@ public class AzureRecorder {
 
     private final RuntimeValue<AzureExporterQuarkusRuntimeConfig> quarkusRuntimeConfig;
 
+    private final RuntimeValue<OTelRuntimeConfig> otelRuntimeConfig;
+
     public AzureRecorder(RuntimeValue<AzureExporterRuntimeConfig> runtimeConfig,
-            RuntimeValue<AzureExporterQuarkusRuntimeConfig> quarkusRuntimeConfig) {
+            RuntimeValue<AzureExporterQuarkusRuntimeConfig> quarkusRuntimeConfig,
+            RuntimeValue<OTelRuntimeConfig> otelRuntimeConfig) {
         this.runtimeConfig = runtimeConfig;
         this.quarkusRuntimeConfig = quarkusRuntimeConfig;
+        this.otelRuntimeConfig = otelRuntimeConfig;
     }
 
     public Function<SyntheticCreationalContext<AzureMonitorCustomizer>, AzureMonitorCustomizer> createAzureMonitorCustomizer() {
         return new Function<>() {
             @Override
-            public AzureMonitorCustomizer apply(
-                    SyntheticCreationalContext<AzureMonitorCustomizer> objectSyntheticCreationalContext) {
+            public AzureMonitorCustomizer apply(SyntheticCreationalContext<AzureMonitorCustomizer> context) {
                 Optional<String> connectionString = findConnectionString(runtimeConfig, quarkusRuntimeConfig);
-                return new AzureMonitorCustomizer(connectionString);
+                Instance<ScheduledExecutorService> managedScheduler = context
+                        .getInjectedReference(new TypeLiteral<>() {
+                        });
+                return new AzureMonitorCustomizer(connectionString,
+                        otelRuntimeConfig.getValue().metric().exportInterval(), managedScheduler);
             }
         };
     }

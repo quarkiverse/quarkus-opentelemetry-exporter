@@ -2,6 +2,7 @@ package io.quarkiverse.opentelemetry.exporter.azure.deployment;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Stream;
 
@@ -52,6 +53,19 @@ public class AzureExporterProcessor {
     }
 
     private static final DotName SERVICE_INTERFACE_DOT_NAME = DotName.createSimple(ServiceInterface.class.getName());
+
+    /**
+     * CDI priority of the synthetic beans that customize the OpenTelemetry SDK builder.
+     * <p>
+     * This value is load-bearing. ArC iterates {@code Instance<AutoConfiguredOpenTelemetrySdkBuilderCustomizer>}
+     * in descending priority order and, for equal priorities, in hash order that changes from one JVM to the next.
+     * The Quarkus built-in customizers have priority 0 and the Quarkus {@code MetricProviderCustomizer} rebuilds the
+     * periodic metric reader from the metric exporter it observed in the customizer chain. When it is iterated before
+     * the Azure customizer, that exporter is the Azure Monitor no-op marker and every metric is silently dropped.
+     * A higher priority guarantees that the Azure customizations are registered first.
+     * {@link AzureMonitorCustomizer} additionally re-binds the reader to the Azure exporter whatever the order.
+     */
+    public static final int SDK_CUSTOMIZER_PRIORITY = 100;
 
     @BuildStep
     IndexDependencyBuildItem indexDependency() {
@@ -146,15 +160,21 @@ public class AzureExporterProcessor {
                 .setRuntimeInit()
                 .scope(Singleton.class)
                 .unremovable()
+                .priority(SDK_CUSTOMIZER_PRIORITY)
+                // the Quarkus managed scheduler, used for the periodic metric reader like Quarkus does
                 .addInjectionPoint(ParameterizedType.create(DotName.createSimple(Instance.class),
-                        new Type[] {
-                                ClassType.create(DotName.createSimple(AutoConfigurationCustomizerProvider.class.getName())) },
+                        new Type[] { ClassType.create(DotName.createSimple(ScheduledExecutorService.class.getName())) },
                         null))
                 .createWith(recorder.createAzureMonitorCustomizer())
                 .done();
 
     }
 
+    /**
+     * Quarkus uses the {@link Sampler} bean with the highest priority. {@link #SDK_CUSTOMIZER_PRIORITY} makes the
+     * Azure endpoint sampler take precedence over an application sampler with the default priority; the application
+     * can still override it with a higher priority (see the "Sampling" section of the extension documentation).
+     */
     @BuildStep
     @Consume(OpenTelemetrySdkBuildItem.class)
     @Record(ExecutionTime.RUNTIME_INIT)
@@ -164,8 +184,7 @@ public class AzureExporterProcessor {
                 .setRuntimeInit()
                 .scope(Singleton.class)
                 .unremovable()
-                .addInjectionPoint(ParameterizedType.create(DotName.createSimple(Instance.class),
-                        new Type[] { ClassType.create(DotName.createSimple(Sampler.class.getName())) }, null))
+                .priority(SDK_CUSTOMIZER_PRIORITY)
                 .createWith(recorder.createSampler())
                 .done();
     }
