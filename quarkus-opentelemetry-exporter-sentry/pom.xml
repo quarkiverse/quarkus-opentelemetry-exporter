@@ -16,9 +16,6 @@
         <module>deployment</module>
     </modules>
 
-    <properties>
-        <sentry.version>8.38.0</sentry.version>
-    </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>

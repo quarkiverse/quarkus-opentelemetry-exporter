@@ -87,6 +87,8 @@
                                 </native.image.path>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                 <maven.home>${maven.home}</maven.home>
+                                <!-- Keep the Azure SDK offline storage of the test JVM under target/, like surefire does -->
+                                <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>

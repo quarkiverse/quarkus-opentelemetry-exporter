@@ -18,3 +18,4 @@ buildNumber.properties
 /quarkus-opentelemetry-exporter-gcp/integration-tests/quarkus-opentelemetry-exporter-gcp-integration-tests.iml
 /quarkus-opentelemetry-exporter-gcp/runtime/quarkus-opentelemetry-exporter-gcp.iml
 /migrate.sh
+/.claude/design/azure-metric-export-stall-design.md

@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.quarkiverse</groupId>
         <artifactId>quarkiverse-parent</artifactId>
-        <version>21</version> <!-- always from repository -->
+        <version>22</version> <!-- always from repository -->
     </parent>
 
     <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
@@ -36,23 +36,39 @@
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.33.3.1</quarkus.version>
+        <quarkus.version>3.39.3</quarkus.version>
         <netty-bom.version>4.1.137.Final</netty-bom.version>
-        <opentelemetry-instrumentation-alpha.version>2.23.0-alpha</opentelemetry-instrumentation-alpha.version>
+        <opentelemetry-instrumentation-alpha.version>2.28.1-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
         <gcp-opentelemetry.version>0.36.0</gcp-opentelemetry.version>
+        <quarkus-google-cloud-services-bom.version>2.24.0</quarkus-google-cloud-services-bom.version>
 
-        <azure-monitor-opentelemetry-autoconfigure.version>1.4.0</azure-monitor-opentelemetry-autoconfigure.version>
+        <quarkus-azure-services-bom.version>1.2.5</quarkus-azure-services-bom.version>
+        <azure-monitor-opentelemetry-autoconfigure.version>1.6.0</azure-monitor-opentelemetry-autoconfigure.version>
+        <!-- Keep aligned with the azure-core version pulled by azure-monitor-opentelemetry-autoconfigure;
+             the version pinned by quarkus-azure-services-bom lags behind. -->
+        <azure-core-http-vertx.version>1.1.7</azure-core-http-vertx.version>
+
+        <sentry.version>8.53.0</sentry.version>
 
         <assertj-core.version>3.27.7</assertj-core.version>
         <testcontainers-junit-jupiter.version>1.21.4</testcontainers-junit-jupiter.version>
         <quarkus-wiremock-test.version>1.6.3</quarkus-wiremock-test.version>
-        <quarkus-google-cloud-services-bom.version>2.21.0</quarkus-google-cloud-services-bom.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- quarkus-azure-services-bom pins azure-core-http-vertx to 1.0.5 (built against azure-core 1.55 /
+                 Vert.x 4.5.15), while the Azure exporter runs the azure-core shipped by
+                 azure-monitor-opentelemetry-autoconfigure on the Vert.x of the Quarkus BOM. Align the transport with
+                 the azure-core we actually run. Declared here (not in the azure BOM import) so that the
+                 integration-tests module inherits it. -->
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-core-http-vertx</artifactId>
+                <version>${azure-core-http-vertx.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
                 <artifactId>quarkus-opentelemetry-exporter-common</artifactId>
