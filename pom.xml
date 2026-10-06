@@ -36,12 +36,12 @@
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.39.3</quarkus.version>
-        <netty-bom.version>4.1.137.Final</netty-bom.version>
+        <quarkus.version>3.40.1</quarkus.version>
+        <netty-bom.version>4.1.138.Final</netty-bom.version>
         <opentelemetry-instrumentation-alpha.version>2.28.1-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
-        <gcp-opentelemetry.version>0.36.0</gcp-opentelemetry.version>
+        <gcp-opentelemetry.version>0.37.0</gcp-opentelemetry.version>
         <quarkus-google-cloud-services-bom.version>2.24.0</quarkus-google-cloud-services-bom.version>
 
         <quarkus-azure-services-bom.version>1.2.5</quarkus-azure-services-bom.version>
@@ -50,7 +50,7 @@
              the version pinned by quarkus-azure-services-bom lags behind. -->
         <azure-core-http-vertx.version>1.1.7</azure-core-http-vertx.version>
 
-        <sentry.version>8.53.0</sentry.version>
+        <sentry.version>8.59.0</sentry.version>
 
         <assertj-core.version>3.27.7</assertj-core.version>
         <testcontainers-junit-jupiter.version>1.21.4</testcontainers-junit-jupiter.version>
