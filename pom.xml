@@ -48,7 +48,7 @@
         <azure-monitor-opentelemetry-autoconfigure.version>1.6.0</azure-monitor-opentelemetry-autoconfigure.version>
         <!-- Keep aligned with the azure-core version pulled by azure-monitor-opentelemetry-autoconfigure;
              the version pinned by quarkus-azure-services-bom lags behind. -->
-        <azure-core-http-vertx.version>1.1.7</azure-core-http-vertx.version>
+        <azure-core-http-vertx.version>1.2.0</azure-core-http-vertx.version>
 
         <sentry.version>8.59.0</sentry.version>
 
