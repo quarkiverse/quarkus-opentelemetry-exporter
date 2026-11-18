@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.quarkiverse</groupId>
         <artifactId>quarkiverse-parent</artifactId>
-        <version>22</version> <!-- always from repository -->
+        <version>26</version> <!-- always from repository -->
     </parent>
 
     <groupId>io.quarkiverse.opentelemetry.exporter</groupId>
@@ -29,16 +29,16 @@
 
     <properties>
         <compiler-plugin.version>3.15.0</compiler-plugin.version>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- On this block, library versions must be kept in sync with the ones in the quarkus-bom: -->
         <!-- Start-->
-        <quarkus.version>3.40.1</quarkus.version>
-        <netty-bom.version>4.1.138.Final</netty-bom.version>
-        <opentelemetry-instrumentation-alpha.version>2.28.1-alpha</opentelemetry-instrumentation-alpha.version>
+        <quarkus.version>4.0.0.CR1</quarkus.version>
+        <netty-bom.version>4.2.20.Final</netty-bom.version>
+        <opentelemetry-instrumentation-alpha.version>2.33.1-alpha</opentelemetry-instrumentation-alpha.version>
         <!-- End-->
 
         <gcp-opentelemetry.version>0.37.0</gcp-opentelemetry.version>
@@ -48,7 +48,10 @@
         <azure-monitor-opentelemetry-autoconfigure.version>1.6.0</azure-monitor-opentelemetry-autoconfigure.version>
         <!-- Keep aligned with the azure-core version pulled by azure-monitor-opentelemetry-autoconfigure;
              the version pinned by quarkus-azure-services-bom lags behind. -->
-        <azure-core-http-vertx.version>1.1.7</azure-core-http-vertx.version>
+        <azure-core-http-vertx.version>1.3.0</azure-core-http-vertx.version>
+        <!-- azure-core-http-vertx 1.3.0 (Vert.x 5 support) is built against azure-core 1.61.0, which is newer than the
+             one pulled by azure-monitor-opentelemetry-autoconfigure. -->
+        <azure-core.version>1.61.0</azure-core.version>
 
         <sentry.version>8.59.0</sentry.version>
 
@@ -68,6 +71,11 @@
                 <groupId>com.azure</groupId>
                 <artifactId>azure-core-http-vertx</artifactId>
                 <version>${azure-core-http-vertx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-core</artifactId>
+                <version>${azure-core.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.quarkiverse.opentelemetry.exporter</groupId>

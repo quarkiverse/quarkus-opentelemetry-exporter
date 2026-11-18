@@ -9,12 +9,12 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.sdk.trace.SpanProcessor;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 public class SentryExporterEnabledTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withEmptyApplication()
             .overrideConfigKey("quarkus.otel.sentry.enabled", "true")
             .overrideConfigKey("quarkus.otel.sentry.dsn", "https://1234@test/1234");

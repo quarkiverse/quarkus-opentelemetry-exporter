@@ -18,7 +18,7 @@ import io.opentelemetry.sdk.autoconfigure.AutoConfiguredOpenTelemetrySdkBuilder;
 import io.opentelemetry.sdk.metrics.export.MetricExporter;
 import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureMonitorCustomizer;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 import reactor.core.publisher.Mono;
 
 /**
@@ -31,7 +31,7 @@ import reactor.core.publisher.Mono;
 class AzureMonitorCustomizerOrderingTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withEmptyApplication()
             .overrideConfigKey("quarkus.otel.azure.enabled", "false");
 

@@ -9,12 +9,12 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.quarkiverse.opentelemetry.exporter.azure.runtime.AzureEndpointSampler;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 public class AzureExporterDisabledTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withEmptyApplication()
             .overrideConfigKey("quarkus.otel.azure.enabled", "false")
             .overrideConfigKey("applicationinsights.connection.string",
