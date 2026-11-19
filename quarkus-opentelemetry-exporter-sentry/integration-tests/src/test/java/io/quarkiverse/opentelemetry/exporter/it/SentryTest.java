@@ -16,20 +16,19 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 
 import io.quarkus.test.junit.QuarkusTest;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @QuarkusTest
 public class SentryTest {
 
     public static final int HTTP_PORT_NUMBER = 53602; // See application.properties file
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final JsonMapper mapper = new JsonMapper();
     private WireMockServer wireMockServer;
 
     @BeforeEach
@@ -121,16 +120,12 @@ public class SentryTest {
         List<List<JsonNode>> requestBodies = telemetryExport
                 .stream()
                 .map(request -> {
-                    try {
-                        List<JsonNode> parsed = new ArrayList<>();
-                        String[] messages = new String(request.getBody()).split("\n");
-                        for (String message : messages) {
-                            parsed.add(mapper.readTree(message));
-                        }
-                        return parsed;
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
+                    List<JsonNode> parsed = new ArrayList<>();
+                    String[] messages = new String(request.getBody()).split("\n");
+                    for (String message : messages) {
+                        parsed.add(mapper.readTree(message));
                     }
+                    return parsed;
                 }).toList();
         return requestBodies;
     }
